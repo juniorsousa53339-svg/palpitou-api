@@ -1,6 +1,7 @@
 package br.com.palpitou.entity;
 
 import br.com.palpitou.enums.Role;
+import br.com.palpitou.enums.StatusGlobal;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -35,6 +36,6 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Enumerated(EnumType.STRING)
-    private Enum Status;
+   // @Enumerated(EnumType.STRING)
+   // private StatusGlobal Status;   // Verificar se ainda vou presisar disso
 }

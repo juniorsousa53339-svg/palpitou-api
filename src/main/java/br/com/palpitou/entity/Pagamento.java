@@ -1,6 +1,7 @@
 package br.com.palpitou.entity;
 
-import br.com.palpitou.enums.StatusGlobal;
+
+import br.com.palpitou.enums.StatusPagamento;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,27 +9,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "campeonatos")
+@Getter  @Setter
 @NoArgsConstructor
-@Getter @Setter
-public class Campeonato {
+@Table(name = "pagamentos")
+public class Pagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    @NotBlank
-    private String nome;
-
-    @Column(nullable = false)
     @NotNull
-    private int temporada;
+    private BigDecimal valor;
 
     @Enumerated(EnumType.STRING)
-    private StatusGlobal Status;
-}
+     private StatusPagamento status;
 
+    @NotBlank
+    private String nomePagadorPix;
+
+    private String comprovante;
+}
