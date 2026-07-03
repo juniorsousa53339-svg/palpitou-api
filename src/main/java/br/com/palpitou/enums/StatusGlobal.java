@@ -1,6 +1,6 @@
 package br.com.palpitou.enums;
 
-public enum Status {
+public enum StatusGlobal {
     ABERTA,
     EM_ANDAMENTO,
     FINALIZADA;
