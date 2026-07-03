@@ -1,8 +1,7 @@
 package br.com.palpitou.entity;
 
-import br.com.palpitou.enums.Role;
+import br.com.palpitou.enums.StatusGlobal;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -10,31 +9,33 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "users")
+@Table(name = "bolao")
+@Getter
+@Setter
 @NoArgsConstructor
-@Getter @Setter
-public class Users {
+public class Bolao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     @NotBlank
     private String nome;
 
-    @Column(nullable = false)
-    @Email
     @NotNull
-    private String Email;
-
-    @NotNull
-    private String Senha;
+    private BigDecimal valorInscricao;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private StatusGlobal Status;
 
-    @Enumerated(EnumType.STRING)
-    private Enum Status;
+    @NotNull
+    private LocalDateTime dataInicio;
+
+    @NotNull
+    private LocalDateTime dataFim;
+
 }
