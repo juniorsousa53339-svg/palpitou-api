@@ -16,7 +16,6 @@ public class Palpite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private int golsMandante;
 
     private int golsVisitante;

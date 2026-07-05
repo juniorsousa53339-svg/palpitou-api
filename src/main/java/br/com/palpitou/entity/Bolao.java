@@ -46,5 +46,4 @@ public class Bolao {
 
     @OneToMany
     private Premiacao premiacao;
-
 }

@@ -33,7 +33,7 @@ public class Pagamento {
     private String comprovante;
 
     @ManyToOne
-    private Users users;
+    private User user;
 
     @ManyToOne
     private Participacao participacao;

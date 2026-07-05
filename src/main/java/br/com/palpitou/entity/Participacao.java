@@ -29,7 +29,7 @@ public class Participacao {
     private int pontos;
 
     @ManyToOne
-    private Users user;
+    private User user;
 
     @OneToMany
     private Pagamento pagamento;

@@ -28,6 +28,4 @@ public class Time {
 
     @OneToMany
     private Jogo jogo ;
-
-
 }

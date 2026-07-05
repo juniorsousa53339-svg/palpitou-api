@@ -1,7 +1,6 @@
 package br.com.palpitou.entity;
 
 import br.com.palpitou.enums.Role;
-import br.com.palpitou.enums.StatusGlobal;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +14,7 @@ import lombok.Setter;
 @Table(name = "users")
 @NoArgsConstructor
 @Getter @Setter
-public class Users {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +41,4 @@ public class Users {
     @OneToMany
     private Pagamento pagamento;
 
-   // @Enumerated(EnumType.STRING)
-   // private StatusGlobal Status;   // Verificar se ainda vou presisar disso
 }
