@@ -30,12 +30,21 @@ public class Bolao {
     private BigDecimal valorInscricao;
 
     @Enumerated(EnumType.STRING)
-    private StatusGlobal Status;
+    private StatusGlobal status;
 
     @NotNull
     private LocalDateTime dataInicio;
 
     @NotNull
     private LocalDateTime dataFim;
+
+    @OneToMany
+    private Participacao participacao;
+
+    @ManyToOne
+    private Campeonato campeonato;
+
+    @OneToMany
+    private Premiacao premiacao;
 
 }

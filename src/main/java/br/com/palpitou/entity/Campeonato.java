@@ -29,6 +29,12 @@ public class Campeonato {
     private int temporada;
 
     @Enumerated(EnumType.STRING)
-    private StatusGlobal Status;
+    private StatusGlobal status;
+
+    @OneToMany
+    private Bolao bolao;
+
+    @OneToMany
+    private Jogo jogo;
 }
 

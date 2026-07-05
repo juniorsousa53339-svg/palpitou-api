@@ -31,4 +31,10 @@ public class Pagamento {
     private String nomePagadorPix;
 
     private String comprovante;
+
+    @ManyToOne
+    private Users users;
+
+    @ManyToOne
+    private Participacao participacao;
 }

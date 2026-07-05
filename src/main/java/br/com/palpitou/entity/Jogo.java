@@ -37,6 +37,18 @@ public class Jogo {
     private int golsVisitante;
 
     @Enumerated(EnumType.STRING)
-    private StatusGlobal Status;
+    private StatusGlobal status;
+
+    @ManyToOne
+    private Campeonato campeonato;
+
+    @OneToMany
+    private Palpite palpite;
+
+    @ManyToOne
+    private Time timeMandante;
+
+    @ManyToOne
+    private Time timeVisitante;
 
 }

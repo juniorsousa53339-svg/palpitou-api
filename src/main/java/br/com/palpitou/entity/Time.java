@@ -25,4 +25,9 @@ public class Time {
 
     @NotBlank
     private String sigla;
+
+    @OneToMany
+    private Jogo jogo ;
+
+
 }

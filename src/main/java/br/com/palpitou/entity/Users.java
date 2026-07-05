@@ -28,13 +28,19 @@ public class Users {
     @Column(nullable = false)
     @Email
     @NotNull
-    private String Email;
+    private String email;
 
     @NotNull
-    private String Senha;
+    private String senha;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany
+    private Participacao participacao;
+
+    @OneToMany
+    private Pagamento pagamento;
 
    // @Enumerated(EnumType.STRING)
    // private StatusGlobal Status;   // Verificar se ainda vou presisar disso

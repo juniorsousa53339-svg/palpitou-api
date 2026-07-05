@@ -16,12 +16,15 @@ public class Palpite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+
     private int golsMandante;
 
-    @NotNull
     private int golsVisitante;
 
     @NotNull
     private int pontosObtidos;
+
+    @ManyToOne
+    private Jogo jogo;
+
 }

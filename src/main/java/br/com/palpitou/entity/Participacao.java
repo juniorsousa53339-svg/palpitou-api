@@ -27,4 +27,13 @@ public class Participacao {
     private LocalDate dataInscricao;
 
     private int pontos;
+
+    @ManyToOne
+    private Users user;
+
+    @OneToMany
+    private Pagamento pagamento;
+
+    @ManyToOne
+    private Bolao bolao;
 }

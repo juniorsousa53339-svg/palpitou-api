@@ -29,4 +29,8 @@ public class Premiacao {
 
     @NotBlank
     private String descricao;
+
+    @ManyToOne
+    private Bolao bolao;
+
 }
