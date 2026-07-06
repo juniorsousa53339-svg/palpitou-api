@@ -1,6 +1,6 @@
 package br.com.palpitou.mapper;
 
-import br.com.palpitou.dto.CriarUserRequest;
+import br.com.palpitou.dto.UserRequest;
 import br.com.palpitou.dto.UserResponse;
 import br.com.palpitou.entity.User;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 public class UserMapper {
 
-    public User toEntity(CriarUserRequest request) {
+    public User toEntity(UserRequest request) {
 
         User user = new User();
 

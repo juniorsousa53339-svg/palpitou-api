@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class CriarUserRequest {
+public class UserRequest {
 
     @Column(nullable = false)
     @NotBlank
