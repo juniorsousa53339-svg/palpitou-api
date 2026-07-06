@@ -13,7 +13,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -24,10 +25,9 @@ public class User {
     @NotBlank
     private String nome;
 
-
     @Email
     @NotNull
-    @Column(unique=true)
+    @Column(unique = true)
     private String email;
 
     @NotNull
@@ -41,5 +41,16 @@ public class User {
 
     @OneToMany
     private Pagamento pagamento;
+
+    public void alterarDados(
+            String nome,
+            String email,
+            String senha
+    ) {
+
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+    }
 
 }

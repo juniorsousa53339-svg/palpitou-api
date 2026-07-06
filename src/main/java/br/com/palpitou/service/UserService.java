@@ -21,34 +21,55 @@ public class UserService {
 
     public UserResponse salvar(UserRequest request) {
 
-    User user = userMapper.toEntity(request);
+        User user = userMapper.toEntity(request);
 
-    User userSalvo =  userRepository.save(user);
-     
-    return userMapper.toResponse(userSalvo);
+        User userSalvo = userRepository.save(user);
+
+        return userMapper.toResponse(userSalvo);
     }
 
-    public UserResponse buscar(Long id){
+    public UserResponse buscar(Long id) {
 
         User user =
                 userRepository.findById(id).
                         orElseThrow(() ->
                                 new RuntimeException
-                                ("User não encontrado!"));
+                                        ("Usuario não encontrado!"));
 
         return userMapper.toResponse(user);
     }
 
-    public List<UserResponse> listarTodos(){
+    public List<UserResponse> listarTodos() {
 
         List<User> users = userRepository.findAll();
 
         List<UserResponse> resposta =
                 users.stream()
                         .map(userMapper::toResponse)
-                .toList();
+                        .toList();
 
         return resposta;
     }
 
+    public UserResponse updateUser(Long id, UserRequest userRequest) {
+
+
+
+        User userBd =
+                userRepository.findById(id)
+                        .orElseThrow(()
+                                -> new RuntimeException
+                                ("Usuario não encontrado")
+                        );
+
+        userBd.alterarDados(
+
+                userBd.getNome(),
+                userBd.getEmail(),
+                userBd.getSenha()
+        );
+
+        return userMapper.toResponse(
+                userRepository.save(userBd));
+    }
 }
