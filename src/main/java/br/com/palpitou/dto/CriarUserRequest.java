@@ -1,33 +1,25 @@
-package br.com.palpitou.entity;
+package br.com.palpitou.dto;
 
 import br.com.palpitou.enums.Role;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@Entity
-@Table(name = "users")
-@NoArgsConstructor
 @Getter @Setter
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class CriarUserRequest {
 
     @Column(nullable = false)
     @NotBlank
     private String nome;
 
-
+    @Column(nullable = false)
     @Email
     @NotNull
-    @Column(unique=true)
     private String email;
 
     @NotNull
@@ -35,11 +27,5 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    @OneToMany
-    private Participacao participacao;
-
-    @OneToMany
-    private Pagamento pagamento;
 
 }
