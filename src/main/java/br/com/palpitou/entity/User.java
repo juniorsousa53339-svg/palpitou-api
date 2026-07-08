@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name = "users")
@@ -36,11 +39,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany
-    private Participacao participacao;
+    @OneToMany(mappedBy = "usuario")
+    private List<Participacao> participacoes = new ArrayList<>();
 
-    @OneToMany
-    private Pagamento pagamento;
+    @OneToMany(mappedBy = "user")
+    private List<Pagamento> pagamentos = new ArrayList<>();
 
     public void alterarDados(
             String nome,

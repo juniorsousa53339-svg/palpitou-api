@@ -33,8 +33,10 @@ public class Pagamento {
     private String comprovante;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+
+    @OneToOne(mappedBy = "pagamento")
     private Participacao participacao;
 }

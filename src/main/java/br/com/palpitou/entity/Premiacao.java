@@ -31,6 +31,7 @@ public class Premiacao {
     private String descricao;
 
     @ManyToOne
+    @JoinColumn(name = "bolao_id")
     private Bolao bolao;
 
 }

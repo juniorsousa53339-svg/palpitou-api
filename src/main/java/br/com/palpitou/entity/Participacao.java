@@ -29,11 +29,14 @@ public class Participacao {
     private int pontos;
 
     @ManyToOne
-    private User user;
+    @JoinColumn(name = "usuario_id")
+    private User usuario;
 
-    @OneToMany
+    @OneToOne(cascade = CascadeType.ALL)
     private Pagamento pagamento;
 
     @ManyToOne
+    @JoinColumn(name = "bolao_id")
     private Bolao bolao;
+
 }

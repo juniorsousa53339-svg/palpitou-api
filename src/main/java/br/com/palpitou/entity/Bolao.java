@@ -11,6 +11,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "bolao")
@@ -38,12 +40,13 @@ public class Bolao {
     @NotNull
     private LocalDateTime dataFim;
 
-    @OneToMany
-    private Participacao participacao;
+    @OneToMany(mappedBy = "bolao")
+    private List<Participacao> participacoes = new ArrayList<>();
 
     @ManyToOne
+    @JoinColumn(name = "campeonato_id")
     private Campeonato campeonato;
 
-    @OneToMany
-    private Premiacao premiacao;
+    @OneToMany(mappedBy = "bolao", cascade = CascadeType.ALL)
+    private List<Premiacao> premiacoes = new ArrayList<>();
 }

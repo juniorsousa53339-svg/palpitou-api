@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -31,10 +33,10 @@ public class Campeonato {
     @Enumerated(EnumType.STRING)
     private StatusGlobal status;
 
-    @OneToMany
-    private Bolao bolao;
+    @OneToMany(mappedBy = "campeonato")
+    private List<Bolao> boloes = new ArrayList<>();
 
-    @OneToMany
-    private Jogo jogo;
+    @OneToMany(mappedBy = "campeonato")
+    private List<Jogo> jogos = new ArrayList<>();
 }
 

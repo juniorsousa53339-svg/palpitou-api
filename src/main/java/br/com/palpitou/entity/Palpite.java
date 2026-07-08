@@ -24,6 +24,7 @@ public class Palpite {
     private int pontosObtidos;
 
     @ManyToOne
+    @JoinColumn(name = "jogo_id")
     private Jogo jogo;
 
 }
