@@ -8,8 +8,6 @@ import br.com.palpitou.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +21,10 @@ public class UserService {
 
         User user = userMapper.toEntity(request);
 
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("E-mail já cadastrado.");
+        }
+
         User userSalvo = userRepository.save(user);
 
         return userMapper.toResponse(userSalvo);
@@ -35,6 +37,7 @@ public class UserService {
                         orElseThrow(() ->
                                 new RuntimeException
                                         ("Usuario não encontrado!"));
+
 
         return userMapper.toResponse(user);
     }
@@ -51,8 +54,7 @@ public class UserService {
         return resposta;
     }
 
-    public UserResponse updateUser(Long id, UserRequest userRequest) {
-
+    public UserResponse updateUser(Long id, UserRequest request) {
 
 
         User userBd =
@@ -64,12 +66,28 @@ public class UserService {
 
         userBd.alterarDados(
 
-                userBd.getNome(),
-                userBd.getEmail(),
-                userBd.getSenha()
+                request.getNome(),
+                request.getEmail(),
+                request.getSenha()
         );
 
-        return userMapper.toResponse(
-                userRepository.save(userBd));
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("E-mail já cadastrado.");
+        }
+
+        User userAtualizado = userRepository.save(userBd);
+        return userMapper.toResponse(userAtualizado);
+    }
+
+    public void deleteUser(Long id) {
+
+        User userBd =
+                userRepository.findById(id)
+                        .orElseThrow(()
+                                -> new RuntimeException
+                                ("Usuario não encontrado")
+                        );
+
+        userRepository.delete(userBd);
     }
 }
