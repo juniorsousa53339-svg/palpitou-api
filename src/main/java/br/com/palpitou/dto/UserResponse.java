@@ -13,19 +13,8 @@ import lombok.Setter;
 
 @Getter @Setter
 public class UserResponse {
-
-    @Column(nullable = false)
-    @NotBlank
     private String nome;
-
-    @Column(nullable = false)
-    @Email
-    @NotNull
     private String email;
-
-    @NotNull
     private String senha;
-
-    @Enumerated(EnumType.STRING)
     private Role role;
 }
