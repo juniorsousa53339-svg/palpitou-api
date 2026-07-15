@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> findAll() {
+    public ResponseEntity<List<UserResponse>> listarTodos() {
 
         var resposta = userService.listarTodos();
 
@@ -53,6 +53,14 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
+
+      var resposta = userService.buscar(id);
+
+      return ResponseEntity.ok(resposta);
     }
 
 }

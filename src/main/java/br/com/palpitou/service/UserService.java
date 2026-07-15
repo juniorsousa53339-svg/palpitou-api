@@ -79,6 +79,10 @@ public class UserService {
         return userMapper.toResponse(userAtualizado);
     }
 
+
+
+
+
     public void deleteUser(Long id) {
 
         User userBd =
