@@ -5,7 +5,6 @@ import br.com.palpitou.dto.UserRequest;
 import br.com.palpitou.dto.UserResponse;
 
 
-
 import br.com.palpitou.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,28 +26,33 @@ public class UserController {
     public ResponseEntity<UserResponse> salvar(
             @RequestBody @Valid UserRequest request) {
 
-        userService.salvar(request);
-        return ResponseEntity.ok().build();
+        UserResponse resposta = userService.salvar(request);
+
+        return ResponseEntity.ok(resposta);
     }
 
     @GetMapping
     public ResponseEntity<List<UserResponse>> findAll() {
-       return (ResponseEntity<List<UserResponse>>) userService.listarTodos();
+
+        var resposta = userService.listarTodos();
+
+        return ResponseEntity.ok(resposta);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> atualizar(
             @PathVariable Long id,
             @RequestBody @Valid UserRequest request
-    ){
-    userService.updateUser(id, request);
-    return ResponseEntity.ok().build();
+    ) {
+        var resposta = userService.updateUser(id, request);
+
+        return ResponseEntity.ok(resposta);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

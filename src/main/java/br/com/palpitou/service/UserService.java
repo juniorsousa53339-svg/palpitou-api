@@ -19,11 +19,11 @@ public class UserService {
 
     public UserResponse salvar(UserRequest request) {
 
-        User user = userMapper.toEntity(request);
-
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("E-mail já cadastrado.");
         }
+
+        User user = userMapper.toEntity(request);
 
         User userSalvo = userRepository.save(user);
 
