@@ -45,6 +45,8 @@ public class Jogo {
     @JoinColumn(name = "campeonato_id")
     private Campeonato campeonato;
 
+
+
     @OneToMany(mappedBy = "jogo")
     private List<Palpite> palpites = new ArrayList<>();
 
