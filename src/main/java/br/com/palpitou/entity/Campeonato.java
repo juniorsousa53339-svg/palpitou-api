@@ -38,5 +38,16 @@ public class Campeonato {
 
     @OneToMany(mappedBy = "campeonato")
     private List<Jogo> jogos = new ArrayList<>();
+
+    public void alterarDados(
+            String nome,
+            int temporada,
+            StatusGlobal status
+    ) {
+
+        this.nome = nome;
+        this.temporada = temporada;
+        this.status = status;
+    }
 }
 
