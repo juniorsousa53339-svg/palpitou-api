@@ -28,7 +28,7 @@ public class CampeonatoService {
         return campeonatoMapper.toResponse(campSalvo);
     }
 
-    public CampeonatoResponse buscarPorId(Long id) {
+    public CampeonatoResponse buscar(Long id) {
 
         Campeonato camp =
                 campeonatoRepository.findById(id).
@@ -40,7 +40,7 @@ public class CampeonatoService {
     }
 
 
-    public List<CampeonatoResponse> buscarTodos() {
+    public List<CampeonatoResponse> listarTodos() {
         List<Campeonato> camp = campeonatoRepository.findAll();
 
         List<CampeonatoResponse> resposta =
@@ -73,7 +73,7 @@ public class CampeonatoService {
         return campeonatoMapper.toResponse(campAtualizado);
     }
 
-    public void deleteCampeonato(Long campeonatoId) {
+    public void delete(Long campeonatoId) {
 
         Campeonato campBd =
                 campeonatoRepository.findById(campeonatoId)

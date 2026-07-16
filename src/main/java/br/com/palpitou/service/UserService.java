@@ -79,7 +79,7 @@ public class UserService {
         return userMapper.toResponse(userAtualizado);
     }
 
-    public void deleteUser(Long id) {
+    public void delete(Long id) {
 
         User userBd =
                 userRepository.findById(id)
