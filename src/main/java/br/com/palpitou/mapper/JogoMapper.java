@@ -2,36 +2,45 @@ package br.com.palpitou.mapper;
 
 import br.com.palpitou.dto.JogoRequest;
 import br.com.palpitou.dto.JogoResponse;
+import br.com.palpitou.entity.Campeonato;
 import br.com.palpitou.entity.Jogo;
+import br.com.palpitou.entity.Time;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JogoMapper {
 
-    public Jogo toEntity(JogoRequest request) {
+    public Jogo toEntity(
+            JogoRequest request,
+            Campeonato campeonato,
+            Time timeMandante,
+            Time timeVisitante
+    ) {
 
         Jogo jogo = new Jogo();
 
         jogo.setDataHora(request.getDataHora());
         jogo.setRodada(request.getRodada());
         jogo.setStatus(request.getStatus());
-        jogo.setCampeonato(request.getCampeonato());
-        jogo.setTimeMandante(request.getTimeMandante());
-        jogo.setTimeVisitante(request.getTimeVisitante());
+        jogo.setCampeonato(campeonato);
+        jogo.setTimeMandante(timeMandante);
+        jogo.setTimeVisitante(timeVisitante);
 
         return jogo;
     }
 
     public JogoResponse toResponse(Jogo jogo) {
+
         JogoResponse response = new JogoResponse();
 
         response.setId(jogo.getId());
         response.setDataHora(jogo.getDataHora());
         response.setRodada(jogo.getRodada());
         response.setStatus(jogo.getStatus());
-        response.setCampeonato(jogo.getCampeonato());
-        response.setTimeMandante(jogo.getTimeMandante());
-        response.setTimeVisitante(jogo.getTimeVisitante());
+
+        response.setCampeonatoId(jogo.getCampeonato().getId());
+        response.setTimeMandanteId(jogo.getTimeMandante().getId());
+        response.setTimeVisitanteId(jogo.getTimeVisitante().getId());
 
         return response;
     }

@@ -15,7 +15,7 @@ public class JogoRequest {
 
     private StatusGlobal status;
 
-    private Campeonato campeonato;
-    private Time timeMandante;
-    private Time timeVisitante;
+    private Long campeonatoId;
+    private Long timeMandanteId;
+    private Long timeVisitanteId;
 }

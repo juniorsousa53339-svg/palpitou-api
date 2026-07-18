@@ -7,7 +7,9 @@ import br.com.palpitou.dto.JogoRequest;
 import br.com.palpitou.dto.JogoResponse;
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.mapper.JogoMapper;
+import br.com.palpitou.repository.CampeonatoRepository;
 import br.com.palpitou.repository.JogoRepository;
+import br.com.palpitou.repository.TimeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import java.util.List;
 public class JogoService {
 
     private final JogoRepository jogoRepository;
+    private final CampeonatoRepository campeonatoRepository;
+    private final TimeRepository timeRepository;
     private final JogoMapper jogoMapper;
 
     public JogoResponse salvar(JogoRequest request) {
