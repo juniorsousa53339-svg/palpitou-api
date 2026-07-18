@@ -3,6 +3,7 @@ package br.com.palpitou.service;
 import br.com.palpitou.dto.CampeonatoRequest;
 import br.com.palpitou.dto.CampeonatoResponse;
 import br.com.palpitou.entity.Campeonato;
+import br.com.palpitou.entity.User;
 import br.com.palpitou.mapper.CampeonatoMapper;
 import br.com.palpitou.repository.CampeonatoRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,22 @@ public class CampeonatoService {
     private final CampeonatoRepository campeonatoRepository;
     private final CampeonatoMapper campeonatoMapper;
 
+
+    // =========================
+    // Métodos auxiliares
+    // =========================
+
+    private Campeonato buscarCamp(Long id) {
+        return campeonatoRepository.findById(id).
+                orElseThrow(() ->
+                        new RuntimeException
+                                ("Campeonato não encontrado!"));
+    }
+
+    // =========================
+    // CRUD
+    // =========================
+
     public CampeonatoResponse salvar(CampeonatoRequest request) {
 
         if (campeonatoRepository.existsByNome(request.getNome())) {
@@ -30,11 +47,7 @@ public class CampeonatoService {
 
     public CampeonatoResponse buscar(Long id) {
 
-        Campeonato camp =
-                campeonatoRepository.findById(id).
-                        orElseThrow(() ->
-                                new RuntimeException
-                                        ("Campeonato não encontrado!"));
+        Campeonato camp = buscarCamp(id);
 
         return campeonatoMapper.toResponse(camp);
     }
@@ -53,10 +66,7 @@ public class CampeonatoService {
 
     public CampeonatoResponse updateCamp(Long campeonatoId, CampeonatoRequest request) {
 
-        Campeonato campBd =
-                campeonatoRepository.findById(campeonatoId)
-                        .orElseThrow(()
-                                -> new RuntimeException("Campeonato não encontrado!"));
+        Campeonato campBd = buscarCamp(campeonatoId);
 
         campBd.alterarDados(
 
@@ -75,13 +85,7 @@ public class CampeonatoService {
 
     public void delete(Long campeonatoId) {
 
-        Campeonato campBd =
-                campeonatoRepository.findById(campeonatoId)
-                        .orElseThrow(()
-                                -> new RuntimeException
-                                ("Campeonato não encontrado")
-                        );
-
+        Campeonato campBd = buscarCamp(campeonatoId);
         campeonatoRepository.delete(campBd);
     }
 

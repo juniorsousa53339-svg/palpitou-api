@@ -2,6 +2,7 @@ package br.com.palpitou.service;
 
 import br.com.palpitou.dto.UserRequest;
 import br.com.palpitou.dto.UserResponse;
+import br.com.palpitou.entity.Campeonato;
 import br.com.palpitou.entity.User;
 import br.com.palpitou.mapper.UserMapper;
 import br.com.palpitou.repository.UserRepository;
@@ -16,6 +17,24 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+
+    // =========================
+    // Métodos auxiliares
+    // =========================
+
+    private User buscarUser(Long id) {
+        return userRepository.findById(id).
+                orElseThrow(() ->
+                        new RuntimeException
+                                ("Usuario não encontrado!"));
+    }
+
+
+
+    // =========================
+    // CRUD
+    // =========================
 
     public UserResponse salvar(UserRequest request) {
 
@@ -32,13 +51,7 @@ public class UserService {
 
     public UserResponse buscar(Long id) {
 
-        User user =
-                userRepository.findById(id).
-                        orElseThrow(() ->
-                                new RuntimeException
-                                        ("Usuario não encontrado!"));
-
-
+        User user = buscarUser(id);
         return userMapper.toResponse(user);
     }
 
@@ -57,12 +70,7 @@ public class UserService {
     public UserResponse updateUser(Long id, UserRequest request) {
 
 
-        User userBd =
-                userRepository.findById(id)
-                        .orElseThrow(()
-                                -> new RuntimeException
-                                ("Usuario não encontrado")
-                        );
+        User userBd = buscarUser(id);
 
         userBd.alterarDados(
 
@@ -81,13 +89,7 @@ public class UserService {
 
     public void delete(Long id) {
 
-        User userBd =
-                userRepository.findById(id)
-                        .orElseThrow(()
-                                -> new RuntimeException
-                                ("Usuario não encontrado")
-                        );
-
+        User userBd = buscarUser(id);
         userRepository.delete(userBd);
     }
 }
