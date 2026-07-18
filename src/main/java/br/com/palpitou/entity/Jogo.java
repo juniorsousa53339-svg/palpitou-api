@@ -59,4 +59,23 @@ public class Jogo {
     @JoinColumn(name = "time_visitante_id")
     private Time timeVisitante;
 
+
+    public void alterarDados(
+
+            LocalDate data,
+            LocalDateTime dataHora,
+            int rodada,
+            int golsMandante,
+            int golsVisitante,
+            StatusGlobal status
+    ) {
+
+        this.data = data;
+        this.dataHora = dataHora;
+        this.rodada = rodada;
+        this.golsMandante = golsMandante;
+        this.golsVisitante = golsVisitante;
+        this.status = status;
+    }
+
 }

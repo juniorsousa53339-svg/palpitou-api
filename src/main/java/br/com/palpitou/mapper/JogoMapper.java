@@ -2,6 +2,7 @@ package br.com.palpitou.mapper;
 
 import br.com.palpitou.dto.JogoRequest;
 import br.com.palpitou.dto.JogoResponse;
+import br.com.palpitou.dto.PutResponseJogo;
 import br.com.palpitou.entity.Campeonato;
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.entity.Time;
@@ -43,5 +44,19 @@ public class JogoMapper {
         response.setTimeVisitanteId(jogo.getTimeVisitante().getId());
 
         return response;
+    }
+
+    public PutResponseJogo toPutResponseJogo(Jogo jogo){
+
+        PutResponseJogo putResponseJogo = new PutResponseJogo();
+
+        putResponseJogo.setData(jogo.getData());
+        putResponseJogo.setDataHora(jogo.getDataHora());
+        putResponseJogo.setRodada(jogo.getRodada());
+        putResponseJogo.setGolsMandante(jogo.getGolsMandante());
+        putResponseJogo.setGolsVisitante(jogo.getGolsVisitante());
+        putResponseJogo.setStatus(jogo.getStatus());
+
+     return putResponseJogo;
     }
 }

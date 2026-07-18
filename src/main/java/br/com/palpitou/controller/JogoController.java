@@ -2,6 +2,8 @@ package br.com.palpitou.controller;
 
 import br.com.palpitou.dto.JogoRequest;
 import br.com.palpitou.dto.JogoResponse;
+import br.com.palpitou.dto.PutRequestJogo;
+import br.com.palpitou.dto.PutResponseJogo;
 import br.com.palpitou.service.JogoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +49,16 @@ public class JogoController {
     public ResponseEntity<JogoResponse> buscar(@PathVariable Long id) {
 
         var  resposta = jogoService.buscar(id);
+        return ResponseEntity.ok(resposta);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PutResponseJogo> atualizar(
+            @PathVariable Long id,
+            @RequestBody @Valid PutRequestJogo putRequest
+    ){
+
+        var resposta = jogoService.updateJogo(id, putRequest);
         return ResponseEntity.ok(resposta);
     }
 }
