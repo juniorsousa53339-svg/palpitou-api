@@ -59,8 +59,6 @@ public class UserController {
     public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
 
       var resposta = userService.buscar(id);
-
       return ResponseEntity.ok(resposta);
     }
-
 }

@@ -29,8 +29,8 @@ public class TimeService {
                                 ("Time não encontrado!"));
     }
 
-    private void validName(TimeRequest request) {
-        if (timeRepository.existsByNome(request.getNome())) {
+    private void validarNomeDuplicado(String request) {
+        if (timeRepository.existsByNome(request)) {
             throw new RuntimeException("Time já cadastrado.");
         }
     }
@@ -41,7 +41,7 @@ public class TimeService {
 
     public TimeResponse salvar(TimeRequest request) {
 
-        validName(request);
+        validarNomeDuplicado(request.getNome());
 
         Time time = timeMapper.toEntity(request);
 
@@ -80,7 +80,8 @@ public class TimeService {
                 request.getSigla()
         );
 
-        validName(request);
+        buscarTime(id);
+        validarNomeDuplicado(request.getNome());
 
         Time timeAtualizado = timeRepository.save(timeBd);
         return timeMapper.toResponse(timeAtualizado);
@@ -90,6 +91,4 @@ public class TimeService {
         Time timeBd = buscarTime(id);
         timeRepository.delete(timeBd);
     }
-
-
 }
