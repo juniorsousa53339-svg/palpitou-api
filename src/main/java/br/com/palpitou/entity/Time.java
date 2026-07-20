@@ -31,4 +31,16 @@ public class Time {
 
     @OneToMany
     private List<Jogo> jogos = new ArrayList<>();
+
+    public void altDados(
+
+            String nome,
+            String escudo,
+            String sigla
+    ) {
+        this.nome = nome;
+        this.escudo = escudo;
+        this.sigla = sigla;
+
+    }
 }
