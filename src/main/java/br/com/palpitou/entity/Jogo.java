@@ -23,8 +23,6 @@ public class Jogo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    private LocalDate data;
 
     @NotNull
     private LocalDateTime dataHora;
@@ -62,7 +60,6 @@ public class Jogo {
 
     public void alterarDados(
 
-            LocalDate data,
             LocalDateTime dataHora,
             int rodada,
             int golsMandante,
@@ -70,7 +67,6 @@ public class Jogo {
             StatusGlobal status
     ) {
 
-        this.data = data;
         this.dataHora = dataHora;
         this.rodada = rodada;
         this.golsMandante = golsMandante;

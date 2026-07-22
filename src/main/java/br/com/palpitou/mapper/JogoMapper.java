@@ -50,7 +50,6 @@ public class JogoMapper {
 
         PutResponseJogo putResponseJogo = new PutResponseJogo();
 
-        putResponseJogo.setData(jogo.getData());
         putResponseJogo.setDataHora(jogo.getDataHora());
         putResponseJogo.setRodada(jogo.getRodada());
         putResponseJogo.setGolsMandante(jogo.getGolsMandante());

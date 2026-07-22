@@ -25,6 +25,7 @@ public class TimeMapper {
         timeResponse.setNome(time.getNome());
         timeResponse.setEscudo(time.getEscudo());
         timeResponse.setSigla(time.getSigla());
+        timeResponse.setId(time.getId());
         return timeResponse;
     }
 }

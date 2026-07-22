@@ -97,7 +97,6 @@ public class JogoService {
         Jogo jogoBd = buscarJogo(id);
 
         jogoBd.alterarDados(
-                putjogo.getData(),
                 putjogo.getDataHora(),
                 putjogo.getRodada(),
                 putjogo.getGolsMandante(),
