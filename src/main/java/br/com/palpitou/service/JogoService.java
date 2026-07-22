@@ -31,6 +31,15 @@ public class JogoService {
     // Métodos auxiliares
     // =========================
 
+    private void validarTimesDuplicados(
+            Time timeMandante ,
+            Time timeVisitante
+    ) {
+         if (timeMandante.getId().equals(timeVisitante.getId())){
+             throw new RuntimeException("O jogo não pode ser duplicado.");
+          }
+    }
+
     private Campeonato buscarCampeonato(Long id) {
         return campeonatoRepository.findById(id)
                 .orElseThrow(() ->
@@ -61,6 +70,8 @@ public class JogoService {
         Time timeMandante = buscarTime(request.getTimeMandanteId());
 
         Time timeVisitante = buscarTime(request.getTimeVisitanteId());
+
+        validarTimesDuplicados(timeMandante, timeVisitante);
 
         Jogo jogo = jogoMapper.toEntity(
                 request,
@@ -117,4 +128,7 @@ public class JogoService {
     // =========================
    // Regras de negócio
   // =========================
+
+
+
 }
