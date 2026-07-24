@@ -8,6 +8,7 @@ import br.com.palpitou.dto.PutResponseJogo;
 import br.com.palpitou.entity.Campeonato;
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.entity.Time;
+import br.com.palpitou.enums.StatusGlobal;
 import br.com.palpitou.mapper.JogoMapper;
 import br.com.palpitou.repository.CampeonatoRepository;
 import br.com.palpitou.repository.JogoRepository;
@@ -31,13 +32,22 @@ public class JogoService {
     // Métodos auxiliares
     // =========================
 
+    private void validarStatusCampeonato(StatusGlobal status) {
+
+        if (status == StatusGlobal.FINALIZADA) {
+            throw new RuntimeException(
+                    "Não é permitido cadastrar jogos" +
+                    "em um campeonato finalizado."
+                    );
+        }
+    }
     private void validarTimesDuplicados(
-            Time timeMandante ,
+            Time timeMandante,
             Time timeVisitante
     ) {
-         if (timeMandante.getId().equals(timeVisitante.getId())){
-             throw new RuntimeException("O jogo não pode ser duplicado.");
-          }
+        if (timeMandante.getId().equals(timeVisitante.getId())) {
+            throw new RuntimeException("O jogo não pode ser duplicado.");
+        }
     }
 
     private Campeonato buscarCampeonato(Long id) {
@@ -52,7 +62,7 @@ public class JogoService {
                         new RuntimeException("Time não encontrado!"));
     }
 
-    private Jogo buscarJogo(Long id){
+    private Jogo buscarJogo(Long id) {
         return jogoRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("jogo não encontrado!"));
@@ -67,13 +77,16 @@ public class JogoService {
 
         Campeonato campeonato = buscarCampeonato(request.getCampeonatoId());
 
+        validarStatusCampeonato(campeonato.getStatus());
+
         Time timeMandante = buscarTime(request.getTimeMandanteId());
 
         Time timeVisitante = buscarTime(request.getTimeVisitanteId());
 
         validarTimesDuplicados(timeMandante, timeVisitante);
 
-        Jogo jogo = jogoMapper.toEntity(
+        Jogo jogo = jogoMapper.toEntity
+                (
                 request,
                 campeonato,
                 timeMandante,
@@ -126,9 +139,8 @@ public class JogoService {
     }
 
     // =========================
-   // Regras de negócio
-  // =========================
-
+    // Regras de negócio
+    // =========================
 
 
 }
