@@ -39,4 +39,12 @@ public class Participacao {
     @JoinColumn(name = "bolao_id")
     private Bolao bolao;
 
+    public void alterarDados(
+            int pontos,
+            StatusParticipacao status
+    ) {
+        this.pontos = pontos;
+        this.status = status;
+    }
+
 }
