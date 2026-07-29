@@ -46,7 +46,7 @@ public class JogoMapper {
         return response;
     }
 
-    public PutResponseJogo toPutResponseJogo(Jogo jogo){
+    public PutResponseJogo toPutResponseJogo(Jogo jogo) {
 
         PutResponseJogo putResponseJogo = new PutResponseJogo();
 
@@ -55,7 +55,6 @@ public class JogoMapper {
         putResponseJogo.setGolsMandante(jogo.getGolsMandante());
         putResponseJogo.setGolsVisitante(jogo.getGolsVisitante());
         putResponseJogo.setStatus(jogo.getStatus());
-
-     return putResponseJogo;
+        return putResponseJogo;
     }
 }

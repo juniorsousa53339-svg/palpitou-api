@@ -49,4 +49,18 @@ public class Bolao {
 
     @OneToMany(mappedBy = "bolao", cascade = CascadeType.ALL)
     private List<Premiacao> premiacoes = new ArrayList<>();
+
+    public void alterarDados(
+            String nome,
+            BigDecimal valorInscricao,
+            LocalDateTime dataInicio,
+            LocalDateTime dataFim,
+            StatusGlobal status
+    ) {
+        this.nome = nome;
+        this.valorInscricao = valorInscricao;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.status = status;
+    }
 }
