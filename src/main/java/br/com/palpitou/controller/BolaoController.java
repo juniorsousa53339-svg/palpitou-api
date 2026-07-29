@@ -22,7 +22,7 @@ public class BolaoController {
             @RequestBody @Valid BolaoRequest request){
 
         BolaoResponse response =
-                bolaoService.salvarBolao(request);
+                bolaoService.salvar(request);
 
         return ResponseEntity.ok(response);
     }
@@ -38,7 +38,6 @@ public class BolaoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id){
-
         bolaoService.delete(id);
         return ResponseEntity.noContent().build();
     }
