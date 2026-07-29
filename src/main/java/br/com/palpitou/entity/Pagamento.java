@@ -12,7 +12,8 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
-@Getter  @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "pagamentos")
 public class Pagamento {
@@ -25,7 +26,7 @@ public class Pagamento {
     private BigDecimal valor;
 
     @Enumerated(EnumType.STRING)
-     private StatusPagamento status;
+    private StatusPagamento status;
 
     @NotBlank
     private String nomePagadorPix;
@@ -39,4 +40,8 @@ public class Pagamento {
 
     @OneToOne(mappedBy = "pagamento")
     private Participacao participacao;
+
+    public void alterarDados(StatusPagamento status) {
+        this.status = status;
+    }
 }
