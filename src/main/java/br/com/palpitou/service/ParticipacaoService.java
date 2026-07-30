@@ -13,6 +13,10 @@ import br.com.palpitou.mapper.ParticipacaoMapper;
 import br.com.palpitou.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.List;
 
 @Service
@@ -48,6 +52,15 @@ public class ParticipacaoService {
                         new RuntimeException("Bolão não encontrado!"));
     }
 
+    private void  validarParticipacao(LocalDateTime dataInicio) {
+
+        if (dataInicio.isBefore(LocalDateTime.now())) {
+            throw new RuntimeException(
+                    "Este bolão já foi iniciado e não aceita novas participações."
+            );
+        }
+    }
+
     // =========================
     // CRUD
     // =========================
@@ -56,8 +69,9 @@ public class ParticipacaoService {
 
         User user = buscarUser(request.getUserId());
 
-
         Bolao bolao = buscarBolao(request.getBolaoId());
+
+        validarParticipacao(bolao.getDataInicio());
 
         Participacao participacao = participacaoMapper.toEntity(
 
