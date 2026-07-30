@@ -1,6 +1,8 @@
 package br.com.palpitou.controller;
 
 
+import br.com.palpitou.dto.PutRequestUser;
+import br.com.palpitou.dto.PutResponseUser;
 import br.com.palpitou.dto.UserRequest;
 import br.com.palpitou.dto.UserResponse;
 
@@ -39,13 +41,23 @@ public class UserController {
         return ResponseEntity.ok(resposta);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> atualizar(
+    @PutMapping("/{id}/Me")
+    public ResponseEntity<PutResponseUser> atualizarUser(
             @PathVariable Long id,
-            @RequestBody @Valid UserRequest request
+            @RequestBody @Valid PutRequestUser request
     ) {
         var resposta = userService.updateUser(id, request);
 
+        return ResponseEntity.ok(resposta);
+    }
+
+    @PutMapping("/{id}/Role")
+    public ResponseEntity<UserResponse> atualizarAdmin(
+
+            @PathVariable Long id,
+            @RequestBody @Valid UserRequest request
+    ){
+        var resposta = userService.updateAdmin(id, request);
         return ResponseEntity.ok(resposta);
     }
 

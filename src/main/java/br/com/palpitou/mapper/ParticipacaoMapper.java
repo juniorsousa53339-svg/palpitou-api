@@ -4,7 +4,6 @@ import br.com.palpitou.dto.ParticipacaoRequest;
 import br.com.palpitou.dto.ParticipacaoResponse;
 import br.com.palpitou.dto.PutResponseParticipacao;
 import br.com.palpitou.entity.Bolao;
-import br.com.palpitou.entity.Pagamento;
 import br.com.palpitou.entity.Participacao;
 import br.com.palpitou.entity.User;
 
@@ -16,7 +15,6 @@ public class ParticipacaoMapper {
     public Participacao toEntity
             (
                     ParticipacaoRequest request,
-                    Pagamento pagamento,
                     User user,
                     Bolao bolao
             ) {
@@ -27,7 +25,6 @@ public class ParticipacaoMapper {
         participacao.setDataInscricao(request.getDataInscricao());
         participacao.setPontos(request.getPontos());
         participacao.setUsuario(user);
-        participacao.setPagamento(pagamento);
         participacao.setBolao(bolao);
         return participacao;
     }

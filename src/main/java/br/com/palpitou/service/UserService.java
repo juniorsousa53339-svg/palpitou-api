@@ -1,5 +1,7 @@
 package br.com.palpitou.service;
 
+import br.com.palpitou.dto.PutRequestUser;
+import br.com.palpitou.dto.PutResponseUser;
 import br.com.palpitou.dto.UserRequest;
 import br.com.palpitou.dto.UserResponse;
 import br.com.palpitou.entity.Campeonato;
@@ -66,12 +68,11 @@ public class UserService {
         return resposta;
     }
 
-    public UserResponse updateUser(Long id, UserRequest request) {
-
+    public PutResponseUser updateUser(Long id, PutRequestUser request) {
 
         User userBd = buscarUser(id);
 
-        userBd.alterarDados(
+        userBd.alterarPerfil(
 
                 request.getNome(),
                 request.getEmail(),
@@ -81,6 +82,21 @@ public class UserService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("E-mail já cadastrado.");
         }
+
+        User userAtualizado = userRepository.save(userBd);
+        return userMapper.toPut(userAtualizado);
+    }
+
+    public  UserResponse updateAdmin(Long id, UserRequest request) {
+        User userBd = buscarUser(id);
+
+        userBd.alterarDadosAdmin(
+
+                request.getNome(),
+                request.getEmail(),
+                request.getSenha(),
+                request.getRole()
+        );
 
         User userAtualizado = userRepository.save(userBd);
         return userMapper.toResponse(userAtualizado);

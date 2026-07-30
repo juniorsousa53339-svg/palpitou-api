@@ -41,11 +41,6 @@ public class ParticipacaoService {
                         new RuntimeException("Usuario não encontrado!"));
     }
 
-    private Pagamento buscarPagamento(Long idPagamento) {
-        return pagamentoRepository.findById(idPagamento)
-                .orElseThrow(() ->
-                        new RuntimeException("Pagamento não encontrado!"));
-    }
 
     private Bolao buscarBolao(Long idBolao) {
         return bolaoRepository.findById(idBolao)
@@ -61,14 +56,12 @@ public class ParticipacaoService {
 
         User user = buscarUser(request.getUserId());
 
-        Pagamento pagamento = buscarPagamento(request.getPagamentoId());
 
         Bolao bolao = buscarBolao(request.getBolaoId());
 
         Participacao participacao = participacaoMapper.toEntity(
 
                 request,
-                pagamento,
                 user,
                 bolao
 

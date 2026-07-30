@@ -1,5 +1,7 @@
 package br.com.palpitou.mapper;
 
+import br.com.palpitou.dto.PutRequestUser;
+import br.com.palpitou.dto.PutResponseUser;
 import br.com.palpitou.dto.UserRequest;
 import br.com.palpitou.dto.UserResponse;
 import br.com.palpitou.entity.User;
@@ -30,5 +32,15 @@ public class UserMapper {
         userResponse.setRole(user.getRole());
 
         return userResponse;
+    }
+
+    public PutResponseUser toPut(User user){
+        PutResponseUser putResponseUser = new PutResponseUser();
+
+        putResponseUser.setEmail(user.getEmail());
+        putResponseUser.setNome(user.getNome());
+        putResponseUser.setSenha(user.getSenha());
+
+        return putResponseUser;
     }
 }

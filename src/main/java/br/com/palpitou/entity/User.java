@@ -45,7 +45,12 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Pagamento> pagamentos = new ArrayList<>();
 
-    public void alterarDados(
+
+    // =========================
+    // Métodos auxiliares
+    // =========================
+
+    public void alterarPerfil(
             String nome,
             String email,
             String senha
@@ -55,5 +60,20 @@ public class User {
         this.email = email;
         this.senha = senha;
     }
+
+
+    public void alterarDadosAdmin(
+            String nome,
+            String email,
+            String senha,
+            Role role
+    ) {
+
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.role = role;
+    }
+
 
 }

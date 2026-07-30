@@ -13,6 +13,5 @@ public class ParticipacaoRequest {
     private LocalDate dataInscricao;
     private int pontos;
     private Long userId;
-    private Long pagamentoId;
     private Long bolaoId;
 }

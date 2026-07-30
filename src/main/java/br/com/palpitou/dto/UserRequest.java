@@ -12,10 +12,8 @@ import lombok.Setter;
 
 @Getter @Setter
 public class UserRequest {
-
     private String nome;
     private String email;
     private String senha;
     private Role role;
-
 }
