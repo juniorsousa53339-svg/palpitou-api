@@ -26,9 +26,9 @@ public class ParticipacaoService {
     private final BolaoRepository bolaoRepository;
     private final ParticipacaoMapper participacaoMapper;
 
-    // =========================
+    // ========================
     // Métodos auxiliares
-    // =========================
+    // ========================
 
     private Participacao buscarParticipacao(Long idParticipacao) {
         return participacaoRepository.findById(idParticipacao)
@@ -69,9 +69,9 @@ public class ParticipacaoService {
 
     }
 
-    // =========================
+    // ========================
     // CRUD
-    // =========================
+    // ========================
 
     public ParticipacaoResponse salvar(ParticipacaoRequest request) {
 
