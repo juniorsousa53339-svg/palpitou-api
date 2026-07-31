@@ -9,5 +9,5 @@ public interface CampeonatoRepository extends JpaRepository<Campeonato,Long> {
     boolean existsByNome(String nome);
 
 
-    Campeonato findByStatus(StatusGlobal status);
+
 }

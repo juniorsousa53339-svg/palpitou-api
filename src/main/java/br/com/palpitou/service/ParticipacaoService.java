@@ -6,7 +6,6 @@ import br.com.palpitou.dto.ParticipacaoResponse;
 import br.com.palpitou.dto.PutRequestParticipacao;
 import br.com.palpitou.dto.PutResponseParticipacao;
 import br.com.palpitou.entity.Bolao;
-import br.com.palpitou.entity.Pagamento;
 import br.com.palpitou.entity.Participacao;
 import br.com.palpitou.entity.User;
 import br.com.palpitou.mapper.ParticipacaoMapper;
@@ -14,9 +13,7 @@ import br.com.palpitou.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.util.List;
 
 @Service
@@ -52,7 +49,7 @@ public class ParticipacaoService {
                         new RuntimeException("Bolão não encontrado!"));
     }
 
-    private void  validarParticipacao(LocalDateTime dataInicio) {
+    private void validaData(LocalDateTime dataInicio) {
 
         if (dataInicio.isBefore(LocalDateTime.now())) {
             throw new RuntimeException(
@@ -61,24 +58,39 @@ public class ParticipacaoService {
         }
     }
 
+    private void validarParticipacaoDuplicada(ParticipacaoRequest request) {
+
+        if (participacaoRepository.existsByBolaoIdAndUserId(
+                request.getBolaoId(),
+                request.getUserId())
+        ) {
+            throw new RuntimeException("Usuário já possui uma participação neste bolão.");
+        }
+
+    }
+
     // =========================
     // CRUD
     // =========================
 
     public ParticipacaoResponse salvar(ParticipacaoRequest request) {
 
-        User user = buscarUser(request.getUserId());
+        User user =
+                buscarUser(request.getUserId());
 
-        Bolao bolao = buscarBolao(request.getBolaoId());
+        Bolao bolao =
+                buscarBolao(request.getBolaoId());
 
-        validarParticipacao(bolao.getDataInicio());
+        validaData
+                (bolao.getDataInicio());
 
-        Participacao participacao = participacaoMapper.toEntity(
+        validarParticipacaoDuplicada
+                (request);
 
-                request,
-                user,
-                bolao
+        Participacao participacao =
+                participacaoMapper.toEntity(
 
+                request, user, bolao
         );
 
         Participacao participacaoSalvo = participacaoRepository.save(participacao);
@@ -102,7 +114,7 @@ public class ParticipacaoService {
 
     public PutResponseParticipacao updateParticipacao(
             Long id, PutRequestParticipacao put
-    ){
+    ) {
         Participacao participacao = buscarParticipacao(id);
 
         participacao.alterarDados(
@@ -120,7 +132,8 @@ public class ParticipacaoService {
 
     public void delete(long id) {
         Participacao participacao = buscarParticipacao(id);
-        participacaoRepository.delete(participacao);    }
+        participacaoRepository.delete(participacao);
+    }
 
     // =========================
     // Regras de negócio
