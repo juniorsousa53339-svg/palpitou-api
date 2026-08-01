@@ -6,6 +6,7 @@ import br.com.palpitou.dto.ParticipacaoResponse;
 import br.com.palpitou.dto.PutRequestParticipacao;
 import br.com.palpitou.dto.PutResponseParticipacao;
 import br.com.palpitou.entity.Bolao;
+import br.com.palpitou.entity.Pagamento;
 import br.com.palpitou.entity.Participacao;
 import br.com.palpitou.entity.User;
 import br.com.palpitou.mapper.ParticipacaoMapper;
@@ -49,24 +50,10 @@ public class ParticipacaoService {
                         new RuntimeException("Bolão não encontrado!"));
     }
 
-    private void validaData(LocalDateTime dataInicio) {
-
-        if (dataInicio.isBefore(LocalDateTime.now())) {
-            throw new RuntimeException(
-                    "Este bolão já foi iniciado e não aceita novas participações."
-            );
-        }
-    }
-
-    private void validarParticipacaoDuplicada(ParticipacaoRequest request) {
-
-        if (participacaoRepository.existsByBolaoIdAndUserId(
-                request.getBolaoId(),
-                request.getUserId())
-        ) {
-            throw new RuntimeException("Usuário já possui uma participação neste bolão.");
-        }
-
+    private Pagamento buscarPagamento(Long id) {
+        return pagamentoRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Pagamento não encontrado!"));
     }
 
     // ========================
@@ -81,6 +68,12 @@ public class ParticipacaoService {
         Bolao bolao =
                 buscarBolao(request.getBolaoId());
 
+
+          Pagamento pagamento =
+                  buscarPagamento(request.getPagamentoId());
+
+          validarPagamento(pagamento);
+
         validaData
                 (bolao.getDataInicio());
 
@@ -90,7 +83,7 @@ public class ParticipacaoService {
         Participacao participacao =
                 participacaoMapper.toEntity(
 
-                request, user, bolao
+                request, user, bolao, pagamento
         );
 
         Participacao participacaoSalvo = participacaoRepository.save(participacao);
@@ -138,4 +131,30 @@ public class ParticipacaoService {
     // =========================
     // Regras de negócio
     // =========================
+
+
+    private void validaData(LocalDateTime dataInicio) {
+
+        if (dataInicio.isBefore(LocalDateTime.now())) {
+            throw new RuntimeException(
+                    "Este bolão já foi iniciado e não aceita novas participações."
+            );
+        }
+    }
+
+    private void validarParticipacaoDuplicada(ParticipacaoRequest request) {
+
+        if (participacaoRepository.existsByBolaoIdAndUsuarioId(
+                request.getBolaoId(),
+                request.getUserId())
+        ) {
+            throw new RuntimeException("Usuário já possui uma participação neste bolão.");
+        }
+
+    }
+
+    private void validarPagamento(Pagamento pagamento) {
+
+        pagamento.isPagamentoAprovado(pagamento.getStatus());
+    }
 }

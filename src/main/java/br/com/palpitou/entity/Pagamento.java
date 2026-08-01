@@ -37,11 +37,22 @@ public class Pagamento {
     @JoinColumn(name = "user_id")
     private User user;
 
-
-    @OneToOne(mappedBy = "pagamento")
-    private Participacao participacao;
+    @ManyToOne
+    @JoinColumn(name = "bolao_id")
+    private Bolao bolao;
 
     public void alterarDados(StatusPagamento status) {
         this.status = status;
+    }
+
+    public boolean isPagamentoAprovado(StatusPagamento status) {
+        if (status == StatusPagamento.APROVADO) {
+            return true;
+
+        } else {
+            throw new RuntimeException(
+                    "Pagamento não aprovado. " +
+                            "Não é possível criar a participação.");
+        }
     }
 }

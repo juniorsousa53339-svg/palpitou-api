@@ -14,4 +14,5 @@ public class ParticipacaoRequest {
     private int pontos;
     private Long userId;
     private Long bolaoId;
+    private Long pagamentoId;
 }

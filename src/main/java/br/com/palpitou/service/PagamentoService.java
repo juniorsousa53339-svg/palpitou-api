@@ -6,11 +6,10 @@ import br.com.palpitou.dto.PutRequestPagamento;
 import br.com.palpitou.dto.PutResponsePagamento;
 import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.entity.Pagamento;
-import br.com.palpitou.entity.Participacao;
 import br.com.palpitou.entity.User;
 import br.com.palpitou.mapper.PagamentoMapper;
+import br.com.palpitou.repository.BolaoRepository;
 import br.com.palpitou.repository.PagamentoRepository;
-import br.com.palpitou.repository.ParticipacaoRepository;
 import br.com.palpitou.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class PagamentoService {
 
     private final PagamentoRepository pagamentoRepository;
     private final UserRepository userRepository;
-    private final ParticipacaoRepository participacaoRepository;
+    private final BolaoRepository bolaoRepository;
     private final PagamentoMapper pagamentoMapper;
 
     // =========================
@@ -42,10 +41,10 @@ public class PagamentoService {
                         new RuntimeException("Pagamento não encontrado!"));
     }
 
-    private Participacao buscarParticipacao(Long id) {
-        return participacaoRepository.findById(id)
+    private Bolao buscarBolao(Long id) {
+        return bolaoRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Participação não encontrada!"));
+                        new RuntimeException("Bolão não encontrado!"));
     }
 
     // =========================
@@ -57,13 +56,13 @@ public class PagamentoService {
        User user =
                buscarUser(request.getUserId());
 
-       Participacao participacao =
-               buscarParticipacao(request.getParticipacaoId());
+       Bolao bolao =
+               buscarBolao(request.getBolaoId());
 
         Pagamento pagamento = pagamentoMapper.toEntity(
                 request,
                 user,
-                participacao
+                bolao
         );
 
         Pagamento pagamentoSalvo =

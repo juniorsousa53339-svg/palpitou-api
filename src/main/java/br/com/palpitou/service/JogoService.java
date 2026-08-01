@@ -32,23 +32,7 @@ public class JogoService {
     // Métodos auxiliares
     // =========================
 
-    private void validarStatusCampeonato(StatusGlobal status) {
 
-        if (status == StatusGlobal.FINALIZADA) {
-            throw new RuntimeException(
-                    "Não é permitido cadastrar jogos" +
-                    "em um campeonato finalizado."
-                    );
-        }
-    }
-    private void validarTimesDuplicados(
-            Time timeMandante,
-            Time timeVisitante
-    ) {
-        if (timeMandante.getId().equals(timeVisitante.getId())) {
-            throw new RuntimeException("O jogo não pode ser duplicado.");
-        }
-    }
 
     private Campeonato buscarCampeonato(Long id) {
         return campeonatoRepository.findById(id)
@@ -142,5 +126,23 @@ public class JogoService {
     // Regras de negócio
     // =========================
 
+
+    private void validarStatusCampeonato(StatusGlobal status) {
+
+        if (status == StatusGlobal.FINALIZADA) {
+            throw new RuntimeException(
+                    "Não é permitido cadastrar jogos" +
+                            "em um campeonato finalizado."
+            );
+        }
+    }
+    private void validarTimesDuplicados(
+            Time timeMandante,
+            Time timeVisitante
+    ) {
+        if (timeMandante.getId().equals(timeVisitante.getId())) {
+            throw new RuntimeException("O jogo não pode ser duplicado.");
+        }
+    }
 
 }

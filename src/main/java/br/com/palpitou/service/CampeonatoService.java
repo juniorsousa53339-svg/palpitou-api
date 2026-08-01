@@ -18,7 +18,6 @@ public class CampeonatoService {
     private final CampeonatoRepository campeonatoRepository;
     private final CampeonatoMapper campeonatoMapper;
 
-
     // =========================
     // Métodos auxiliares
     // =========================

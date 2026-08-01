@@ -1,6 +1,7 @@
 package br.com.palpitou.dto;
 
 
+import br.com.palpitou.entity.Bolao;
 import lombok.Getter;
 import lombok.Setter;
 import java.math.BigDecimal;
@@ -12,5 +13,5 @@ public class PagamentoRequest {
     private String nomePagadorPix;
     private String comprovante;
     private Long userId;
-    private Long participacaoId;
+    private Long bolaoId;
 }

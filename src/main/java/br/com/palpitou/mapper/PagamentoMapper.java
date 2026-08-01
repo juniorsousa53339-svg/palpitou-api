@@ -3,8 +3,9 @@ package br.com.palpitou.mapper;
 import br.com.palpitou.dto.PagamentoRequest;
 import br.com.palpitou.dto.PagamentoResponse;
 import br.com.palpitou.dto.PutResponsePagamento;
+import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.entity.Pagamento;
-import br.com.palpitou.entity.Participacao;
+
 import br.com.palpitou.entity.User;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ public class PagamentoMapper {
     public Pagamento toEntity(
             PagamentoRequest request,
             User user,
-            Participacao participacao
+            Bolao bolao
     ) {
 
         Pagamento pagamento = new Pagamento();
@@ -23,7 +24,7 @@ public class PagamentoMapper {
         pagamento.setNomePagadorPix(request.getNomePagadorPix());
         pagamento.setComprovante(request.getComprovante());
         pagamento.setUser(user);
-        pagamento.setParticipacao(participacao);
+        pagamento.setBolao(bolao);
         return pagamento;
     }
 
