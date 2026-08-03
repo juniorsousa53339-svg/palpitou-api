@@ -14,6 +14,7 @@ import br.com.palpitou.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -86,6 +87,8 @@ public class ParticipacaoService {
                 request, user, bolao, pagamento
         );
 
+        participacao.setDataInscricao(LocalDate.now());
+
         Participacao participacaoSalvo = participacaoRepository.save(participacao);
         return participacaoMapper.toResponse(participacaoSalvo);
     }
@@ -150,7 +153,6 @@ public class ParticipacaoService {
         ) {
             throw new RuntimeException("Usuário já possui uma participação neste bolão.");
         }
-
     }
 
     private void validarPagamento(Pagamento pagamento) {

@@ -24,7 +24,6 @@ public class ParticipacaoMapper {
         Participacao participacao = new Participacao();
 
         participacao.setStatus(request.getStatus());
-        participacao.setDataInscricao(request.getDataInscricao());
         participacao.setPontos(request.getPontos());
         participacao.setUsuario(user);
         participacao.setBolao(bolao);

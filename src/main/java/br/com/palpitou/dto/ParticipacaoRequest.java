@@ -10,7 +10,6 @@ import java.time.LocalDate;
 public class ParticipacaoRequest {
 
     private StatusParticipacao status;
-    private LocalDate dataInscricao;
     private int pontos;
     private Long userId;
     private Long bolaoId;
