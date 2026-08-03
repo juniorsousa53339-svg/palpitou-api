@@ -32,8 +32,6 @@ public class JogoService {
     // Métodos auxiliares
     // =========================
 
-
-
     private Campeonato buscarCampeonato(Long id) {
         return campeonatoRepository.findById(id)
                 .orElseThrow(() ->
@@ -52,20 +50,20 @@ public class JogoService {
                         new RuntimeException("jogo não encontrado!"));
     }
 
-
     // =========================
     // CRUD
     // =========================
 
     public JogoResponse salvar(JogoRequest request) {
 
-        Campeonato campeonato = buscarCampeonato(request.getCampeonatoId());
-
-        validarStatusCampeonato(campeonato.getStatus());
 
         Time timeMandante = buscarTime(request.getTimeMandanteId());
 
         Time timeVisitante = buscarTime(request.getTimeVisitanteId());
+
+        Campeonato campeonato = buscarCampeonato(request.getCampeonatoId());
+
+        validarStatusCampeonato(campeonato.getStatus());
 
         validarTimesDuplicados(timeMandante, timeVisitante);
 
@@ -141,7 +139,9 @@ public class JogoService {
             Time timeVisitante
     ) {
         if (timeMandante.getId().equals(timeVisitante.getId())) {
-            throw new RuntimeException("O jogo não pode ser duplicado.");
+            throw new RuntimeException(
+                    "O time mandante e o time visitante não podem ser o mesmo."
+            );
         }
     }
 
