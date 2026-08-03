@@ -44,6 +44,4 @@ public class PagamentoMapper {
         put.setStatus(pagamento.getStatus());
         return put;
     }
-
-
 }

@@ -27,4 +27,12 @@ public class Palpite {
     @JoinColumn(name = "jogo_id")
     private Jogo jogo;
 
+    // =========================
+    // Métodos auxiliares
+    // =========================
+
+    public void alterarPontosObtidos(int pontosObtidos) {
+        this.pontosObtidos = pontosObtidos;
+    }
+
 }
