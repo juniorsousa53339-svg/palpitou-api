@@ -45,6 +45,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Pagamento> pagamentos = new ArrayList<>();
 
+    @OneToMany(mappedBy = "usuario")
+    private List<Palpite> palpites = new ArrayList<>();
+
 
     // =========================
     // Métodos auxiliares

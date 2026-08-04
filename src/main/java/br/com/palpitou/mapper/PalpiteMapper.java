@@ -5,12 +5,15 @@ import br.com.palpitou.dto.PalpiteResponse;
 import br.com.palpitou.dto.PutResponsePalpite;
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.entity.Palpite;
+import br.com.palpitou.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PalpiteMapper {
 
-    public Palpite toEntity(PalpiteRequest request, Jogo jogo) {
+    public Palpite toEntity(PalpiteRequest request,
+                            Jogo jogo, User usuario
+    ) {
 
 
         Palpite palpite = new Palpite();
@@ -18,6 +21,7 @@ public class PalpiteMapper {
         palpite.setGolsMandante(request.getGolsMandante());
         palpite.setGolsVisitante(request.getGolsVisitante());
         palpite.setJogo(jogo);
+        palpite.setUsuario(usuario);
         return palpite;
     }
 
