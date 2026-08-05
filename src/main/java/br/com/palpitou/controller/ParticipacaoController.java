@@ -5,6 +5,7 @@ import br.com.palpitou.dto.ParticipacaoResponse;
 import br.com.palpitou.dto.PutRequestParticipacao;
 import br.com.palpitou.dto.PutResponseParticipacao;
 import br.com.palpitou.service.ParticipacaoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class ParticipacaoController {
 
     @PostMapping
     public ResponseEntity<ParticipacaoResponse> salvar(
-            @RequestBody ParticipacaoRequest request){
+            @RequestBody @Valid ParticipacaoRequest request){
 
           ParticipacaoResponse response =
                   participacaoService.salvar(request);
