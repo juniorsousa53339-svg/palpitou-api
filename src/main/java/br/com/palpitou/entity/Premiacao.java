@@ -34,4 +34,9 @@ public class Premiacao {
     @JoinColumn(name = "bolao_id")
     private Bolao bolao;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
 }
