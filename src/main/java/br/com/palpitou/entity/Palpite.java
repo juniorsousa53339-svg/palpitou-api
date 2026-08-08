@@ -28,8 +28,8 @@ public class Palpite {
     private Jogo jogo;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private User usuario;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     // =========================
     // Métodos auxiliares

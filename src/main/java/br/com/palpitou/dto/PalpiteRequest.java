@@ -9,5 +9,5 @@ public class PalpiteRequest {
     private int golsMandante;
     private int golsVisitante;
     private Long jogoId;
-    private Long usuarioId;
+    private Long userId;
 }

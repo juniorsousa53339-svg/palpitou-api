@@ -3,12 +3,15 @@ package br.com.palpitou.service;
 import br.com.palpitou.dto.*;
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.entity.Palpite;
+import br.com.palpitou.entity.User;
 import br.com.palpitou.mapper.PalpiteMapper;
 import br.com.palpitou.repository.JogoRepository;
 import br.com.palpitou.repository.PalpiteRepository;
+import br.com.palpitou.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,9 +21,10 @@ public class PalpiteService {
     private final PalpiteRepository palpiteRepository;
     private final JogoRepository jogoRepository;
     private final PalpiteMapper palpiteMapper;
+    private final UserRepository userRepository;
 
     // =========================
-    // Métodos auxiliares
+    // Métodos auxiliareS
     // =========================
 
     private Jogo buscarJogo(Long id) {
@@ -35,19 +39,35 @@ public class PalpiteService {
                         new RuntimeException("Palpite não encontrado!"));
     }
 
-    // =========================
-    // CRUD
-    // =========================
+    private User buscarUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Usuário não encontrado!"));
+    }
+
+    // =======================
+    // CRUDD
+    // =======================
 
     public PalpiteResponse salvar(PalpiteRequest palpiteRequest) {
 
         Jogo jogo =
                 buscarJogo(palpiteRequest.getJogoId());
 
+
+        User user =
+                buscarUser(palpiteRequest.getUserId());
+
+        validarPalpiteDuplicado
+                (palpiteRequest);
+
+        validarSeJogoComecou(jogo.getDataHora());
+
         Palpite palpite =
                 palpiteMapper.toEntity(
                         palpiteRequest,
-                        jogo
+                        jogo,
+                        user
                 );
 
         Palpite palpiteSalvo =
@@ -91,11 +111,33 @@ public class PalpiteService {
     }
 
     public void delete(Long id) {
-      Palpite palpite = buscarPalpite(id);
-      palpiteRepository.delete(palpite);
+        Palpite palpite = buscarPalpite(id);
+        palpiteRepository.delete(palpite);
     }
 
     // =========================
     // Regras de negócio
     // =========================
+
+    private void validarPalpiteDuplicado(PalpiteRequest request) {
+
+        if (palpiteRepository.existsByUserIdAndJogoId(
+                request.getUserId(),
+                request.getJogoId())
+        ) {
+            throw new RuntimeException(
+                    "O usuário já possui um " +
+                            "palpite para este jogo.");
+        }
+    }
+
+    private void validarSeJogoComecou(LocalDateTime dataJogo){
+
+        if(!dataJogo.isAfter(LocalDateTime.now())){
+            throw new RuntimeException(
+                    "Não é possível realizar" +
+                            " um palpite após o início do jogo."
+            );
+        }
+    }
 }

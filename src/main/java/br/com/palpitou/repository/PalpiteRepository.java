@@ -5,4 +5,6 @@ import br.com.palpitou.entity.Palpite;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PalpiteRepository extends JpaRepository<Palpite,Long> {
+
+ boolean existsByUserIdAndJogoId(Long userId, Long jogoId);
 }

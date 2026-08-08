@@ -10,4 +10,5 @@ public class PalpiteResponse {
     private int golsMandante;
     private int golsVisitante;
     private int pontosObtidos;
+    private Long userId;
 }

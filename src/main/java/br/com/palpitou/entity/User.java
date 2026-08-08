@@ -45,7 +45,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Pagamento> pagamentos = new ArrayList<>();
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "user")
     private List<Palpite> palpites = new ArrayList<>();
 
 

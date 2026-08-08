@@ -89,8 +89,11 @@ public class ParticipacaoService {
 
         participacao.setDataInscricao(LocalDate.now());
 
-        Participacao participacaoSalvo = participacaoRepository.save(participacao);
-        return participacaoMapper.toResponse(participacaoSalvo);
+        Participacao participacaoSalvo =
+                participacaoRepository.save(participacao);
+
+        return participacaoMapper.
+                toResponse(participacaoSalvo);
     }
 
     public ParticipacaoResponse buscar(Long id) {
@@ -103,7 +106,8 @@ public class ParticipacaoService {
                 participacaoRepository.findAll();
 
         List<ParticipacaoResponse> responses =
-                participacoes.stream().map(participacaoMapper::toResponse)
+                participacoes.stream().map(
+                        participacaoMapper::toResponse)
                         .toList();
         return responses;
     }
@@ -140,7 +144,8 @@ public class ParticipacaoService {
 
         if (dataInicio.isBefore(LocalDateTime.now())) {
             throw new RuntimeException(
-                    "Este bolão já foi iniciado e não aceita novas participações."
+                    "Este bolão já foi iniciado" +
+                            " e não aceita novas participações."
             );
         }
     }
@@ -151,12 +156,14 @@ public class ParticipacaoService {
                 request.getBolaoId(),
                 request.getUserId())
         ) {
-            throw new RuntimeException("Usuário já possui uma participação neste bolão.");
+            throw new RuntimeException(
+                    "Usuário já possui " +
+                    "uma participação neste bolão.");
         }
     }
 
     private void validarPagamento(Pagamento pagamento) {
-
-        pagamento.isPagamentoAprovado(pagamento.getStatus());
+        pagamento.isPagamentoAprovado
+                (pagamento.getStatus());
     }
 }

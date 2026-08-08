@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class PalpiteMapper {
 
     public Palpite toEntity(PalpiteRequest request,
-                            Jogo jogo, User usuario
+                            Jogo jogo, User user
     ) {
 
 
@@ -21,7 +21,7 @@ public class PalpiteMapper {
         palpite.setGolsMandante(request.getGolsMandante());
         palpite.setGolsVisitante(request.getGolsVisitante());
         palpite.setJogo(jogo);
-        palpite.setUsuario(usuario);
+        palpite.setUser(user);
         return palpite;
     }
 
@@ -32,6 +32,7 @@ public class PalpiteMapper {
         response.setGolsMandante(palpite.getGolsMandante());
         response.setGolsVisitante(palpite.getGolsVisitante());
         response.setPontosObtidos(palpite.getPontosObtidos());
+        response.setUserId(palpite.getUser().getId());
         return  response;
     }
 
