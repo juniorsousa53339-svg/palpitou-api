@@ -1,26 +1,12 @@
 package br.com.palpitou.mapper;
 
-import br.com.palpitou.dto.PremiacaoRequest;
+
 import br.com.palpitou.dto.PremiacaoResponse;
-import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.entity.Premiacao;
-import br.com.palpitou.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PremiacaoMapper {
-
-    public Premiacao toEntity(
-            PremiacaoRequest premiacaoRequest,
-            Bolao bolao ,
-            User user
-    ) {
-
-        Premiacao premiacao = new Premiacao();
-        premiacao.setUser(user);
-        premiacao.setBolao(bolao);
-        return premiacao;
-    }
 
     public PremiacaoResponse toResponse(Premiacao premiacao) {
 
