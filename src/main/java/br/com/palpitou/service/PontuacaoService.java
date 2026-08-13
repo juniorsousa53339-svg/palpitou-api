@@ -12,33 +12,76 @@ public class PontuacaoService {
     // ========================
     // Métodos auxiliares
     // ========================
-    private boolean placarExato(Jogo jogo, Palpite palpite) {
 
+    private boolean placarExato(Jogo jogo, Palpite palpite) {
         return jogo.getGolsMandante() == palpite.getGolsMandante()
                 && jogo.getGolsVisitante() == palpite.getGolsVisitante();
     }
 
-    private boolean vencedorEGols(Jogo jogo, Palpite palpite){
-
+    private boolean mandanteVenceu(Jogo jogo) {
+        return jogo.getGolsMandante() > jogo.getGolsVisitante();
     }
 
+    private boolean visitanteVenceu(Jogo jogo) {
+        return jogo.getGolsMandante() < jogo.getGolsVisitante();
+    }
 
-    // =========================
+    private boolean mandanteFoiPrevistoComoVencedor(Palpite palpite) {
+        return palpite.getGolsMandante() > palpite.getGolsVisitante();
+    }
+
+    private boolean visitanteFoiPrevistoComoVencedor(Palpite palpite) {
+        return palpite.getGolsMandante() < palpite.getGolsVisitante();
+    }
+
+    private boolean jogoTerminouEmpatado(Jogo jogo) {
+        return jogo.getGolsMandante() == jogo.getGolsVisitante();
+    }
+
+    private boolean palpitePreviuEmpate(Palpite palpite){
+        return palpite.getGolsMandante() == palpite.getGolsVisitante();
+    }
+
+    // ========================
     // Regras de negócio
-    // =========================
+    // ========================
 
     private int calcularPontuacao(Jogo jogo, Palpite palpite) {
 
-        int pontuacao = 0;
-
         if (placarExato(jogo, palpite)) {
             return 10;
+        }
 
-        } else if (vencedorEGols(jogo, palpite)) {
+        if (mandanteVenceu(jogo)
+                && mandanteFoiPrevistoComoVencedor(palpite)
+                && jogo.getGolsMandante() == palpite.getGolsMandante()) {
             return 7;
         }
 
-        return pontuacao;
-    }
+        if (visitanteVenceu(jogo)
+                && visitanteFoiPrevistoComoVencedor(palpite)
+                && jogo.getGolsVisitante() == palpite.getGolsVisitante()) {
+            return 7;
+        }
 
+        if (mandanteVenceu(jogo)
+                && mandanteFoiPrevistoComoVencedor(palpite)) {
+            return 5;
+        }
+
+        if (visitanteVenceu(jogo)
+                && visitanteFoiPrevistoComoVencedor(palpite)) {
+            return 5;
+        }
+
+        if (
+                jogoTerminouEmpatado(jogo)
+                        &&
+                palpitePreviuEmpate(palpite)
+        ) {
+            return 5;
+        }
+
+        return 0;
+    }
 }
