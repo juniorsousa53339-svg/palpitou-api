@@ -2,12 +2,21 @@ package br.com.palpitou.service;
 
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.entity.Palpite;
+import br.com.palpitou.entity.User;
+import br.com.palpitou.repository.PalpiteRepository;
+import br.com.palpitou.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class PontuacaoService {
+
+    private final PalpiteRepository palpiteRepository;
+    private final UserRepository userRepository;
+
 
     // ========================
     // Métodos auxiliares
@@ -84,4 +93,23 @@ public class PontuacaoService {
 
         return 0;
     }
+
+    public List<Palpite> buscarPalpitesDeUmaRodada(int rodada) {
+        return palpiteRepository.findByJogoRodada(rodada);
+    }
+
+    public List<Palpite> buscarPalpitesDoUsuarioNaRodada(int rodada,  Long userId) {
+        return palpiteRepository.findByJogoRodadaAndUserId(rodada, userId);
+    }
+
+    public List<Object> buscarParticipantesDaRodada(int rodada) {
+
+        return palpiteRepository
+                .findByJogoRodada(rodada)
+                .stream()
+                .map(palpite -> palpite.getUserId())
+                .distinct()
+                .toList();
+    }
+
 }

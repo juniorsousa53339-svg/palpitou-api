@@ -39,4 +39,7 @@ public class Palpite {
         this.pontosObtidos = pontosObtidos;
     }
 
+    public Object getUserId() {
+        return user.getId();
+    }
 }
