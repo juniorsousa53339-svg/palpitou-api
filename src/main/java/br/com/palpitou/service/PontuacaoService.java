@@ -2,9 +2,7 @@ package br.com.palpitou.service;
 
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.entity.Palpite;
-import br.com.palpitou.entity.User;
 import br.com.palpitou.repository.PalpiteRepository;
-import br.com.palpitou.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +13,6 @@ import java.util.List;
 public class PontuacaoService {
 
     private final PalpiteRepository palpiteRepository;
-    private final UserRepository userRepository;
-
 
     // ========================
     // Métodos auxiliares
@@ -47,7 +43,7 @@ public class PontuacaoService {
         return jogo.getGolsMandante() == jogo.getGolsVisitante();
     }
 
-    private boolean palpitePreviuEmpate(Palpite palpite){
+    private boolean palpitePreviuEmpate(Palpite palpite) {
         return palpite.getGolsMandante() == palpite.getGolsVisitante();
     }
 
@@ -86,7 +82,7 @@ public class PontuacaoService {
         if (
                 jogoTerminouEmpatado(jogo)
                         &&
-                palpitePreviuEmpate(palpite)
+                        palpitePreviuEmpate(palpite)
         ) {
             return 5;
         }
@@ -98,18 +94,25 @@ public class PontuacaoService {
         return palpiteRepository.findByJogoRodada(rodada);
     }
 
-    public List<Palpite> buscarPalpitesDoUsuarioNaRodada(int rodada,  Long userId) {
+    public List<Palpite> buscarPalpitesDoUsuarioNaRodada(int rodada, Long userId) {
         return palpiteRepository.findByJogoRodadaAndUserId(rodada, userId);
     }
 
-    public List<Object> buscarParticipantesDaRodada(int rodada) {
+    public List<Long> buscarParticipantesDaRodada(int rodada) {
 
         return palpiteRepository
                 .findByJogoRodada(rodada)
                 .stream()
-                .map(palpite -> palpite.getUserId())
+                .map(palpite -> palpite.getUser().getId())
                 .distinct()
                 .toList();
     }
 
+    private int calcularPontuacaoTotalDeParticipanteNaRodada(int rodada, Long userId) {
+
+        return buscarPalpitesDoUsuarioNaRodada(rodada, userId)
+                .stream()
+                .map(palpite -> calcularPontuacao(palpite.getJogo(), palpite))
+                .reduce(0, Integer::sum);
+    }
 }

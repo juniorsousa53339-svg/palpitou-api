@@ -20,7 +20,7 @@ public class Palpite {
 
     private int golsVisitante;
 
-    @NotNull
+
     private int pontosObtidos;
 
     @ManyToOne
@@ -39,7 +39,4 @@ public class Palpite {
         this.pontosObtidos = pontosObtidos;
     }
 
-    public Object getUserId() {
-        return user.getId();
-    }
 }
