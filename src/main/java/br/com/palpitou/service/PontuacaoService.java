@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -108,11 +110,25 @@ public class PontuacaoService {
                 .toList();
     }
 
-    private int calcularPontuacaoTotalDeParticipanteNaRodada(int rodada, Long userId) {
+    private int calcularPontuacaoDoParticipanteNaRodada(int rodada, Long userId) {
 
         return buscarPalpitesDoUsuarioNaRodada(rodada, userId)
                 .stream()
                 .map(palpite -> calcularPontuacao(palpite.getJogo(), palpite))
                 .reduce(0, Integer::sum);
+    }
+
+    private Map<Long, Integer> calcularPontuacaoDosParticipantesDaRodada(int rodada) {
+
+        return buscarParticipantesDaRodada(rodada)
+                .stream()
+                .map(userId -> Map.entry(
+                        userId,
+                        calcularPontuacaoDoParticipanteNaRodada(rodada, userId)
+                ))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
+                ));
     }
 }
