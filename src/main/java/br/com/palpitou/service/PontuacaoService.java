@@ -6,6 +6,7 @@ import br.com.palpitou.repository.PalpiteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -131,4 +132,23 @@ public class PontuacaoService {
                         Map.Entry::getValue
                 ));
     }
+
+    private Map<Long, Integer> gerarRankingDaRodada(int rodada) {
+
+        return calcularPontuacaoDosParticipantesDaRodada(rodada)
+                .entrySet()
+                .stream()
+                .sorted(
+                        Comparator
+                                .comparing((Map.Entry<Long, Integer> entry) -> entry.getValue())
+                                .reversed()
+                )
+                .collect(
+                        Collectors.toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue
+                        )
+                );
+    }
+
 }
