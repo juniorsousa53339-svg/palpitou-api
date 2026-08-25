@@ -1,0 +1,42 @@
+package br.com.palpitou.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Getter @Setter
+@NoArgsConstructor
+@Table(name = "palpites")
+public class Palpite {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private int golsMandante;
+
+    private int golsVisitante;
+
+
+    private int pontosObtidos;
+
+    @ManyToOne
+    @JoinColumn(name = "jogo_id")
+    private Jogo jogo;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // =========================
+    // Métodos auxiliares
+    // =========================
+
+    public void alterarPontosObtidos(int pontosObtidos) {
+        this.pontosObtidos = pontosObtidos;
+    }
+
+}
