@@ -1,8 +1,12 @@
 package br.com.palpitou.service;
 
+import br.com.palpitou.dto.RankingResponse;
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.entity.Palpite;
+import br.com.palpitou.entity.User;
+import br.com.palpitou.mapper.RankingMapper;
 import br.com.palpitou.repository.PalpiteRepository;
+import br.com.palpitou.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,12 +14,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
 public class PontuacaoService {
 
     private final PalpiteRepository palpiteRepository;
+    private final UserRepository userRepository;
+    private final RankingMapper rankingMapper;
 
     // ========================
     // Métodos auxiliares
@@ -149,6 +156,30 @@ public class PontuacaoService {
                                 Map.Entry::getValue
                         )
                 );
+    }
+
+    public List<RankingResponse> buscarRankingDaRodada(int rodada) {
+
+        List<Map.Entry<Long, Integer>> entries = gerarRankingDaRodada(rodada)
+                .entrySet()
+                .stream()
+                .toList();
+
+        return IntStream.range(0, entries.size())
+                .mapToObj(i -> {
+                    Map.Entry<Long, Integer> entry = entries.get(i);
+
+                    User usuario = userRepository
+                            .findById(entry.getKey())
+                            .orElseThrow();
+
+                    return rankingMapper.toResponse(
+                            usuario,
+                            entry.getValue(),
+                            i + 1
+                            );
+                })
+                .toList();
     }
 
 }

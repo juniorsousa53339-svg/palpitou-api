@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,6 @@ public class Jogo {
     @ManyToOne
     @JoinColumn(name = "campeonato_id")
     private Campeonato campeonato;
-
 
 
     @OneToMany(mappedBy = "jogo")
