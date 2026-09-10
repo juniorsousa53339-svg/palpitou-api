@@ -4,6 +4,7 @@ import br.com.palpitou.dto.CampeonatoRequest;
 import br.com.palpitou.dto.CampeonatoResponse;
 import br.com.palpitou.entity.Campeonato;
 import br.com.palpitou.entity.User;
+import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.CampeonatoMapper;
 import br.com.palpitou.repository.CampeonatoRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class CampeonatoService {
     private Campeonato buscarCamp(Long id) {
         return campeonatoRepository.findById(id).
                 orElseThrow(() ->
-                        new RuntimeException
+                        new ResourceNotFoundException
                                 ("Campeonato não encontrado!"));
     }
 

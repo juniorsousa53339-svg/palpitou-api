@@ -4,6 +4,7 @@ import br.com.palpitou.dto.*;
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.entity.Palpite;
 import br.com.palpitou.entity.User;
+import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.PalpiteMapper;
 import br.com.palpitou.repository.JogoRepository;
 import br.com.palpitou.repository.PalpiteRepository;
@@ -30,19 +31,19 @@ public class PalpiteService {
     private Jogo buscarJogo(Long id) {
         return jogoRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Jogo não encontrado!"));
+                        new ResourceNotFoundException("Jogo não encontrado!"));
     }
 
     private Palpite buscarPalpite(Long id) {
         return palpiteRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Palpite não encontrado!"));
+                        new ResourceNotFoundException("Palpite não encontrado!"));
     }
 
     private User buscarUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Usuário não encontrado!"));
+                        new ResourceNotFoundException("Usuário não encontrado!"));
     }
 
     // =======================

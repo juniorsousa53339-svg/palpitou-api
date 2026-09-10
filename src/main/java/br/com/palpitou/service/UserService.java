@@ -6,6 +6,7 @@ import br.com.palpitou.dto.UserRequest;
 import br.com.palpitou.dto.UserResponse;
 import br.com.palpitou.entity.Campeonato;
 import br.com.palpitou.entity.User;
+import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.UserMapper;
 import br.com.palpitou.repository.UserRepository;
 
@@ -28,7 +29,7 @@ public class UserService {
     private User buscarUser(Long id) {
         return userRepository.findById(id).
                 orElseThrow(() ->
-                        new RuntimeException
+                        new ResourceNotFoundException
                                 ("Usuario não encontrado!"));
     }
 

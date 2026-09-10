@@ -7,6 +7,7 @@ import br.com.palpitou.dto.PutResponsePagamento;
 import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.entity.Pagamento;
 import br.com.palpitou.entity.User;
+import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.PagamentoMapper;
 import br.com.palpitou.repository.BolaoRepository;
 import br.com.palpitou.repository.PagamentoRepository;
@@ -32,19 +33,19 @@ public class PagamentoService {
     private User buscarUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("User não encontrado!"));
+                        new ResourceNotFoundException("User não encontrado!"));
     }
 
     private Pagamento buscarPagamento(Long id) {
         return pagamentoRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Pagamento não encontrado!"));
+                        new ResourceNotFoundException("Pagamento não encontrado!"));
     }
 
     private Bolao buscarBolao(Long id) {
         return bolaoRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Bolão não encontrado!"));
+                        new ResourceNotFoundException("Bolão não encontrado!"));
     }
 
     // =========================

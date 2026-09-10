@@ -4,6 +4,7 @@ import br.com.palpitou.dto.*;
 import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.entity.Campeonato;
 import br.com.palpitou.enums.StatusGlobal;
+import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.BolaoMapper;
 import br.com.palpitou.repository.BolaoRepository;
 import br.com.palpitou.repository.CampeonatoRepository;
@@ -36,13 +37,13 @@ public class BolaoService {
     private Bolao buscarBolaoPorId(Long id) {
         return bolaoRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Bolão não encontrado!"));
+                        new ResourceNotFoundException("Bolão não encontrado!"));
     }
 
     private Campeonato buscarCampeonato(Long id) {
         return campeonatoRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Campeonato não encontrado!"));
+                        new ResourceNotFoundException("Campeonato não encontrado!"));
     }
 
     // =========================

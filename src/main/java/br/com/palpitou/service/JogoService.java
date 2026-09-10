@@ -1,4 +1,5 @@
 package br.com.palpitou.service;
+import br.com.palpitou.exception.ResourceNotFoundException;
 
 
 import br.com.palpitou.dto.JogoRequest;
@@ -35,19 +36,19 @@ public class JogoService {
     private Campeonato buscarCampeonato(Long id) {
         return campeonatoRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Campeonato não encontrado!"));
+                        new ResourceNotFoundException("Campeonato não encontrado!"));
     }
 
     private Time buscarTime(Long id) {
         return timeRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Time não encontrado!"));
+                        new ResourceNotFoundException("Time não encontrado!"));
     }
 
     private Jogo buscarJogo(Long id) {
         return jogoRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("jogo não encontrado!"));
+                        new  ResourceNotFoundException("jogo não encontrado!"));
     }
 
     // =========================
@@ -57,15 +58,20 @@ public class JogoService {
     public JogoResponse salvar(JogoRequest request) {
 
 
-        Time timeMandante = buscarTime(request.getTimeMandanteId());
+        Time timeMandante =
+                buscarTime(request.getTimeMandanteId());
 
-        Time timeVisitante = buscarTime(request.getTimeVisitanteId());
+        Time timeVisitante =
+                buscarTime(request.getTimeVisitanteId());
 
-        Campeonato campeonato = buscarCampeonato(request.getCampeonatoId());
+        Campeonato campeonato =
+                buscarCampeonato(request.getCampeonatoId());
 
-        validarStatusCampeonato(campeonato.getStatus());
+        validarStatusCampeonato(
+                campeonato.getStatus());
 
-        validarTimesDuplicados(timeMandante, timeVisitante);
+        validarTimesDuplicados(
+                timeMandante, timeVisitante);
 
         Jogo jogo = jogoMapper.toEntity
                 (

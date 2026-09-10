@@ -9,6 +9,7 @@ import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.entity.Pagamento;
 import br.com.palpitou.entity.Participacao;
 import br.com.palpitou.entity.User;
+import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.ParticipacaoMapper;
 import br.com.palpitou.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -35,26 +36,26 @@ public class ParticipacaoService {
     private Participacao buscarParticipacao(Long idParticipacao) {
         return participacaoRepository.findById(idParticipacao)
                 .orElseThrow(() ->
-                        new RuntimeException("Participação não encontrada!"));
+                        new ResourceNotFoundException("Participação não encontrada!"));
     }
 
     private User buscarUser(Long idUser) {
         return userRepository.findById(idUser)
                 .orElseThrow(() ->
-                        new RuntimeException("Usuario não encontrado!"));
+                        new ResourceNotFoundException("Usuario não encontrado!"));
     }
 
 
     private Bolao buscarBolao(Long idBolao) {
         return bolaoRepository.findById(idBolao)
                 .orElseThrow(() ->
-                        new RuntimeException("Bolão não encontrado!"));
+                        new ResourceNotFoundException("Bolão não encontrado!"));
     }
 
     private Pagamento buscarPagamento(Long id) {
         return pagamentoRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Pagamento não encontrado!"));
+                        new ResourceNotFoundException("Pagamento não encontrado!"));
     }
 
     // ========================

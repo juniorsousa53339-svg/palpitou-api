@@ -4,6 +4,7 @@ package br.com.palpitou.service;
 
 import br.com.palpitou.dto.PremiacaoResponse;
 import br.com.palpitou.entity.Premiacao;
+import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.PremiacaoMapper;
 import br.com.palpitou.repository.PremiacaoRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class PremiacaoService {
     private Premiacao buscarPremiacao(Long id) {
         return premiacaoRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Premiação não encontrada!"));
+                        new ResourceNotFoundException("Premiação não encontrada!"));
     }
 
     // ========================

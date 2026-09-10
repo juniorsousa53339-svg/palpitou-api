@@ -3,6 +3,7 @@ package br.com.palpitou.service;
 import br.com.palpitou.dto.TimeRequest;
 import br.com.palpitou.dto.TimeResponse;
 import br.com.palpitou.entity.Time;
+import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.TimeMapper;
 import br.com.palpitou.repository.TimeRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class TimeService {
     private Time buscarTime(Long id) {
         return timeRepository.findById(id).
                 orElseThrow(() ->
-                        new RuntimeException
+                        new ResourceNotFoundException
                                 ("Time não encontrado!"));
     }
 
