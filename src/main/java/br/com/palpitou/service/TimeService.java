@@ -3,6 +3,7 @@ package br.com.palpitou.service;
 import br.com.palpitou.dto.TimeRequest;
 import br.com.palpitou.dto.TimeResponse;
 import br.com.palpitou.entity.Time;
+import br.com.palpitou.exception.BusinessRuleException;
 import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.TimeMapper;
 import br.com.palpitou.repository.TimeRepository;
@@ -32,7 +33,7 @@ public class TimeService {
 
     private void validarNomeDuplicado(String request) {
         if (timeRepository.existsByNome(request)) {
-            throw new RuntimeException("Time já cadastrado.");
+            throw new BusinessRuleException("Time já cadastrado.");
         }
     }
 

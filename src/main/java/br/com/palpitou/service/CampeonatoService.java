@@ -4,6 +4,7 @@ import br.com.palpitou.dto.CampeonatoRequest;
 import br.com.palpitou.dto.CampeonatoResponse;
 import br.com.palpitou.entity.Campeonato;
 import br.com.palpitou.entity.User;
+import br.com.palpitou.exception.BusinessRuleException;
 import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.CampeonatoMapper;
 import br.com.palpitou.repository.CampeonatoRepository;
@@ -37,7 +38,7 @@ public class CampeonatoService {
     public CampeonatoResponse salvar(CampeonatoRequest request) {
 
         if (campeonatoRepository.existsByNome(request.getNome())) {
-            throw new RuntimeException("Campeonato já cadastrado.");
+            throw new BusinessRuleException("Campeonato já cadastrado.");
         }
 
         Campeonato camp = campeonatoMapper.toEntity(request);
@@ -76,7 +77,7 @@ public class CampeonatoService {
         );
 
         if (campeonatoRepository.existsByNome(request.getNome())) {
-            throw new RuntimeException("Campeonato já cadastrado.");
+            throw new BusinessRuleException("Campeonato já cadastrado.");
         }
 
         Campeonato campAtualizado = campeonatoRepository.save(campBd);

@@ -140,7 +140,7 @@ public class PontuacaoService {
                 ));
     }
 
-    private Map<Long, Integer> gerarRankingDaRodada(int rodada) {
+    public Map<Long, Integer> gerarRankingDaRodada(int rodada) {
 
         return calcularPontuacaoDosParticipantesDaRodada(rodada)
                 .entrySet()

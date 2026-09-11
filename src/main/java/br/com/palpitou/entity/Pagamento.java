@@ -2,6 +2,7 @@ package br.com.palpitou.entity;
 
 
 import br.com.palpitou.enums.StatusPagamento;
+import br.com.palpitou.exception.BusinessRuleException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -50,7 +51,7 @@ public class Pagamento {
             return true;
 
         } else {
-            throw new RuntimeException(
+            throw new BusinessRuleException(
                     "Pagamento não aprovado. " +
                             "Não é possível criar a participação.");
         }

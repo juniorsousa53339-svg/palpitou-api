@@ -1,4 +1,5 @@
 package br.com.palpitou.service;
+import br.com.palpitou.exception.BusinessRuleException;
 import br.com.palpitou.exception.ResourceNotFoundException;
 
 
@@ -134,7 +135,7 @@ public class JogoService {
     private void validarStatusCampeonato(StatusGlobal status) {
 
         if (status == StatusGlobal.FINALIZADA) {
-            throw new RuntimeException(
+            throw new BusinessRuleException(
                     "Não é permitido cadastrar jogos" +
                             "em um campeonato finalizado."
             );
@@ -145,7 +146,7 @@ public class JogoService {
             Time timeVisitante
     ) {
         if (timeMandante.getId().equals(timeVisitante.getId())) {
-            throw new RuntimeException(
+            throw new BusinessRuleException(
                     "O time mandante e o time visitante não podem ser o mesmo."
             );
         }

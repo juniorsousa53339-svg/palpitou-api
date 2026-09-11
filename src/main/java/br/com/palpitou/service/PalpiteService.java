@@ -4,6 +4,7 @@ import br.com.palpitou.dto.*;
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.entity.Palpite;
 import br.com.palpitou.entity.User;
+import br.com.palpitou.exception.BusinessRuleException;
 import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.PalpiteMapper;
 import br.com.palpitou.repository.JogoRepository;
@@ -126,7 +127,7 @@ public class PalpiteService {
                 request.getUserId(),
                 request.getJogoId())
         ) {
-            throw new RuntimeException(
+            throw new BusinessRuleException(
                     "O usuário já possui um " +
                             "palpite para este jogo.");
         }
@@ -135,7 +136,7 @@ public class PalpiteService {
     private void validarSeJogoComecou(LocalDateTime dataJogo){
 
         if(!dataJogo.isAfter(LocalDateTime.now())){
-            throw new RuntimeException(
+            throw new BusinessRuleException(
                     "Não é possível realizar" +
                             " um palpite após o início do jogo."
             );

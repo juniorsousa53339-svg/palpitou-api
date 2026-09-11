@@ -9,6 +9,7 @@ import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.entity.Pagamento;
 import br.com.palpitou.entity.Participacao;
 import br.com.palpitou.entity.User;
+import br.com.palpitou.exception.BusinessRuleException;
 import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.ParticipacaoMapper;
 import br.com.palpitou.repository.*;
@@ -144,7 +145,7 @@ public class ParticipacaoService {
     private void validaData(LocalDateTime dataInicio) {
 
         if (dataInicio.isBefore(LocalDateTime.now())) {
-            throw new RuntimeException(
+            throw new BusinessRuleException(
                     "Este bolão já foi iniciado" +
                             " e não aceita novas participações."
             );
@@ -157,7 +158,7 @@ public class ParticipacaoService {
                 request.getBolaoId(),
                 request.getUserId())
         ) {
-            throw new RuntimeException(
+            throw new BusinessRuleException(
                     "Usuário já possui " +
                     "uma participação neste bolão.");
         }

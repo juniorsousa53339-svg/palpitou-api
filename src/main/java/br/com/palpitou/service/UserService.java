@@ -6,6 +6,7 @@ import br.com.palpitou.dto.UserRequest;
 import br.com.palpitou.dto.UserResponse;
 import br.com.palpitou.entity.Campeonato;
 import br.com.palpitou.entity.User;
+import br.com.palpitou.exception.BusinessRuleException;
 import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.UserMapper;
 import br.com.palpitou.repository.UserRepository;
@@ -41,7 +42,7 @@ public class UserService {
     public UserResponse salvar(UserRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("E-mail já cadastrado.");
+            throw new BusinessRuleException("E-mail já cadastrado.");
         }
 
         User user = userMapper.toEntity(request);
@@ -81,7 +82,7 @@ public class UserService {
         );
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("E-mail já cadastrado.");
+            throw new BusinessRuleException("E-mail já cadastrado.");
         }
 
         User userAtualizado = userRepository.save(userBd);

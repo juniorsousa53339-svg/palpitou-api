@@ -4,6 +4,7 @@ import br.com.palpitou.dto.*;
 import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.entity.Campeonato;
 import br.com.palpitou.enums.StatusGlobal;
+import br.com.palpitou.exception.BusinessRuleException;
 import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.BolaoMapper;
 import br.com.palpitou.repository.BolaoRepository;
@@ -28,7 +29,7 @@ public class BolaoService {
     private void validarStatusBolao(StatusGlobal status) {
 
         if (status == StatusGlobal.FINALIZADA) {
-            throw new RuntimeException(
+            throw new BusinessRuleException(
                     "Não é permitido cadastrar bolão finalizado."
             );
         }
