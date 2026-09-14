@@ -1,9 +1,8 @@
 package br.com.palpitou.service;
 
-import br.com.palpitou.dto.CampeonatoRequest;
-import br.com.palpitou.dto.CampeonatoResponse;
+import br.com.palpitou.dto.request.CampeonatoRequest;
+import br.com.palpitou.dto.response.CampeonatoResponse;
 import br.com.palpitou.entity.Campeonato;
-import br.com.palpitou.entity.User;
 import br.com.palpitou.exception.BusinessRuleException;
 import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.CampeonatoMapper;

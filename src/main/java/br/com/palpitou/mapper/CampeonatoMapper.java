@@ -1,8 +1,8 @@
 package br.com.palpitou.mapper;
 
-import br.com.palpitou.dto.CampeonatoRequest;
+import br.com.palpitou.dto.request.CampeonatoRequest;
 
-import br.com.palpitou.dto.CampeonatoResponse;
+import br.com.palpitou.dto.response.CampeonatoResponse;
 import br.com.palpitou.entity.Campeonato;
 import org.springframework.stereotype.Component;
 

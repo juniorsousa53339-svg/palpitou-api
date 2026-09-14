@@ -1,6 +1,9 @@
 package br.com.palpitou.controller;
 
-import br.com.palpitou.dto.*;
+import br.com.palpitou.dto.putRequest.PutRequestPalpite;
+import br.com.palpitou.dto.putResponse.PutResponsePalpite;
+import br.com.palpitou.dto.request.PalpiteRequest;
+import br.com.palpitou.dto.response.PalpiteResponse;
 import br.com.palpitou.service.PalpiteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

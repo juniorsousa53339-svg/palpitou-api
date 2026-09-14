@@ -1,6 +1,6 @@
 package br.com.palpitou.mapper;
 
-import br.com.palpitou.dto.RankingResponse;
+import br.com.palpitou.dto.response.RankingResponse;
 
 
 import br.com.palpitou.entity.User;

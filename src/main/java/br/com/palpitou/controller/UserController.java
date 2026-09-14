@@ -1,10 +1,10 @@
 package br.com.palpitou.controller;
 
 
-import br.com.palpitou.dto.PutRequestUser;
-import br.com.palpitou.dto.PutResponseUser;
-import br.com.palpitou.dto.UserRequest;
-import br.com.palpitou.dto.UserResponse;
+import br.com.palpitou.dto.putRequest.PutRequestUser;
+import br.com.palpitou.dto.putResponse.PutResponseUser;
+import br.com.palpitou.dto.request.UserRequest;
+import br.com.palpitou.dto.response.UserResponse;
 
 
 import br.com.palpitou.service.UserService;

@@ -1,7 +1,7 @@
 package br.com.palpitou.service;
 
-import br.com.palpitou.dto.TimeRequest;
-import br.com.palpitou.dto.TimeResponse;
+import br.com.palpitou.dto.request.TimeRequest;
+import br.com.palpitou.dto.response.TimeResponse;
 import br.com.palpitou.entity.Time;
 import br.com.palpitou.exception.BusinessRuleException;
 import br.com.palpitou.exception.ResourceNotFoundException;

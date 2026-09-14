@@ -21,7 +21,6 @@ public class Premiacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     private int posicao;
 
     @NotNull

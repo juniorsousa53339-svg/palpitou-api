@@ -3,10 +3,10 @@ import br.com.palpitou.exception.BusinessRuleException;
 import br.com.palpitou.exception.ResourceNotFoundException;
 
 
-import br.com.palpitou.dto.JogoRequest;
-import br.com.palpitou.dto.JogoResponse;
-import br.com.palpitou.dto.PutRequestJogo;
-import br.com.palpitou.dto.PutResponseJogo;
+import br.com.palpitou.dto.request.JogoRequest;
+import br.com.palpitou.dto.response.JogoResponse;
+import br.com.palpitou.dto.putRequest.PutRequestJogo;
+import br.com.palpitou.dto.putResponse.PutResponseJogo;
 import br.com.palpitou.entity.Campeonato;
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.entity.Time;

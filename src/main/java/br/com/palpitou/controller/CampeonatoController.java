@@ -1,7 +1,7 @@
 package br.com.palpitou.controller;
 
-import br.com.palpitou.dto.CampeonatoRequest;
-import br.com.palpitou.dto.CampeonatoResponse;
+import br.com.palpitou.dto.request.CampeonatoRequest;
+import br.com.palpitou.dto.response.CampeonatoResponse;
 import br.com.palpitou.service.CampeonatoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

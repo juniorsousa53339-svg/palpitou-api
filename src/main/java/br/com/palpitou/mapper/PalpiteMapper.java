@@ -1,8 +1,8 @@
 package br.com.palpitou.mapper;
 
-import br.com.palpitou.dto.PalpiteRequest;
-import br.com.palpitou.dto.PalpiteResponse;
-import br.com.palpitou.dto.PutResponsePalpite;
+import br.com.palpitou.dto.request.PalpiteRequest;
+import br.com.palpitou.dto.response.PalpiteResponse;
+import br.com.palpitou.dto.putResponse.PutResponsePalpite;
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.entity.Palpite;
 import br.com.palpitou.entity.User;

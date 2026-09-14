@@ -1,7 +1,7 @@
 package br.com.palpitou.mapper;
 
 
-import br.com.palpitou.dto.PremiacaoResponse;
+import br.com.palpitou.dto.response.PremiacaoResponse;
 import br.com.palpitou.entity.Premiacao;
 import org.springframework.stereotype.Component;
 

@@ -1,10 +1,10 @@
 package br.com.palpitou.service;
 
 
-import br.com.palpitou.dto.ParticipacaoRequest;
-import br.com.palpitou.dto.ParticipacaoResponse;
-import br.com.palpitou.dto.PutRequestParticipacao;
-import br.com.palpitou.dto.PutResponseParticipacao;
+import br.com.palpitou.dto.request.ParticipacaoRequest;
+import br.com.palpitou.dto.response.ParticipacaoResponse;
+import br.com.palpitou.dto.putRequest.PutRequestParticipacao;
+import br.com.palpitou.dto.putResponse.PutResponseParticipacao;
 import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.entity.Pagamento;
 import br.com.palpitou.entity.Participacao;

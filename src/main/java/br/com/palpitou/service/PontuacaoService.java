@@ -1,6 +1,6 @@
 package br.com.palpitou.service;
 
-import br.com.palpitou.dto.RankingResponse;
+import br.com.palpitou.dto.response.RankingResponse;
 import br.com.palpitou.entity.Jogo;
 import br.com.palpitou.entity.Palpite;
 import br.com.palpitou.entity.User;

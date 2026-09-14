@@ -20,7 +20,6 @@ public class Palpite {
 
     private int golsVisitante;
 
-
     private int pontosObtidos;
 
     @ManyToOne

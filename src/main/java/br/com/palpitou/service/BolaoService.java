@@ -1,6 +1,9 @@
 package br.com.palpitou.service;
 
-import br.com.palpitou.dto.*;
+import br.com.palpitou.dto.putRequest.PutRequestBolao;
+import br.com.palpitou.dto.putResponse.PutResponseBolao;
+import br.com.palpitou.dto.request.BolaoRequest;
+import br.com.palpitou.dto.response.BolaoResponse;
 import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.entity.Campeonato;
 import br.com.palpitou.enums.StatusGlobal;

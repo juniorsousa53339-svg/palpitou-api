@@ -1,9 +1,9 @@
 package br.com.palpitou.controller;
 
-import br.com.palpitou.dto.JogoRequest;
-import br.com.palpitou.dto.JogoResponse;
-import br.com.palpitou.dto.PutRequestJogo;
-import br.com.palpitou.dto.PutResponseJogo;
+import br.com.palpitou.dto.request.JogoRequest;
+import br.com.palpitou.dto.response.JogoResponse;
+import br.com.palpitou.dto.putRequest.PutRequestJogo;
+import br.com.palpitou.dto.putResponse.PutResponseJogo;
 import br.com.palpitou.service.JogoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

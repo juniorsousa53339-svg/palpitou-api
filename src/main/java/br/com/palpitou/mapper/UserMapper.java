@@ -1,9 +1,8 @@
 package br.com.palpitou.mapper;
 
-import br.com.palpitou.dto.PutRequestUser;
-import br.com.palpitou.dto.PutResponseUser;
-import br.com.palpitou.dto.UserRequest;
-import br.com.palpitou.dto.UserResponse;
+import br.com.palpitou.dto.putResponse.PutResponseUser;
+import br.com.palpitou.dto.request.UserRequest;
+import br.com.palpitou.dto.response.UserResponse;
 import br.com.palpitou.entity.User;
 import org.springframework.stereotype.Component;
 

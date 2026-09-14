@@ -27,7 +27,6 @@ public class Campeonato {
     private String nome;
 
     @Column(nullable = false)
-    @NotNull
     private int temporada;
 
     @Enumerated(EnumType.STRING)

@@ -1,6 +1,6 @@
 package br.com.palpitou.controller;
 
-import br.com.palpitou.dto.PremiacaoResponse;
+import br.com.palpitou.dto.response.PremiacaoResponse;
 import br.com.palpitou.service.PremiacaoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

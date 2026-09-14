@@ -2,7 +2,7 @@ package br.com.palpitou.service;
 
 
 
-import br.com.palpitou.dto.PremiacaoResponse;
+import br.com.palpitou.dto.response.PremiacaoResponse;
 import br.com.palpitou.entity.Premiacao;
 import br.com.palpitou.exception.ResourceNotFoundException;
 import br.com.palpitou.mapper.PremiacaoMapper;

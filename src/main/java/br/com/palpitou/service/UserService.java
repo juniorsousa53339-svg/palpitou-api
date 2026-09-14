@@ -1,10 +1,9 @@
 package br.com.palpitou.service;
 
-import br.com.palpitou.dto.PutRequestUser;
-import br.com.palpitou.dto.PutResponseUser;
-import br.com.palpitou.dto.UserRequest;
-import br.com.palpitou.dto.UserResponse;
-import br.com.palpitou.entity.Campeonato;
+import br.com.palpitou.dto.putRequest.PutRequestUser;
+import br.com.palpitou.dto.putResponse.PutResponseUser;
+import br.com.palpitou.dto.request.UserRequest;
+import br.com.palpitou.dto.response.UserResponse;
 import br.com.palpitou.entity.User;
 import br.com.palpitou.exception.BusinessRuleException;
 import br.com.palpitou.exception.ResourceNotFoundException;

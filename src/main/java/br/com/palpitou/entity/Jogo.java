@@ -26,13 +26,10 @@ public class Jogo {
     @NotNull
     private LocalDateTime dataHora;
 
-    @NotNull
     private int rodada;
 
-    @NotNull
     private int golsMandante;
 
-    @NotNull
     private int golsVisitante;
 
     @Enumerated(EnumType.STRING)

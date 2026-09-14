@@ -1,7 +1,7 @@
 package br.com.palpitou.controller;
 
-import br.com.palpitou.dto.TimeRequest;
-import br.com.palpitou.dto.TimeResponse;
+import br.com.palpitou.dto.request.TimeRequest;
+import br.com.palpitou.dto.response.TimeResponse;
 import br.com.palpitou.service.TimeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

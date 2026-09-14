@@ -1,9 +1,9 @@
 package br.com.palpitou.service;
 
-import br.com.palpitou.dto.PagamentoRequest;
-import br.com.palpitou.dto.PagamentoResponse;
-import br.com.palpitou.dto.PutRequestPagamento;
-import br.com.palpitou.dto.PutResponsePagamento;
+import br.com.palpitou.dto.request.PagamentoRequest;
+import br.com.palpitou.dto.response.PagamentoResponse;
+import br.com.palpitou.dto.putRequest.PutRequestPagamento;
+import br.com.palpitou.dto.putResponse.PutResponsePagamento;
 import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.entity.Pagamento;
 import br.com.palpitou.entity.User;

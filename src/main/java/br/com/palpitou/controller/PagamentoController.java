@@ -1,7 +1,10 @@
 package br.com.palpitou.controller;
 
 
-import br.com.palpitou.dto.*;
+import br.com.palpitou.dto.putRequest.PutRequestPagamento;
+import br.com.palpitou.dto.putResponse.PutResponsePagamento;
+import br.com.palpitou.dto.request.PagamentoRequest;
+import br.com.palpitou.dto.response.PagamentoResponse;
 import br.com.palpitou.service.PagamentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
