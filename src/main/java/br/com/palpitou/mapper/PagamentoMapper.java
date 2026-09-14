@@ -7,6 +7,7 @@ import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.entity.Pagamento;
 
 import br.com.palpitou.entity.User;
+import br.com.palpitou.enums.StatusPagamento;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,6 +26,7 @@ public class PagamentoMapper {
         pagamento.setComprovante(request.getComprovante());
         pagamento.setUser(user);
         pagamento.setBolao(bolao);
+        pagamento.setStatus(StatusPagamento.PENDENTE);
         return pagamento;
     }
 

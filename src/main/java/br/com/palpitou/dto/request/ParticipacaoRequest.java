@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter @Setter
 public class ParticipacaoRequest {
 
-    private StatusParticipacao status;
     private int pontos;
     private Long userId;
     private Long bolaoId;

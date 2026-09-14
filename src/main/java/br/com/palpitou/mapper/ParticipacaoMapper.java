@@ -8,6 +8,7 @@ import br.com.palpitou.entity.Pagamento;
 import br.com.palpitou.entity.Participacao;
 import br.com.palpitou.entity.User;
 
+import br.com.palpitou.enums.StatusParticipacao;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,11 +24,11 @@ public class ParticipacaoMapper {
 
         Participacao participacao = new Participacao();
 
-        participacao.setStatus(request.getStatus());
         participacao.setPontos(request.getPontos());
         participacao.setUsuario(user);
         participacao.setBolao(bolao);
         participacao.setPagamento(pagamento);
+        participacao.setStatus(StatusParticipacao.PENDENTE);
 
         return participacao;
     }
