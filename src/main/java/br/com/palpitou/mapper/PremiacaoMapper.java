@@ -23,7 +23,13 @@ public class PremiacaoMapper {
     public PremiacaoResponse toResponse(Premiacao premiacao) {
 
         PremiacaoResponse response = new PremiacaoResponse();
-        response.setUserId(premiacao.getUser().getId());
+
+        response.setUserId(
+                premiacao.getUser() != null
+                  ? premiacao.getUser().getId()
+                  : null
+        );
+
         response.setBolaoId(premiacao.getBolao().getId());
         response.setDescricao(premiacao.getDescricao());
         response.setPosicao(premiacao.getPosicao());
