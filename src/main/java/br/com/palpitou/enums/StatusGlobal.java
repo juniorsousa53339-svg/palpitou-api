@@ -4,6 +4,4 @@ public enum StatusGlobal {
     ABERTA,
     EM_ANDAMENTO,
     FINALIZADA;
-
-
 }

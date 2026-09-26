@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/campeonatos")
 @RequiredArgsConstructor
-public class CampeonatoController {
+public class  CampeonatoController {
 
     private final CampeonatoService campeonatoService;
 
