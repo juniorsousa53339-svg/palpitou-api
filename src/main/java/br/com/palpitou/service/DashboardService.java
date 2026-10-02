@@ -1,5 +1,6 @@
 package br.com.palpitou.service;
 
+import br.com.palpitou.dto.Dashboard.DashboardResponse;
 import br.com.palpitou.enums.StatusPagamento;
 import br.com.palpitou.enums.StatusParticipacao;
 import br.com.palpitou.repository.BolaoRepository;
@@ -7,6 +8,8 @@ import br.com.palpitou.repository.PagamentoRepository;
 import br.com.palpitou.repository.ParticipacaoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 
 @Service
@@ -24,10 +27,10 @@ public class DashboardService {
     }
 
     //Metodo auxiliar
-    private int buscarParticipantesAprovados() {
+    private int buscarParticipantesPorStatus(StatusParticipacao status) {
         return Math.toIntExact(
                 participacaoRepository.countByStatus
-                        (StatusParticipacao.APROVADA));
+                        (status));
     }
 
     //Metodo auxiliar
@@ -37,4 +40,49 @@ public class DashboardService {
         );
     }
 
+    //Metodo auxiliar
+    private BigDecimal buscarFaturamento() {
+        return pagamentoRepository.
+                sumFaturamento(
+                        StatusPagamento.APROVADO);
+    }
+
+    public DashboardResponse buscarDashboard() {
+
+        DashboardResponse resposta = new DashboardResponse();
+
+        resposta.setTotalBoloes(
+                buscarTotalBoloes()
+        );
+
+        resposta.setParticipantesAprovados(
+                buscarParticipantesPorStatus(
+                        StatusParticipacao.APROVADA
+                )
+        );
+
+        resposta.setPagamentosAprovados(
+                buscarQuantidadePagamentosPorStatus(
+                        StatusPagamento.APROVADO
+                )
+        );
+
+        resposta.setPagamentosPendentes(
+                buscarQuantidadePagamentosPorStatus(
+                        StatusPagamento.PENDENTE
+                )
+        );
+
+        resposta.setPagamentosRejeitados(
+                buscarQuantidadePagamentosPorStatus(
+                        StatusPagamento.RECUSADO
+                )
+        );
+
+        resposta.setFaturamento(
+                buscarFaturamento()
+        );
+
+        return resposta;
+    }
 }
