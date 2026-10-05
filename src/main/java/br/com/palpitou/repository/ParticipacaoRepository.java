@@ -2,11 +2,8 @@ package br.com.palpitou.repository;
 
 
 import br.com.palpitou.entity.Participacao;
-import br.com.palpitou.enums.StatusPagamento;
 import br.com.palpitou.enums.StatusParticipacao;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface ParticipacaoRepository extends JpaRepository<Participacao,Long> {
 
@@ -14,4 +11,5 @@ public interface ParticipacaoRepository extends JpaRepository<Participacao,Long>
 
     long countByStatus(StatusParticipacao status);
 
+    long countByBolaoIdAndStatus(Long bolaoId, StatusParticipacao status);
 }

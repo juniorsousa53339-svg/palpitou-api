@@ -1,6 +1,8 @@
 package br.com.palpitou.service;
 
+import br.com.palpitou.dto.Dashboard.BolaoDashboardResponse;
 import br.com.palpitou.dto.Dashboard.DashboardResponse;
+import br.com.palpitou.entity.Bolao;
 import br.com.palpitou.enums.StatusPagamento;
 import br.com.palpitou.enums.StatusParticipacao;
 import br.com.palpitou.repository.BolaoRepository;
@@ -10,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -45,6 +49,27 @@ public class DashboardService {
         return pagamentoRepository.
                 sumFaturamento(
                         StatusPagamento.APROVADO);
+    }
+
+    //Metodo auxiliar
+    private BigDecimal buscarFaturamentoPorBolao(Long bolaoId) {
+        return pagamentoRepository.sumByBolaoIdAndStatus(
+                bolaoId,
+                StatusPagamento.APROVADO
+        );
+    }
+
+    //Metodo auxiliar
+    private int buscarParticipantesPorStatusPorBolao(
+            Long bolaoId,
+            StatusParticipacao status
+    ) {
+        return Math.toIntExact(
+                participacaoRepository.countByBolaoIdAndStatus(
+                        bolaoId,
+                        status
+                )
+        );
     }
 
     public DashboardResponse buscarDashboard() {
@@ -85,4 +110,41 @@ public class DashboardService {
 
         return resposta;
     }
+
+    public List<BolaoDashboardResponse> buscarBoloesDashboard() {
+
+        List<Bolao> boloes = bolaoRepository.findAll();
+
+        return boloes.stream()
+                .map(bolao -> {
+
+                    BolaoDashboardResponse response =
+                            new BolaoDashboardResponse();
+
+                    response.setBolao(bolao.getNome());
+
+                    response.setCampeonato(
+                            bolao.getCampeonato().getNome()
+                    );
+
+                    response.setParticipantesAprovados(
+                            buscarParticipantesPorStatusPorBolao(
+                                    bolao.getId(),
+                                    StatusParticipacao.APROVADA
+                            )
+                    );
+
+                    response.setFaturamento(
+                            buscarFaturamentoPorBolao(
+                                    bolao.getId()
+                            )
+                    );
+
+                    response.setStatus(bolao.getStatus());
+
+                    return response;
+                })
+                .collect(Collectors.toList());
+    }
 }
+

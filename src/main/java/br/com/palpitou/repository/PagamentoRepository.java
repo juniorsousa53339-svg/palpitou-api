@@ -13,6 +13,15 @@ public interface PagamentoRepository extends JpaRepository<Pagamento, Long> {
 
     long countByStatus(StatusPagamento status);
 
+    @Query(
+            "SELECT COALESCE(SUM(p.valor), 0)" +
+                    " FROM Pagamento p WHERE p.bolao.id =" +
+                    " :bolaoId AND p.status = :status"
+    )
+    BigDecimal sumByBolaoIdAndStatus(
+            @Param("bolaoId") Long bolaoId,
+            @Param("status") StatusPagamento status
+    );
 
     @Query(
             "SELECT COALESCE(SUM(p.valor), 0)" +
