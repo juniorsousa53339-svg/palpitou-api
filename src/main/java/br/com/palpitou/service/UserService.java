@@ -11,7 +11,9 @@ import br.com.palpitou.mapper.UserMapper;
 import br.com.palpitou.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -20,7 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-
+    private final PasswordEncoder passwordEncoder;
 
     // =========================
     // Métodos auxiliares
@@ -46,7 +48,11 @@ public class UserService {
 
         User user = userMapper.toEntity(request);
 
-        User userSalvo = userRepository.save(user);
+        user.setSenha(passwordEncoder.
+                encode(request.getSenha()));
+
+        User userSalvo =
+                userRepository.save(user);
 
         return userMapper.toResponse(userSalvo);
     }
@@ -73,11 +79,17 @@ public class UserService {
 
         User userBd = buscarUser(id);
 
+        if (userRepository.existsByEmail(request.getEmail()) && !userBd.getEmail().equals(request.getEmail())) {
+            throw new BusinessRuleException("E-mail já cadastrado.");
+        }
+
+        String senhaCriptografada = passwordEncoder.encode(request.getSenha());
+
         userBd.alterarPerfil(
 
                 request.getNome(),
                 request.getEmail(),
-                request.getSenha()
+                senhaCriptografada
         );
 
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -88,14 +100,21 @@ public class UserService {
         return userMapper.toPut(userAtualizado);
     }
 
-    public  UserResponse updateAdmin(Long id, UserRequest request) {
+    public UserResponse updateAdmin(Long id, UserRequest request) {
         User userBd = buscarUser(id);
+
+
+        if (userRepository.existsByEmail(request.getEmail()) && !userBd.getEmail().equals(request.getEmail())) {
+            throw new BusinessRuleException("E-mail já cadastrado.");
+        }
+
+        String senhaCriptografada = passwordEncoder.encode(request.getSenha());
 
         userBd.alterarDadosAdmin(
 
                 request.getNome(),
                 request.getEmail(),
-                request.getSenha(),
+                senhaCriptografada,
                 request.getRole()
         );
 
