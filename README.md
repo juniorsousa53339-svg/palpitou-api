@@ -5,11 +5,11 @@
 ![Maven](https://img.shields.io/badge/Build-Maven-C71A36?logo=apachemaven&logoColor=white)
 ![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
 
-API REST em Java/Spring Boot para uma plataforma de **bolão de futebol**: campeonatos, jogos, bolões, participação mediante pagamento via PIX, palpites, pontuação, ranking, premiações e métricas administrativas.
+API REST em Java/Spring Boot para uma plataforma de **bolão de futebol**: campeonatos, jogos, bolões, participação mediante pagamento via PIX, palpites, pontuação, ranking, premiações e métricas do dashboard administrativo.
 
 O projeto modela o ciclo de um produto real, em que o usuário paga para entrar, o pagamento é validado, os palpites são feitos antes da partida e a pontuação é calculada a partir do resultado. Ele não é um CRUD isolado.
 
-> **Estágio atual:** back-end em desenvolvimento ativo. A API REST principal, as regras de negócio iniciais, a pontuação, o tratamento global de exceções e os testes unitários dos principais serviços estão implementados. Autenticação/autorização, endpoint do Dashboard, PostgreSQL, Docker e front-end ainda **não** estão implementados (veja o [Roadmap](#roadmap)).
+> **Estágio atual:** back-end em desenvolvimento ativo. A API REST principal, os endpoints do Dashboard, as regras de negócio iniciais, a pontuação, o tratamento global de exceções e os testes unitários dos serviços estão implementados. Autenticação/autorização, PostgreSQL, Docker e front-end ainda **não** estão implementados (veja o [Roadmap](#roadmap)).
 
 ---
 
@@ -35,6 +35,7 @@ O projeto modela o ciclo de um produto real, em que o usuário paga para entrar,
 - [Estrutura do projeto](#estrutura-do-projeto)
 - [Decisões técnicas](#decisões-técnicas)
 - [Roadmap](#roadmap)
+- [Inteligência Artificial e Agentes](#inteligência-artificial-e-agentes)
 - [Autor](#autor)
 
 ---
@@ -76,16 +77,16 @@ O fluxo de negócio coberto pela modelagem e pelos serviços é:
 
 Arquitetura em camadas, com responsabilidades separadas:
 
-Controller → Service → Repository → Database
-↑ ↑
-DTO Mapper / Entity
+Controller → Service → Repository → Database  
+↑           ↑  
+DTO         Mapper / Entity  
 
 
 | Camada | Responsabilidade |
 | --- | --- |
 | **Controller** | Expõe os endpoints REST, recebe DTOs de entrada e devolve DTOs de resposta. Delega o processamento aos services. |
 | **Service** | Concentra as regras de negócio (validações, cálculo de pontuação, agregações do dashboard). |
-| **Repository** | Acesso a dados com Spring Data JPA, incluindo consultas derivadas e uma consulta JPQL de agregação. |
+| **Repository** | Acesso a dados com Spring Data JPA, incluindo consultas derivadas e consultas JPQL de agregação. |
 | **DTO** | Contrato de entrada e saída da API, separado das entidades. Organizado em `request`, `response`, `putRequest`, `putResponse` e `Dashboard`. |
 | **Mapper** | Conversão entre entidades e DTOs (classes `@Component` escritas manualmente). |
 | **Entity** | Mapeamento JPA/Hibernate do domínio. |
@@ -196,9 +197,9 @@ O `PontuacaoService` também oferece:
 
 Fluxo conceitual:
 
-Usuário → registra pagamento (PENDENTE) → pagamento aprovado
-→ cria participação (PENDENTE) → participação aprovada
-→ participa do bolão
+Usuário → registra pagamento (PENDENTE) → pagamento aprovado  
+        → cria participação (PENDENTE) → participação aprovada  
+        → participa do bolão  
 
 
 **Pagamento** (`/pagamentos`)
@@ -225,9 +226,7 @@ Já é possível cadastrar, consultar, listar e excluir premiações. A **apura�
 
 ## Dashboard
 
-**Estrutura inicial, em desenvolvimento.**
-
-O `DashboardService` já calcula:
+O `DashboardService` calcula métricas agregadas da plataforma e dos bolões:
 
 | Métrica | Critério |
 | --- | --- |
@@ -240,7 +239,7 @@ O `DashboardService` já calcula:
 
 As métricas vêm de **consultas de agregação no banco** (`COUNT` por status e `SELECT COALESCE(SUM(p.valor), 0)` em JPQL). Isso evita carregar todas as entidades em memória apenas para contar ou somar.
 
-O `DashboardService` e as consultas de agregação já estão implementados. A exposição via endpoint REST está em desenvolvimento: o `DashboardController` existe mapeado em `/dashboard`, mas ainda não possui nenhum método.
+O `DashboardController` expõe os endpoints do dashboard em `/dashboard` (métricas gerais) e `/dashboard/boloes` (métricas detalhadas por bolão).
 
 ---
 
@@ -284,8 +283,9 @@ Atualmente o `SecurityConfig` desabilita CSRF e **libera todas as requisições*
 | Participações | `/participacoes` | `GET`, `GET /{id}`, `POST`, `PUT /{id}`, `DELETE /{id}` |
 | Palpites | `/palpites` | `GET`, `GET /{id}`, `POST`, `PUT /{id}`, `DELETE /{id}` |
 | Premiações | `/premiacao` | `GET`, `GET /{id}`, `POST`, `DELETE /{id}` |
+| Dashboard | `/dashboard` | `GET`, `GET /boloes` |
 
-Os identificadores são `Long`. Ainda **não existem** endpoints para o Dashboard nem para o ranking.
+Os identificadores são `Long`. Ainda **não existem** endpoints para o ranking.
 
 ---
 
@@ -368,7 +368,9 @@ Resposta (o pagamento nasce `PENDENTE`):
 }
 ```
 
-Não há exemplo de consulta de ranking porque o ranking ainda não é exposto por endpoint.
+**Consultar Dashboard** — `GET /dashboard` e `GET /dashboard/boloes`
+
+Não há exemplo de corpo pois são requisições `GET`.
 
 ---
 
@@ -440,17 +442,18 @@ Com a aplicação no ar, abra o Swagger UI em <http://localhost:8080/swagger-ui.
 
 ## Testes
 
-Há testes unitários nos serviços:
+Há testes unitários nos serviços e componentes:
 
 | Classe | Serviço testado |
 | --- | --- |
 | `BolaoServiceTest` | `BolaoService` |
+| `DashboardServiceTest` | `DashboardService` |
 | `PagamentoServiceTest` | `PagamentoService` |
 | `PalpiteServiceTest` | `PalpiteService` |
 | `ParticipacaoServiceTest` | `ParticipacaoService` |
 | `PontuacaoServiceTest` | `PontuacaoService` (inclusive ranking da rodada) |
 
-Há também o `ApiApplicationTests` (carregamento do contexto). Os testes cobrem os fluxos principais dos serviços, e a cobertura continua sendo ampliada conforme novas funcionalidades são implementadas. Os cenários de violação de regra de negócio e os serviços restantes (Campeonato, Jogo, Time, User, Premiacao e Dashboard) ainda não têm testes dedicados.
+Há também o `ApiApplicationTests` (carregamento do contexto). Os testes cobrem os fluxos principais dos serviços, e a cobertura continua sendo ampliada conforme novas funcionalidades são implementadas. Os cenários de violação de regra de negócio e os serviços restantes (Campeonato, Jogo, Time, User e Premiacao) ainda não têm testes dedicados.
 
 ```bash
 # Linux/macOS
@@ -464,31 +467,30 @@ Há também o `ApiApplicationTests` (carregamento do contexto). Os testes cobrem
 
 ## Estrutura do projeto
 
-src/
-├── main/
-│ ├── java/br/com/palpitou/
-│ │ ├── controller/
-│ │ ├── dto/
-│ │ │ ├── Dashboard/
-│ │ │ ├── putRequest/
-│ │ │ ├── putResponse/
-│ │ │ ├── request/
-│ │ │ └── response/
-│ │ ├── entity/
-│ │ ├── enums/
-│ │ ├── exception/
-│ │ ├── mapper/
-│ │ ├── repository/
-│ │ ├── security/
-│ │ ├── service/
-│ │ └── ApiApplication.java
-│ └── resources/
-│ └── application.properties
-└── test/
-└── java/br/com/palpitou/
-├── service/
-└── ApiApplicationTests.java
-
+src/  
+├── main/  
+│   ├── java/br/com/palpitou/  
+│   │   ├── controller/  
+│   │   ├── dto/  
+│   │   │   ├── Dashboard/  
+│   │   │   ├── putRequest/  
+│   │   │   ├── putResponse/  
+│   │   │   ├── request/  
+│   │   │   └── response/  
+│   │   ├── entity/  
+│   │   ├── enums/  
+│   │   ├── exception/  
+│   │   ├── mapper/  
+│   │   ├── repository/  
+│   │   ├── security/  
+│   │   ├── service/  
+│   │   └── ApiApplication.java  
+│   └── resources/  
+│       └── application.properties  
+└── test/  
+    └── java/br/com/palpitou/  
+        ├── service/  
+        └── ApiApplicationTests.java  
 
 ---
 
@@ -501,7 +503,7 @@ src/
 - **Regras de negócio nos services:** validações como participação duplicada, pagamento aprovado e jogo já iniciado ficam concentradas na camada de serviço.
 - **Agregações no banco:** `COUNT` e `SUM` do dashboard são executados no banco, sem carregar entidades em memória.
 - **Tratamento global de exceções:** exceções de domínio mapeadas para HTTP em um único ponto.
-- **Testes unitários de serviços:** as regras de negócio são testadas isoladamente.
+- **Testes unitários de serviços:** as regras de negócio são testadas isoladamente (incluindo `DashboardServiceTest`).
 
 ---
 
@@ -520,12 +522,12 @@ src/
 - [x] Tratamento global de exceções (404 e 409)
 - [x] Configuração inicial do Spring Security
 - [x] Documentação OpenAPI / Swagger
-- [x] Testes unitários dos principais serviços
+- [x] Testes unitários dos principais serviços (`BolaoServiceTest`, `DashboardServiceTest`, `PagamentoServiceTest`, `PalpiteServiceTest`, `ParticipacaoServiceTest`, `PontuacaoServiceTest`)
 - [x] `DashboardService` e consultas de agregação
+- [x] Endpoints do Dashboard (`/dashboard` e `/dashboard/boloes`)
 
 **Em desenvolvimento**
 
-- [ ] Endpoint do Dashboard
 - [ ] Endpoint de ranking
 - [ ] Autenticação e autorização (JWT, perfis de acesso)
 - [ ] Tratamento de erros de validação
@@ -553,6 +555,17 @@ src/
 - [ ] Palpites
 - [ ] Ranking
 - [ ] Premiações
+
+---
+
+## Inteligência Artificial e Agentes
+
+Este projeto utiliza engenharia de IA avançada com o **Claude Code** (Anthropic SDK) e uma arquitetura multiagente configurada no workspace (`.claude/`), demonstrando competência em desenvolvimento assistido por IA, padronização de código, revisão rigorosa e aprendizado contínuo:
+
+- **Java Mentor (`.claude/agents/java-mentor.md`):** Especialista em Java e Spring Boot focado em orientar conceitos arquiteturais, decisões de design e implementação incremental com abordagem didática.
+- **Code Reviewer (`.claude/agents/code-reviewer.md`):** Agente responsável por auditorias de código focadas em segurança, corretude, integridade de dados (JPA/transações) e princípios SOLID.
+- **Test Engineer (`.claude/agents/test-engineer.md`):** Especialista em JUnit 5, Mockito e validação de cobertura de testes unitários e de integração.
+- **Regras e Contexto Personalizados (`.claude/rules/` e `CLAUDE.md`):** Diretrizes estruturadas para garantir segurança, validação de entradas, tratamento global de exceções e separação estrita de responsabilidades em camadas.
 
 ---
 
