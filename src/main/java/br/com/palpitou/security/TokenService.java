@@ -1,5 +1,6 @@
 package br.com.palpitou.security;
 
+import br.com.palpitou.entity.User;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
@@ -19,5 +20,8 @@ public class TokenService {
         return Keys.hmacShaKeyFor(bytes);
     }
 
+    public String gerarToken(User user){
+
+    }
 
 }
