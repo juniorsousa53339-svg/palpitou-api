@@ -35,6 +35,12 @@ public class UserService {
                                 ("Usuario não encontrado!"));
     }
 
+    private void validarEmailUnico(String novoEmail, String emailAtual) {
+        if (userRepository.existsByEmail(novoEmail) && !emailAtual.equals(novoEmail)) {
+            throw new BusinessRuleException("E-mail já cadastrado.");
+        }
+    }
+
 
     // =========================
     // CRUD
@@ -58,7 +64,6 @@ public class UserService {
     }
 
     public UserResponse buscar(Long id) {
-
         User user = buscarUser(id);
         return userMapper.toResponse(user);
     }
@@ -79,22 +84,16 @@ public class UserService {
 
         User userBd = buscarUser(id);
 
-        if (userRepository.existsByEmail(request.getEmail()) && !userBd.getEmail().equals(request.getEmail())) {
-            throw new BusinessRuleException("E-mail já cadastrado.");
-        }
+        validarEmailUnico(request.getEmail(), userBd.getEmail());
 
-        String senhaCriptografada = passwordEncoder.encode(request.getSenha());
+        String senhaCriptografada =
+                passwordEncoder.encode(request.getSenha());
 
         userBd.alterarPerfil(
-
                 request.getNome(),
                 request.getEmail(),
                 senhaCriptografada
         );
-
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new BusinessRuleException("E-mail já cadastrado.");
-        }
 
         User userAtualizado = userRepository.save(userBd);
         return userMapper.toPut(userAtualizado);
@@ -103,10 +102,7 @@ public class UserService {
     public UserResponse updateAdmin(Long id, UserRequest request) {
         User userBd = buscarUser(id);
 
-
-        if (userRepository.existsByEmail(request.getEmail()) && !userBd.getEmail().equals(request.getEmail())) {
-            throw new BusinessRuleException("E-mail já cadastrado.");
-        }
+        validarEmailUnico(request.getEmail(), userBd.getEmail());
 
         String senhaCriptografada = passwordEncoder.encode(request.getSenha());
 
