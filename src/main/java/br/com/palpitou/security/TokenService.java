@@ -39,4 +39,14 @@ public class TokenService {
                 .compact();                           // Gera a String final do token
     }
 
+    public String validarToken(String token) {
+
+        return Jwts.parser()                       // Inicia o parser
+                .verifyWith(getChave())         // Usa a MESMA chave para verificar a assinatura
+                .build()                       // Constrói o parser
+                .parseSignedClaims(token)     // Lê e valida o token
+                .getPayload()                // Acessa o payload (as claims)
+                .getSubject();              // Extrai o subject (o email que guardamos)
+    }
+
 }
