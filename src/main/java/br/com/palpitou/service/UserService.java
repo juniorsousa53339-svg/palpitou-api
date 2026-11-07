@@ -48,14 +48,14 @@ public class UserService {
 
     public UserResponse salvar(UserRequest request) {
 
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.email())) {
             throw new BusinessRuleException("E-mail já cadastrado.");
         }
 
         User user = userMapper.toEntity(request);
 
         user.setSenha(passwordEncoder.
-                encode(request.getSenha()));
+                encode(request.senha()));
 
         User userSalvo =
                 userRepository.save(user);
@@ -84,14 +84,14 @@ public class UserService {
 
         User userBd = buscarUser(id);
 
-        validarEmailUnico(request.getEmail(), userBd.getEmail());
+        validarEmailUnico(request.email(), userBd.getEmail());
 
         String senhaCriptografada =
-                passwordEncoder.encode(request.getSenha());
+                passwordEncoder.encode(request.senha());
 
         userBd.alterarPerfil(
-                request.getNome(),
-                request.getEmail(),
+                request.nome(),
+                request.email(),
                 senhaCriptografada
         );
 
@@ -102,16 +102,16 @@ public class UserService {
     public UserResponse updateAdmin(Long id, UserRequest request) {
         User userBd = buscarUser(id);
 
-        validarEmailUnico(request.getEmail(), userBd.getEmail());
+        validarEmailUnico(request.email(), userBd.getEmail());
 
-        String senhaCriptografada = passwordEncoder.encode(request.getSenha());
+        String senhaCriptografada = passwordEncoder.encode(request.senha());
 
         userBd.alterarDadosAdmin(
 
-                request.getNome(),
-                request.getEmail(),
+                request.nome(),
+                request.email(),
                 senhaCriptografada,
-                request.getRole()
+                request.role()
         );
 
         User userAtualizado = userRepository.save(userBd);

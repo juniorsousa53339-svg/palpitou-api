@@ -46,7 +46,7 @@ public class PremiacaoService {
     public PremiacaoResponse salvar(PremiacaoRequest request) {
 
         Bolao bolao =
-                buscarBolao(request.getBolaoId());
+                buscarBolao(request.bolaoId());
 
 
         Premiacao premiacao =

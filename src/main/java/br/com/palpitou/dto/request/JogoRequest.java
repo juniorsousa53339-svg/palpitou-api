@@ -1,20 +1,26 @@
 package br.com.palpitou.dto.request;
 
-
 import br.com.palpitou.enums.StatusGlobal;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Getter @Setter
-public class JogoRequest {
+public record JogoRequest(
+    @NotNull(message = "A data e hora são obrigatórias")
+    LocalDateTime dataHora,
 
-    private LocalDateTime dataHora;
-    private int rodada;
+    @Min(value = 1, message = "A rodada deve ser maior ou igual a 1")
+    int rodada,
 
-    private StatusGlobal status;
+    @NotNull(message = "O status é obrigatório")
+    StatusGlobal status,
 
-    private Long campeonatoId;
-    private Long timeMandanteId;
-    private Long timeVisitanteId;
-}
+    @NotNull(message = "O ID do campeonato é obrigatório")
+    Long campeonatoId,
+
+    @NotNull(message = "O ID do time mandante é obrigatório")
+    Long timeMandanteId,
+
+    @NotNull(message = "O ID do time visitante é obrigatório")
+    Long timeVisitanteId
+) {}

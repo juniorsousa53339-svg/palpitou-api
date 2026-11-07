@@ -36,7 +36,7 @@ public class CampeonatoService {
 
     public CampeonatoResponse salvar(CampeonatoRequest request) {
 
-        if (campeonatoRepository.existsByNome(request.getNome())) {
+        if (campeonatoRepository.existsByNome(request.nome())) {
             throw new BusinessRuleException("Campeonato já cadastrado.");
         }
 
@@ -70,12 +70,12 @@ public class CampeonatoService {
 
         campBd.alterarDados(
 
-                request.getNome(),
-                request.getTemporada(),
-                request.getStatus()
+                request.nome(),
+                request.temporada(),
+                request.status()
         );
 
-        if (campeonatoRepository.existsByNome(request.getNome())) {
+        if (campeonatoRepository.existsByNome(request.nome())) {
             throw new BusinessRuleException("Campeonato já cadastrado.");
         }
 

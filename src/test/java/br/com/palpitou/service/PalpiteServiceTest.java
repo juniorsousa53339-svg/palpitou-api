@@ -52,11 +52,12 @@ public class PalpiteServiceTest {
         user.setId(10L);
         user.setNome("Maria");
 
-        PalpiteRequest request = new PalpiteRequest();
-        request.setJogoId(1L);
-        request.setUserId(10L);
-        request.setGolsMandante(2);
-        request.setGolsVisitante(1);
+        PalpiteRequest request = new PalpiteRequest(
+            2,
+            1,
+            1L,
+            10L
+        );
 
         Palpite palpite = new Palpite();
         palpite.setId(5L);
@@ -65,10 +66,12 @@ public class PalpiteServiceTest {
         palpite.setJogo(jogo);
         palpite.setUser(user);
 
-        PalpiteResponse responseEsperado = new PalpiteResponse();
-        responseEsperado.setGolsMandante(2);
-        responseEsperado.setGolsVisitante(1);
-        responseEsperado.setUserId(10L);
+        PalpiteResponse responseEsperado = new PalpiteResponse(
+            2,
+            1,
+            0,
+            10L
+        );
 
         when(jogoRepository.findById(1L)).thenReturn(Optional.of(jogo));
         when(userRepository.findById(10L)).thenReturn(Optional.of(user));
@@ -82,9 +85,9 @@ public class PalpiteServiceTest {
 
         // ASSERT
         assertNotNull(response);
-        assertEquals(2, response.getGolsMandante());
-        assertEquals(1, response.getGolsVisitante());
-        assertEquals(10L, response.getUserId());
+        assertEquals(2, response.golsMandante());
+        assertEquals(1, response.golsVisitante());
+        assertEquals(10L, response.userId());
     }
 
     @Test
@@ -104,10 +107,12 @@ public class PalpiteServiceTest {
         palpite.setJogo(jogo);
         palpite.setUser(user);
 
-        PalpiteResponse response = new PalpiteResponse();
-        response.setGolsMandante(1);
-        response.setGolsVisitante(0);
-        response.setUserId(20L);
+        PalpiteResponse response = new PalpiteResponse(
+            1,
+            0,
+            0,
+            20L
+        );
 
         when(palpiteRepository.findAll()).thenReturn(List.of(palpite));
         when(palpiteMapper.toResponse(palpite)).thenReturn(response);
@@ -118,7 +123,6 @@ public class PalpiteServiceTest {
         // ASSERT
         assertNotNull(respostas);
         assertEquals(1, respostas.size());
-        assertEquals(1, respostas.get(0).getGolsMandante());
+        assertEquals(1, respostas.get(0).golsMandante());
     }
 }
-

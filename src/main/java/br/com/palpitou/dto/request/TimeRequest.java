@@ -1,13 +1,16 @@
 package br.com.palpitou.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-import lombok.Getter;
-import lombok.Setter;
+public record TimeRequest(
+    @NotBlank(message = "O nome é obrigatório")
+    String nome,
 
-@Getter @Setter
-public class TimeRequest {
+    @NotBlank(message = "O escudo é obrigatório")
+    String escudo,
 
-    private String nome;
-    private String escudo;
-    private String sigla;
-}
+    @NotBlank(message = "A sigla é obrigatória")
+    @Size(min = 2, max = 4, message = "A sigla deve ter entre 2 e 4 caracteres")
+    String sigla
+) {}

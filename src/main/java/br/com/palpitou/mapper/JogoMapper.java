@@ -20,9 +20,9 @@ public class JogoMapper {
 
         Jogo jogo = new Jogo();
 
-        jogo.setDataHora(request.getDataHora());
-        jogo.setRodada(request.getRodada());
-        jogo.setStatus(request.getStatus());
+        jogo.setDataHora(request.dataHora());
+        jogo.setRodada(request.rodada());
+        jogo.setStatus(request.status());
         jogo.setCampeonato(campeonato);
         jogo.setTimeMandante(timeMandante);
         jogo.setTimeVisitante(timeVisitante);
@@ -31,30 +31,26 @@ public class JogoMapper {
     }
 
     public JogoResponse toResponse(Jogo jogo) {
-
-        JogoResponse response = new JogoResponse();
-
-        response.setId(jogo.getId());
-        response.setDataHora(jogo.getDataHora());
-        response.setRodada(jogo.getRodada());
-        response.setStatus(jogo.getStatus());
-
-        response.setCampeonatoId(jogo.getCampeonato().getId());
-        response.setTimeMandanteId(jogo.getTimeMandante().getId());
-        response.setTimeVisitanteId(jogo.getTimeVisitante().getId());
-
-        return response;
+        return new JogoResponse(
+            jogo.getId(),
+            jogo.getDataHora(),
+            jogo.getRodada(),
+            jogo.getStatus(),
+            jogo.getCampeonato() != null ? jogo.getCampeonato().getId() : null,
+            jogo.getTimeMandante() != null ? jogo.getTimeMandante().getId() : null,
+            jogo.getTimeVisitante() != null ? jogo.getTimeVisitante().getId() : null
+        );
     }
 
     public PutResponseJogo toPutResponseJogo(Jogo jogo) {
-
-        PutResponseJogo putResponseJogo = new PutResponseJogo();
-
-        putResponseJogo.setDataHora(jogo.getDataHora());
-        putResponseJogo.setRodada(jogo.getRodada());
-        putResponseJogo.setGolsMandante(jogo.getGolsMandante());
-        putResponseJogo.setGolsVisitante(jogo.getGolsVisitante());
-        putResponseJogo.setStatus(jogo.getStatus());
-        return putResponseJogo;
+        return new PutResponseJogo(
+            jogo.getId(),
+            null,
+            jogo.getDataHora(),
+            jogo.getRodada(),
+            jogo.getGolsMandante(),
+            jogo.getGolsVisitante(),
+            jogo.getStatus()
+        );
     }
 }

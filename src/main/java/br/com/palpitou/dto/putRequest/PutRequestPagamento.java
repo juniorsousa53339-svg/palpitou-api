@@ -1,10 +1,9 @@
 package br.com.palpitou.dto.putRequest;
 
 import br.com.palpitou.enums.StatusPagamento;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
 
-@Getter @Setter
-public class PutRequestPagamento {
-    private StatusPagamento status;
-}
+public record PutRequestPagamento(
+    @NotNull(message = "O status do pagamento é obrigatório")
+    StatusPagamento status
+) {}

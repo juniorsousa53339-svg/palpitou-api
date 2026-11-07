@@ -18,27 +18,23 @@ public class PalpiteMapper {
 
         Palpite palpite = new Palpite();
 
-        palpite.setGolsMandante(request.getGolsMandante());
-        palpite.setGolsVisitante(request.getGolsVisitante());
+        palpite.setGolsMandante(request.golsMandante());
+        palpite.setGolsVisitante(request.golsVisitante());
         palpite.setJogo(jogo);
         palpite.setUser(user);
         return palpite;
     }
 
     public PalpiteResponse toResponse(Palpite palpite) {
-
-        PalpiteResponse response = new PalpiteResponse();
-
-        response.setGolsMandante(palpite.getGolsMandante());
-        response.setGolsVisitante(palpite.getGolsVisitante());
-        response.setPontosObtidos(palpite.getPontosObtidos());
-        response.setUserId(palpite.getUser().getId());
-        return  response;
+        return new PalpiteResponse(
+            palpite.getGolsMandante(),
+            palpite.getGolsVisitante(),
+            palpite.getPontosObtidos(),
+            palpite.getUser() != null ? palpite.getUser().getId() : null
+        );
     }
 
     public PutResponsePalpite toPut(Palpite palpite) {
-        PutResponsePalpite put = new PutResponsePalpite();
-        put.setPontosObtidos(palpite.getPontosObtidos());
-        return put;
+        return new PutResponsePalpite(palpite.getPontosObtidos());
     }
 }

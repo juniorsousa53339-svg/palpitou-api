@@ -53,12 +53,13 @@ public class PagamentoServiceTest {
         bolao.setId(9L);
         bolao.setNome("Bolão do Verão");
 
-        PagamentoRequest request = new PagamentoRequest();
-        request.setValor(new BigDecimal("80.00"));
-        request.setNomePagadorPix("Carlos");
-        request.setComprovante("comprovante-123");
-        request.setUserId(5L);
-        request.setBolaoId(9L);
+        PagamentoRequest request = new PagamentoRequest(
+            new BigDecimal("80.00"),
+            "Carlos",
+            "comprovante-123",
+            5L,
+            9L
+        );
 
         Pagamento pagamento = new Pagamento();
         pagamento.setId(1L);
@@ -69,11 +70,12 @@ public class PagamentoServiceTest {
         pagamento.setBolao(bolao);
         pagamento.setStatus(StatusPagamento.PENDENTE);
 
-        PagamentoResponse responseEsperado = new PagamentoResponse();
-        responseEsperado.setValor(new BigDecimal("80.00"));
-        responseEsperado.setNomePagadorPix("Carlos");
-        responseEsperado.setComprovante("comprovante-123");
-        responseEsperado.setStatus(StatusPagamento.PENDENTE);
+        PagamentoResponse responseEsperado = new PagamentoResponse(
+            new BigDecimal("80.00"),
+            StatusPagamento.PENDENTE,
+            "Carlos",
+            "comprovante-123"
+        );
 
         when(userRepository.findById(5L)).thenReturn(Optional.of(usuario));
         when(bolaoRepository.findById(9L)).thenReturn(Optional.of(bolao));
@@ -86,9 +88,9 @@ public class PagamentoServiceTest {
 
         // ASSERT
         assertNotNull(response);
-        assertEquals(new BigDecimal("80.00"), response.getValor());
-        assertEquals("Carlos", response.getNomePagadorPix());
-        assertEquals(StatusPagamento.PENDENTE, response.getStatus());
+        assertEquals(new BigDecimal("80.00"), response.valor());
+        assertEquals("Carlos", response.nomePagadorPix());
+        assertEquals(StatusPagamento.PENDENTE, response.status());
     }
 
     @Test
@@ -101,11 +103,12 @@ public class PagamentoServiceTest {
         pagamento.setNomePagadorPix("Ana");
         pagamento.setComprovante("doc-456");
 
-        PagamentoResponse response = new PagamentoResponse();
-        response.setValor(new BigDecimal("120.00"));
-        response.setStatus(StatusPagamento.APROVADO);
-        response.setNomePagadorPix("Ana");
-        response.setComprovante("doc-456");
+        PagamentoResponse response = new PagamentoResponse(
+            new BigDecimal("120.00"),
+            StatusPagamento.APROVADO,
+            "Ana",
+            "doc-456"
+        );
 
         when(pagamentoRepository.findAll()).thenReturn(List.of(pagamento));
         when(pagamentoMapper.toResponse(pagamento)).thenReturn(response);
@@ -116,7 +119,6 @@ public class PagamentoServiceTest {
         // ASSERT
         assertNotNull(respostas);
         assertEquals(1, respostas.size());
-        assertEquals(new BigDecimal("120.00"), respostas.get(0).getValor());
+        assertEquals(new BigDecimal("120.00"), respostas.get(0).valor());
     }
 }
-

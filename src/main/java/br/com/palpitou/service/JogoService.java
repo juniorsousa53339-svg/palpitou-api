@@ -60,13 +60,13 @@ public class JogoService {
 
 
         Time timeMandante =
-                buscarTime(request.getTimeMandanteId());
+                buscarTime(request.timeMandanteId());
 
         Time timeVisitante =
-                buscarTime(request.getTimeVisitanteId());
+                buscarTime(request.timeVisitanteId());
 
         Campeonato campeonato =
-                buscarCampeonato(request.getCampeonatoId());
+                buscarCampeonato(request.campeonatoId());
 
         validarStatusCampeonato(
                 campeonato.getStatus());
@@ -110,11 +110,11 @@ public class JogoService {
         Jogo jogoBd = buscarJogo(id);
 
         jogoBd.alterarDados(
-                putjogo.getDataHora(),
-                putjogo.getRodada(),
-                putjogo.getGolsMandante(),
-                putjogo.getGolsVisitante(),
-                putjogo.getStatus()
+                putjogo.dataHora(),
+                putjogo.rodada(),
+                putjogo.golsMandante(),
+                putjogo.golsVisitante(),
+                putjogo.status()
         );
 
         Jogo jogoUpdated = jogoRepository.save(jogoBd);

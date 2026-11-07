@@ -67,11 +67,12 @@ public class ParticipacaoServiceTest {
         pagamento.setId(3L);
         pagamento.setStatus(StatusPagamento.APROVADO);
 
-        ParticipacaoRequest request = new ParticipacaoRequest();
-        request.setUserId(1L);
-        request.setBolaoId(2L);
-        request.setPagamentoId(3L);
-        request.setPontos(10);
+        ParticipacaoRequest request = new ParticipacaoRequest(
+            10,
+            1L,
+            2L,
+            3L
+        );
 
         Participacao participacao = new Participacao();
         participacao.setId(99L);
@@ -82,10 +83,12 @@ public class ParticipacaoServiceTest {
         participacao.setStatus(StatusParticipacao.PENDENTE);
         participacao.setDataInscricao(LocalDate.now());
 
-        ParticipacaoResponse responseEsperado = new ParticipacaoResponse();
-        responseEsperado.setPontos(10);
-        responseEsperado.setStatus(StatusParticipacao.PENDENTE);
-        responseEsperado.setDataInscricao(LocalDate.now());
+        LocalDate hoje = LocalDate.now();
+        ParticipacaoResponse responseEsperado = new ParticipacaoResponse(
+            StatusParticipacao.PENDENTE,
+            hoje,
+            10
+        );
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(usuario));
         when(bolaoRepository.findById(2L)).thenReturn(Optional.of(bolao));
@@ -100,8 +103,8 @@ public class ParticipacaoServiceTest {
 
         // ASSERT
         assertNotNull(response);
-        assertEquals(10, response.getPontos());
-        assertEquals(StatusParticipacao.PENDENTE, response.getStatus());
+        assertEquals(10, response.pontos());
+        assertEquals(StatusParticipacao.PENDENTE, response.status());
     }
 
     @Test
@@ -113,10 +116,11 @@ public class ParticipacaoServiceTest {
         participacao.setStatus(StatusParticipacao.APROVADA);
         participacao.setDataInscricao(LocalDate.now());
 
-        ParticipacaoResponse response = new ParticipacaoResponse();
-        response.setPontos(15);
-        response.setStatus(StatusParticipacao.APROVADA);
-        response.setDataInscricao(LocalDate.now());
+        ParticipacaoResponse response = new ParticipacaoResponse(
+            StatusParticipacao.APROVADA,
+            LocalDate.now(),
+            15
+        );
 
         when(participacaoRepository.findAll()).thenReturn(List.of(participacao));
         when(participacaoMapper.toResponse(participacao)).thenReturn(response);
@@ -127,7 +131,6 @@ public class ParticipacaoServiceTest {
         // ASSERT
         assertNotNull(respostas);
         assertEquals(1, respostas.size());
-        assertEquals(15, respostas.get(0).getPontos());
+        assertEquals(15, respostas.get(0).pontos());
     }
 }
-

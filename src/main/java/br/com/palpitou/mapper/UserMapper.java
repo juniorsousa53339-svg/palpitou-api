@@ -7,39 +7,31 @@ import br.com.palpitou.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
-
 public class UserMapper {
 
     public User toEntity(UserRequest request) {
-
         User user = new User();
-
-        user.setEmail(request.getEmail());
-        user.setNome(request.getNome());
-        user.setSenha(request.getSenha());
-        user.setRole(request.getRole());
-
+        user.setEmail(request.email());
+        user.setNome(request.nome());
+        user.setSenha(request.senha());
+        user.setRole(request.role());
         return user;
     }
 
-    public UserResponse toResponse(User user){
-
-        UserResponse userResponse = new UserResponse();
-        userResponse.setEmail(user.getEmail());
-        userResponse.setNome(user.getNome());
-        userResponse.setSenha(user.getSenha());
-        userResponse.setRole(user.getRole());
-
-        return userResponse;
+    public UserResponse toResponse(User user) {
+        return new UserResponse(
+            user.getNome(),
+            user.getEmail(),
+            user.getSenha(),
+            user.getRole()
+        );
     }
 
-    public PutResponseUser toPut(User user){
-        PutResponseUser putResponseUser = new PutResponseUser();
-
-        putResponseUser.setEmail(user.getEmail());
-        putResponseUser.setNome(user.getNome());
-        putResponseUser.setSenha(user.getSenha());
-
-        return putResponseUser;
+    public PutResponseUser toPut(User user) {
+        return new PutResponseUser(
+            user.getNome(),
+            user.getEmail(),
+            user.getSenha()
+        );
     }
 }

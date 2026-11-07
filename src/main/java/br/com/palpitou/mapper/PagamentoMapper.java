@@ -21,9 +21,9 @@ public class PagamentoMapper {
 
         Pagamento pagamento = new Pagamento();
 
-        pagamento.setValor(request.getValor());
-        pagamento.setNomePagadorPix(request.getNomePagadorPix());
-        pagamento.setComprovante(request.getComprovante());
+        pagamento.setValor(request.valor());
+        pagamento.setNomePagadorPix(request.nomePagadorPix());
+        pagamento.setComprovante(request.comprovante());
         pagamento.setUser(user);
         pagamento.setBolao(bolao);
         pagamento.setStatus(StatusPagamento.PENDENTE);
@@ -31,19 +31,15 @@ public class PagamentoMapper {
     }
 
     public PagamentoResponse toResponse(Pagamento pagamento) {
-
-        PagamentoResponse response = new PagamentoResponse();
-
-        response.setValor(pagamento.getValor());
-        response.setNomePagadorPix(pagamento.getNomePagadorPix());
-        response.setComprovante(pagamento.getComprovante());
-        response.setStatus(pagamento.getStatus());
-        return response;
+        return new PagamentoResponse(
+            pagamento.getValor(),
+            pagamento.getStatus(),
+            pagamento.getNomePagadorPix(),
+            pagamento.getComprovante()
+        );
     }
 
     public PutResponsePagamento toPut(Pagamento pagamento) {
-        PutResponsePagamento put = new PutResponsePagamento();
-        put.setStatus(pagamento.getStatus());
-        return put;
+        return new PutResponsePagamento(pagamento.getStatus());
     }
 }

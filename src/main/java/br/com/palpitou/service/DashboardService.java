@@ -24,127 +24,52 @@ public class DashboardService {
     private final ParticipacaoRepository participacaoRepository;
     private final PagamentoRepository pagamentoRepository;
 
-    //Metodo auxiliar
     private int buscarTotalBoloes() {
-        return Math.toIntExact
-                (bolaoRepository.count());
+        return Math.toIntExact(bolaoRepository.count());
     }
 
-    //Metodo auxiliar
     private int buscarParticipantesPorStatus(StatusParticipacao status) {
-        return Math.toIntExact(
-                participacaoRepository.countByStatus
-                        (status));
+        return Math.toIntExact(participacaoRepository.countByStatus(status));
     }
 
-    //Metodo auxiliar
     private int buscarQuantidadePagamentosPorStatus(StatusPagamento status) {
-        return Math.toIntExact(
-                pagamentoRepository.countByStatus(status)
-        );
+        return Math.toIntExact(pagamentoRepository.countByStatus(status));
     }
 
-    //Metodo auxiliar
     private BigDecimal buscarFaturamento() {
-        return pagamentoRepository.
-                sumFaturamento(
-                        StatusPagamento.APROVADO);
+        return pagamentoRepository.sumFaturamento(StatusPagamento.APROVADO);
     }
 
-    //Metodo auxiliar
     private BigDecimal buscarFaturamentoPorBolao(Long bolaoId) {
-        return pagamentoRepository.sumByBolaoIdAndStatus(
-                bolaoId,
-                StatusPagamento.APROVADO
-        );
+        return pagamentoRepository.sumByBolaoIdAndStatus(bolaoId, StatusPagamento.APROVADO);
     }
 
-    //Metodo auxiliar
-    private int buscarParticipantesPorStatusPorBolao(
-            Long bolaoId,
-            StatusParticipacao status
-    ) {
-        return Math.toIntExact(
-                participacaoRepository.countByBolaoIdAndStatus(
-                        bolaoId,
-                        status
-                )
-        );
+    private int buscarParticipantesPorStatusPorBolao(Long bolaoId, StatusParticipacao status) {
+        return Math.toIntExact(participacaoRepository.countByBolaoIdAndStatus(bolaoId, status));
     }
 
     public DashboardResponse buscarDashboard() {
-
-        DashboardResponse resposta = new DashboardResponse();
-
-        resposta.setTotalBoloes(
-                buscarTotalBoloes()
+        return new DashboardResponse(
+            buscarTotalBoloes(),
+            buscarParticipantesPorStatus(StatusParticipacao.APROVADA),
+            buscarQuantidadePagamentosPorStatus(StatusPagamento.PENDENTE),
+            buscarQuantidadePagamentosPorStatus(StatusPagamento.APROVADO),
+            buscarQuantidadePagamentosPorStatus(StatusPagamento.RECUSADO),
+            buscarFaturamento()
         );
-
-        resposta.setParticipantesAprovados(
-                buscarParticipantesPorStatus(
-                        StatusParticipacao.APROVADA
-                )
-        );
-
-        resposta.setPagamentosAprovados(
-                buscarQuantidadePagamentosPorStatus(
-                        StatusPagamento.APROVADO
-                )
-        );
-
-        resposta.setPagamentosPendentes(
-                buscarQuantidadePagamentosPorStatus(
-                        StatusPagamento.PENDENTE
-                )
-        );
-
-        resposta.setPagamentosRejeitados(
-                buscarQuantidadePagamentosPorStatus(
-                        StatusPagamento.RECUSADO
-                )
-        );
-
-        resposta.setFaturamento(
-                buscarFaturamento()
-        );
-
-        return resposta;
     }
 
     public List<BolaoDashboardResponse> buscarBoloesDashboard() {
-
         List<Bolao> boloes = bolaoRepository.findAll();
 
         return boloes.stream()
-                .map(bolao -> {
-
-                    BolaoDashboardResponse response =
-                            new BolaoDashboardResponse();
-
-                    response.setBolao(bolao.getNome());
-
-                    response.setCampeonato(
-                            bolao.getCampeonato().getNome()
-                    );
-
-                    response.setParticipantesAprovados(
-                            buscarParticipantesPorStatusPorBolao(
-                                    bolao.getId(),
-                                    StatusParticipacao.APROVADA
-                            )
-                    );
-
-                    response.setFaturamento(
-                            buscarFaturamentoPorBolao(
-                                    bolao.getId()
-                            )
-                    );
-
-                    response.setStatus(bolao.getStatus());
-
-                    return response;
-                })
+                .map(bolao -> new BolaoDashboardResponse(
+                    bolao.getNome(),
+                    bolao.getCampeonato() != null ? bolao.getCampeonato().getNome() : null,
+                    buscarParticipantesPorStatusPorBolao(bolao.getId(), StatusParticipacao.APROVADA),
+                    buscarFaturamentoPorBolao(bolao.getId()),
+                    bolao.getStatus()
+                ))
                 .collect(Collectors.toList());
     }
 }
-

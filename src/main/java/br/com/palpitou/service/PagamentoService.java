@@ -55,10 +55,10 @@ public class PagamentoService {
     public PagamentoResponse salvar(PagamentoRequest request) {
 
        User user =
-               buscarUser(request.getUserId());
+               buscarUser(request.userId());
 
        Bolao bolao =
-               buscarBolao(request.getBolaoId());
+               buscarBolao(request.bolaoId());
 
         Pagamento pagamento = pagamentoMapper.toEntity(
                 request,
@@ -93,7 +93,7 @@ public class PagamentoService {
         Pagamento pagamentoBd = buscarPagamento(id);
 
         pagamentoBd.alterarDados
-                (put.getStatus());
+                (put.status());
 
         Pagamento pagamentoUpdated =
                 pagamentoRepository.save(pagamentoBd);

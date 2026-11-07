@@ -54,7 +54,7 @@ public class ParticipacaoController {
     @PutMapping("/{id}")
     public ResponseEntity<PutResponseParticipacao> atualizar(
             @PathVariable Long id,
-            @RequestBody PutRequestParticipacao request
+            @RequestBody @Valid PutRequestParticipacao request
     ){
 
         var resposta = participacaoService.updateParticipacao(id, request);

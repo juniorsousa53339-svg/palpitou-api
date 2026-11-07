@@ -56,9 +56,9 @@ public class BolaoService {
 
     public BolaoResponse salvar(BolaoRequest request) {
 
-        Campeonato campeonato = buscarCampeonato(request.getCampeonatoId());
+        Campeonato campeonato = buscarCampeonato(request.campeonatoId());
 
-        validarStatusBolao(request.getStatus());
+        validarStatusBolao(request.status());
 
         Bolao bolao = bolaoMapper.toEntity(request, campeonato);
 
@@ -88,11 +88,11 @@ public class BolaoService {
         Bolao bolaoBd = buscarBolaoPorId(id);
 
         bolaoBd.alterarDados(
-            put.getNome(),
-            put.getValorInscricao(),
-            put.getDataInicio(),
-            put.getDataFim(),
-            put.getStatus()
+            put.nome(),
+            put.valorInscricao(),
+            put.dataInicio(),
+            put.dataFim(),
+            put.status()
         );
 
         Bolao bolaoUpdated = bolaoRepository.save(bolaoBd);

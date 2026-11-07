@@ -1,14 +1,18 @@
 package br.com.palpitou.dto.request;
 
-import br.com.palpitou.enums.StatusParticipacao;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
-@Getter @Setter
-public class ParticipacaoRequest {
+public record ParticipacaoRequest(
+    @PositiveOrZero(message = "Os pontos não podem ser negativos")
+    int pontos,
 
-    private int pontos;
-    private Long userId;
-    private Long bolaoId;
-    private Long pagamentoId;
-}
+    @NotNull(message = "O ID do usuário é obrigatório")
+    Long userId,
+
+    @NotNull(message = "O ID do bolão é obrigatório")
+    Long bolaoId,
+
+    @NotNull(message = "O ID do pagamento é obrigatório")
+    Long pagamentoId
+) {}

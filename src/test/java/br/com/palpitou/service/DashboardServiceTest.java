@@ -1,4 +1,3 @@
-
 package br.com.palpitou.service;
 
 import br.com.palpitou.dto.Dashboard.BolaoDashboardResponse;
@@ -39,48 +38,25 @@ class DashboardServiceTest {
 
     @Test
     void deveBuscarDashboard() {
-        // Arrange: configuramos as respostas dos mocks
         when(bolaoRepository.count()).thenReturn(3L);
+        when(participacaoRepository.countByStatus(StatusParticipacao.APROVADA)).thenReturn(10L);
+        when(pagamentoRepository.countByStatus(StatusPagamento.APROVADO)).thenReturn(5L);
+        when(pagamentoRepository.countByStatus(StatusPagamento.PENDENTE)).thenReturn(2L);
+        when(pagamentoRepository.countByStatus(StatusPagamento.RECUSADO)).thenReturn(1L);
+        when(pagamentoRepository.sumFaturamento(StatusPagamento.APROVADO)).thenReturn(new BigDecimal("250.00"));
 
-        when(participacaoRepository.countByStatus(
-                StatusParticipacao.APROVADA
-        )).thenReturn(10L);
-
-        when(pagamentoRepository.countByStatus(
-                StatusPagamento.APROVADO
-        )).thenReturn(5L);
-
-        when(pagamentoRepository.countByStatus(
-                StatusPagamento.PENDENTE
-        )).thenReturn(2L);
-
-        when(pagamentoRepository.countByStatus(
-                StatusPagamento.RECUSADO
-        )).thenReturn(1L);
-
-        when(pagamentoRepository.sumFaturamento(
-                StatusPagamento.APROVADO
-        )).thenReturn(new BigDecimal("250.00"));
-
-        // Act: executamos o método que queremos testar
         DashboardResponse resposta = dashboardService.buscarDashboard();
 
-        // Assert: verificamos o resultado
-        assertEquals(3, resposta.getTotalBoloes());
-        assertEquals(10, resposta.getParticipantesAprovados());
-        assertEquals(5, resposta.getPagamentosAprovados());
-        assertEquals(2, resposta.getPagamentosPendentes());
-        assertEquals(1, resposta.getPagamentosRejeitados());
-
-        assertEquals(
-                0,
-                new BigDecimal("250.00").compareTo(resposta.getFaturamento())
-        );
+        assertEquals(3, resposta.totalBoloes());
+        assertEquals(10, resposta.participantesAprovados());
+        assertEquals(5, resposta.pagamentosAprovados());
+        assertEquals(2, resposta.pagamentosPendentes());
+        assertEquals(1, resposta.pagamentosRejeitados());
+        assertEquals(0, new BigDecimal("250.00").compareTo(resposta.faturamento()));
     }
 
     @Test
     void deveBuscarBoloesDashboard() {
-        // Arrange: criamos os bolões de exemplo
         Campeonato campeonato1 = new Campeonato();
         campeonato1.setNome("Brasileirão");
 
@@ -99,52 +75,23 @@ class DashboardServiceTest {
 
         List<Bolao> boloes = List.of(bolao1, bolao2);
 
-        // Configuramos o retorno dos repositórios
         when(bolaoRepository.findAll()).thenReturn(boloes);
+        when(participacaoRepository.countByBolaoIdAndStatus(1L, StatusParticipacao.APROVADA)).thenReturn(4L);
+        when(participacaoRepository.countByBolaoIdAndStatus(2L, StatusParticipacao.APROVADA)).thenReturn(7L);
+        when(pagamentoRepository.sumByBolaoIdAndStatus(1L, StatusPagamento.APROVADO)).thenReturn(new BigDecimal("100.00"));
+        when(pagamentoRepository.sumByBolaoIdAndStatus(2L, StatusPagamento.APROVADO)).thenReturn(new BigDecimal("200.00"));
 
-        when(participacaoRepository.countByBolaoIdAndStatus(
-                1L, StatusParticipacao.APROVADA
-        )).thenReturn(4L);
+        List<BolaoDashboardResponse> resposta = dashboardService.buscarBoloesDashboard();
 
-        when(participacaoRepository.countByBolaoIdAndStatus(
-                2L, StatusParticipacao.APROVADA
-        )).thenReturn(7L);
-
-        when(pagamentoRepository.sumByBolaoIdAndStatus(
-                1L, StatusPagamento.APROVADO
-        )).thenReturn(new BigDecimal("100.00"));
-
-        when(pagamentoRepository.sumByBolaoIdAndStatus(
-                2L, StatusPagamento.APROVADO
-        )).thenReturn(new BigDecimal("200.00"));
-
-        // Act: executamos o método que queremos testar
-        List<BolaoDashboardResponse> resposta =
-                dashboardService.buscarBoloesDashboard();
-
-        // Assert: verificamos a quantidade de resultados
         assertEquals(2, resposta.size());
+        assertEquals("Bolão 1", resposta.get(0).bolao());
+        assertEquals("Brasileirão", resposta.get(0).campeonato());
+        assertEquals(4, resposta.get(0).participantesAprovados());
+        assertEquals(0, new BigDecimal("100.00").compareTo(resposta.get(0).faturamento()));
 
-        // Verificamos os dados do primeiro bolão
-        assertEquals("Bolão 1", resposta.get(0).getBolao());
-        assertEquals("Brasileirão", resposta.get(0).getCampeonato());
-        assertEquals(4, resposta.get(0).getParticipantesAprovados());
-        assertEquals(
-                0,
-                new BigDecimal("100.00").compareTo(
-                        resposta.get(0).getFaturamento()
-                )
-        );
-
-        // Verificamos os dados do segundo bolão
-        assertEquals("Bolão 2", resposta.get(1).getBolao());
-        assertEquals("Paulistão", resposta.get(1).getCampeonato());
-        assertEquals(7, resposta.get(1).getParticipantesAprovados());
-        assertEquals(
-                0,
-                new BigDecimal("200.00").compareTo(
-                        resposta.get(1).getFaturamento()
-                )
-        );
+        assertEquals("Bolão 2", resposta.get(1).bolao());
+        assertEquals("Paulistão", resposta.get(1).campeonato());
+        assertEquals(7, resposta.get(1).participantesAprovados());
+        assertEquals(0, new BigDecimal("200.00").compareTo(resposta.get(1).faturamento()));
     }
 }

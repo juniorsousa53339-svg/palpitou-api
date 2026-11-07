@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,7 +35,10 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @NotNull
+    @NotBlank
+    @Size(min = 6, max = 15, message = "A senha deve ter entre 6 e 15 caracteres")
+    @Pattern(regexp = "^(?=.*[a-z]).+$", message = "A senha deve conter pelo menos uma letra minúscula")
+    @Column(nullable = false)
     private String senha;
 
     @Enumerated(EnumType.STRING)

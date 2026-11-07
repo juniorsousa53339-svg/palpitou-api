@@ -1,13 +1,7 @@
 package br.com.palpitou.dto.response;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
-public class RankingResponse {
-
-    private int posicao;
-    private String nome;
-    private int pontuacao;
-}
+public record RankingResponse(
+    int posicao,
+    String nome,
+    int pontuacao
+) {}

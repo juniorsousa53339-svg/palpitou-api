@@ -1,10 +1,8 @@
 package br.com.palpitou.dto.putRequest;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.PositiveOrZero;
 
-@Getter
-@Setter
-public class PutRequestPalpite {
-    private int pontosObtidos;
-}
+public record PutRequestPalpite(
+    @PositiveOrZero(message = "Os pontos obtidos não podem ser negativos")
+    int pontosObtidos
+) {}

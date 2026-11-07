@@ -1,12 +1,13 @@
 package br.com.palpitou.dto.putRequest;
 
 import br.com.palpitou.enums.StatusParticipacao;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
-@Getter
-@Setter
-public class PutRequestParticipacao {
-    private int pontos;
-    private StatusParticipacao status;
-}
+public record PutRequestParticipacao(
+    @PositiveOrZero(message = "Os pontos não podem ser negativos")
+    int pontos,
+
+    @NotNull(message = "O status da participação é obrigatório")
+    StatusParticipacao status
+) {}

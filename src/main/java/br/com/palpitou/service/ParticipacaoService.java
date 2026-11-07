@@ -66,14 +66,14 @@ public class ParticipacaoService {
     public ParticipacaoResponse salvar(ParticipacaoRequest request) {
 
         User user =
-                buscarUser(request.getUserId());
+                buscarUser(request.userId());
 
         Bolao bolao =
-                buscarBolao(request.getBolaoId());
+                buscarBolao(request.bolaoId());
 
 
           Pagamento pagamento =
-                  buscarPagamento(request.getPagamentoId());
+                  buscarPagamento(request.pagamentoId());
 
           validarPagamento(pagamento);
 
@@ -121,8 +121,8 @@ public class ParticipacaoService {
 
         participacao.alterarDados(
 
-                put.getPontos(),
-                put.getStatus()
+                put.pontos(),
+                put.status()
         );
 
         Participacao participacaoSalvo =
@@ -155,8 +155,8 @@ public class ParticipacaoService {
     private void validarParticipacaoDuplicada(ParticipacaoRequest request) {
 
         if (participacaoRepository.existsByBolaoIdAndUsuarioId(
-                request.getBolaoId(),
-                request.getUserId())
+                request.bolaoId(),
+                request.userId())
         ) {
             throw new BusinessRuleException(
                     "Usuário já possui " +

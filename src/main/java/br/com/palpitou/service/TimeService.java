@@ -43,7 +43,7 @@ public class TimeService {
 
     public TimeResponse salvar(TimeRequest request) {
 
-        validarNomeDuplicado(request.getNome());
+        validarNomeDuplicado(request.nome());
 
         Time time = timeMapper.toEntity(request);
 
@@ -77,13 +77,13 @@ public class TimeService {
 
         timeBd.altDados(
 
-                request.getNome(),
-                request.getEscudo(),
-                request.getSigla()
+                request.nome(),
+                request.escudo(),
+                request.sigla()
         );
 
         buscarTime(id);
-        validarNomeDuplicado(request.getNome());
+        validarNomeDuplicado(request.nome());
 
         Time timeAtualizado = timeRepository.save(timeBd);
         return timeMapper.toResponse(timeAtualizado);

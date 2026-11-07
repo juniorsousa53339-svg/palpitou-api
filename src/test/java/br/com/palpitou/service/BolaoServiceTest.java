@@ -43,28 +43,30 @@ public class BolaoServiceTest {
         Campeonato campeonato = new Campeonato();
         campeonato.setId(1L);
 
-        BolaoRequest request = new BolaoRequest();
-        request.setNome("Campeonato de Teste");
-        request.setValorInscricao(new BigDecimal("50.00"));
-        request.setDataInicio(LocalDateTime.now().plusDays(1));
-        request.setDataFim(LocalDateTime.now().plusDays(10));
-        request.setStatus(StatusGlobal.ABERTA);
-        request.setCampeonatoId(1L);
+        BolaoRequest request = new BolaoRequest(
+            "Campeonato de Teste",
+            new BigDecimal("50.00"),
+            LocalDateTime.now().plusDays(1),
+            LocalDateTime.now().plusDays(10),
+            StatusGlobal.ABERTA,
+            1L
+        );
 
         Bolao bolao = new Bolao();
-        bolao.setNome(request.getNome());
-        bolao.setValorInscricao(request.getValorInscricao());
-        bolao.setDataInicio(request.getDataInicio());
-        bolao.setDataFim(request.getDataFim());
-        bolao.setStatus(request.getStatus());
+        bolao.setNome(request.nome());
+        bolao.setValorInscricao(request.valorInscricao());
+        bolao.setDataInicio(request.dataInicio());
+        bolao.setDataFim(request.dataFim());
+        bolao.setStatus(request.status());
         bolao.setCampeonato(campeonato);
 
-        BolaoResponse responseEsperado = new BolaoResponse();
-        responseEsperado.setNome("Campeonato de Teste");
-        responseEsperado.setValorInscricao(new BigDecimal("50.00"));
-        responseEsperado.setDataInicio(request.getDataInicio());
-        responseEsperado.setDataFim(request.getDataFim());
-        responseEsperado.setStatus(StatusGlobal.ABERTA);
+        BolaoResponse responseEsperado = new BolaoResponse(
+            "Campeonato de Teste",
+            new BigDecimal("50.00"),
+            request.dataInicio(),
+            request.dataFim(),
+            StatusGlobal.ABERTA
+        );
 
         when(campeonatoRepository.findById(1L)).thenReturn(Optional.of(campeonato));
         when(bolaoMapper.toEntity(request, campeonato)).thenReturn(bolao);
@@ -76,9 +78,9 @@ public class BolaoServiceTest {
 
         // ASSERT
         assertNotNull(response);
-        assertEquals("Campeonato de Teste", response.getNome());
-        assertEquals(new BigDecimal("50.00"), response.getValorInscricao());
-        assertEquals(StatusGlobal.ABERTA, response.getStatus());
+        assertEquals("Campeonato de Teste", response.nome());
+        assertEquals(new BigDecimal("50.00"), response.valorInscricao());
+        assertEquals(StatusGlobal.ABERTA, response.status());
     }
 
     @Test
@@ -92,10 +94,13 @@ public class BolaoServiceTest {
         bolao.setDataFim(LocalDateTime.now().plusDays(15));
         bolao.setStatus(StatusGlobal.ABERTA);
 
-        BolaoResponse responseEsperado = new BolaoResponse();
-        responseEsperado.setNome("Bolão da Liga");
-        responseEsperado.setValorInscricao(new BigDecimal("75.00"));
-        responseEsperado.setStatus(StatusGlobal.ABERTA);
+        BolaoResponse responseEsperado = new BolaoResponse(
+            "Bolão da Liga",
+            new BigDecimal("75.00"),
+            bolao.getDataInicio(),
+            bolao.getDataFim(),
+            StatusGlobal.ABERTA
+        );
 
         when(bolaoRepository.findById(10L)).thenReturn(Optional.of(bolao));
         when(bolaoMapper.toResponse(bolao)).thenReturn(responseEsperado);
@@ -105,8 +110,7 @@ public class BolaoServiceTest {
 
         // ASSERT
         assertNotNull(response);
-        assertEquals("Bolão da Liga", response.getNome());
-        assertEquals(new BigDecimal("75.00"), response.getValorInscricao());
+        assertEquals("Bolão da Liga", response.nome());
+        assertEquals(new BigDecimal("75.00"), response.valorInscricao());
     }
 }
-

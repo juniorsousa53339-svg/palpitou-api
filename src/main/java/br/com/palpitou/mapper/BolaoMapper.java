@@ -19,37 +19,33 @@ public class BolaoMapper {
         Bolao bolao = new Bolao();
 
 
-        bolao.setNome(request.getNome());
-        bolao.setValorInscricao(request.getValorInscricao());
-        bolao.setDataInicio(request.getDataInicio());
-        bolao.setDataFim(request.getDataFim());
-        bolao.setStatus(request.getStatus());
+        bolao.setNome(request.nome());
+        bolao.setValorInscricao(request.valorInscricao());
+        bolao.setDataInicio(request.dataInicio());
+        bolao.setDataFim(request.dataFim());
+        bolao.setStatus(request.status());
         bolao.setCampeonato(campeonato);
 
         return bolao;
     }
 
     public BolaoResponse toResponse(Bolao bolao){
-
-        BolaoResponse response = new BolaoResponse();
-
-        response.setNome(bolao.getNome());
-        response.setValorInscricao(bolao.getValorInscricao());
-        response.setDataInicio(bolao.getDataInicio());
-        response.setDataFim(bolao.getDataFim());
-        response.setStatus(bolao.getStatus());
-        return response;
+        return new BolaoResponse(
+            bolao.getNome(),
+            bolao.getValorInscricao(),
+            bolao.getDataInicio(),
+            bolao.getDataFim(),
+            bolao.getStatus()
+        );
     }
 
     public PutResponseBolao toPutResponseBolao(Bolao bolao){
-
-        PutResponseBolao putResponseBolao = new PutResponseBolao();
-
-        putResponseBolao.setNome(bolao.getNome());
-        putResponseBolao.setValorInscricao(bolao.getValorInscricao());
-        putResponseBolao.setDataInicio(bolao.getDataInicio());
-        putResponseBolao.setDataFim(bolao.getDataFim());
-        putResponseBolao.setStatus(bolao.getStatus());
-        return putResponseBolao;
+        return new PutResponseBolao(
+            bolao.getNome(),
+            bolao.getValorInscricao(),
+            bolao.getDataInicio(),
+            bolao.getDataFim(),
+            bolao.getStatus()
+        );
     }
 }

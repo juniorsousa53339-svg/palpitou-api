@@ -1,18 +1,27 @@
 package br.com.palpitou.dto.putRequest;
 
 import br.com.palpitou.enums.StatusGlobal;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-public class PutRequestBolao {
-    private String nome;
-    private BigDecimal valorInscricao;
-    private LocalDateTime dataInicio;
-    private LocalDateTime dataFim;
-    private StatusGlobal status;
-}
+public record PutRequestBolao(
+    @NotBlank(message = "O nome é obrigatório")
+    String nome,
+
+    @NotNull(message = "O valor de inscrição é obrigatório")
+    @PositiveOrZero(message = "O valor de inscrição deve ser maior ou igual a zero")
+    BigDecimal valorInscricao,
+
+    @NotNull(message = "A data de início é obrigatória")
+    LocalDateTime dataInicio,
+
+    @NotNull(message = "A data de fim é obrigatória")
+    LocalDateTime dataFim,
+
+    @NotNull(message = "O status é obrigatório")
+    StatusGlobal status
+) {}

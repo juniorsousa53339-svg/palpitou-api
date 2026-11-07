@@ -24,7 +24,7 @@ public class ParticipacaoMapper {
 
         Participacao participacao = new Participacao();
 
-        participacao.setPontos(request.getPontos());
+        participacao.setPontos(request.pontos());
         participacao.setUsuario(user);
         participacao.setBolao(bolao);
         participacao.setPagamento(pagamento);
@@ -34,25 +34,19 @@ public class ParticipacaoMapper {
     }
 
     public ParticipacaoResponse toResponse(Participacao participacao) {
-
-        ParticipacaoResponse response = new ParticipacaoResponse();
-
-        response.setStatus(participacao.getStatus());
-        response.setDataInscricao(participacao.getDataInscricao());
-        response.setPontos(participacao.getPontos());
-
-        return  response;
+        return new ParticipacaoResponse(
+            participacao.getStatus(),
+            participacao.getDataInscricao(),
+            participacao.getPontos()
+        );
     }
 
     public PutResponseParticipacao toPutResponseParticipacao
             (Participacao participacao) {
-
-        PutResponseParticipacao putResponseParticipacao = new PutResponseParticipacao();
-
-        putResponseParticipacao.setStatus(participacao.getStatus());
-        putResponseParticipacao.setPontos(participacao.getPontos());
-
-        return putResponseParticipacao;
+        return new PutResponseParticipacao(
+            participacao.getPontos(),
+            participacao.getStatus()
+        );
     }
 
 

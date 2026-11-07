@@ -13,23 +13,20 @@ public class CampeonatoMapper {
 
         Campeonato camp = new Campeonato();
 
-        camp.setNome(request.getNome());
-        camp.setTemporada(request.getTemporada());
-        camp.setStatus(request.getStatus());
+        camp.setNome(request.nome());
+        camp.setTemporada(request.temporada());
+        camp.setStatus(request.status());
 
         return camp;
     }
 
     public CampeonatoResponse toResponse(Campeonato campeonato) {
-
-        CampeonatoResponse response = new CampeonatoResponse();
-
-        response.setId(campeonato.getId());
-        response.setNome(campeonato.getNome());
-        response.setTemporada(campeonato.getTemporada());
-        response.setStatus(campeonato.getStatus());
-
-        return response;
+        return new CampeonatoResponse(
+            campeonato.getId(),
+            campeonato.getNome(),
+            campeonato.getTemporada(),
+            campeonato.getStatus()
+        );
     }
 
 }

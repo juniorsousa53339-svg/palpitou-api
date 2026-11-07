@@ -37,8 +37,6 @@ public class PontuacaoServiceTest {
 
     @Test
     public void deveGerarRankingDaRodadaOrdenadoPorPontuacao() {
-
-        // ARRANGE
         Jogo jogo = new Jogo();
         jogo.setRodada(1);
         jogo.setGolsMandante(2);
@@ -62,28 +60,18 @@ public class PontuacaoServiceTest {
         palpite2.setJogo(jogo);
         palpite2.setUser(usuario2);
 
-        when(palpiteRepository.findByJogoRodada(1))
-                .thenReturn(List.of(palpite1, palpite2));
+        when(palpiteRepository.findByJogoRodada(1)).thenReturn(List.of(palpite1, palpite2));
+        when(palpiteRepository.findByJogoRodadaAndUserId(1, 1L)).thenReturn(List.of(palpite1));
+        when(palpiteRepository.findByJogoRodadaAndUserId(1, 2L)).thenReturn(List.of(palpite2));
 
-        when(palpiteRepository.findByJogoRodadaAndUserId(1, 1L))
-                .thenReturn(List.of(palpite1));
+        Map<Long, Integer> ranking = pontuacaoService.gerarRankingDaRodada(1);
 
-        when(palpiteRepository.findByJogoRodadaAndUserId(1, 2L))
-                .thenReturn(List.of(palpite2));
-
-        // ACT
-        Map<Long, Integer> ranking =
-                pontuacaoService.gerarRankingDaRodada(1);
-
-        // ASSERT
         assertEquals(10, ranking.get(1L));
         assertEquals(0, ranking.get(2L));
     }
 
     @Test
     public void deveBuscarRankingDaRodada() {
-
-        // ARRANGE
         Jogo jogo = new Jogo();
         jogo.setRodada(1);
         jogo.setGolsMandante(2);
@@ -109,52 +97,29 @@ public class PontuacaoServiceTest {
         palpite2.setJogo(jogo);
         palpite2.setUser(usuario2);
 
-        when(palpiteRepository.findByJogoRodada(1))
-                .thenReturn(List.of(palpite1, palpite2));
+        when(palpiteRepository.findByJogoRodada(1)).thenReturn(List.of(palpite1, palpite2));
+        when(palpiteRepository.findByJogoRodadaAndUserId(1, 1L)).thenReturn(List.of(palpite1));
+        when(palpiteRepository.findByJogoRodadaAndUserId(1, 2L)).thenReturn(List.of(palpite2));
 
-        when(palpiteRepository.findByJogoRodadaAndUserId(1, 1L))
-                .thenReturn(List.of(palpite1));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(usuario1));
+        when(userRepository.findById(2L)).thenReturn(Optional.of(usuario2));
 
-        when(palpiteRepository.findByJogoRodadaAndUserId(1, 2L))
-                .thenReturn(List.of(palpite2));
+        RankingResponse response1 = new RankingResponse(1, "Luciano", 10);
+        RankingResponse response2 = new RankingResponse(2, "João", 0);
 
-        // UserRepository
-        when(userRepository.findById(1L))
-                .thenReturn(Optional.of(usuario1));
+        when(rankingMapper.toResponse(usuario1, 10, 1)).thenReturn(response1);
+        when(rankingMapper.toResponse(usuario2, 0, 2)).thenReturn(response2);
 
-        when(userRepository.findById(2L))
-                .thenReturn(Optional.of(usuario2));
+        List<RankingResponse> ranking = pontuacaoService.buscarRankingDaRodada(1);
 
-        // RankingMapper
-        RankingResponse response1 = new RankingResponse();
-        response1.setNome("Luciano");
-        response1.setPontuacao(10);
-        response1.setPosicao(1);
-
-        RankingResponse response2 = new RankingResponse();
-        response2.setNome("João");
-        response2.setPontuacao(0);
-        response2.setPosicao(2);
-
-        when(rankingMapper.toResponse(usuario1, 10, 1))
-                .thenReturn(response1);
-
-        when(rankingMapper.toResponse(usuario2, 0, 2))
-                .thenReturn(response2);
-
-        // ACT
-        List<RankingResponse> ranking =
-                pontuacaoService.buscarRankingDaRodada(1);
-
-        // ASSERT
         assertEquals(2, ranking.size());
 
-        assertEquals("Luciano", ranking.get(0).getNome());
-        assertEquals(10, ranking.get(0).getPontuacao());
-        assertEquals(1, ranking.get(0).getPosicao());
+        assertEquals("Luciano", ranking.get(0).nome());
+        assertEquals(10, ranking.get(0).pontuacao());
+        assertEquals(1, ranking.get(0).posicao());
 
-        assertEquals("João", ranking.get(1).getNome());
-        assertEquals(0, ranking.get(1).getPontuacao());
-        assertEquals(2, ranking.get(1).getPosicao());
+        assertEquals("João", ranking.get(1).nome());
+        assertEquals(0, ranking.get(1).pontuacao());
+        assertEquals(2, ranking.get(1).posicao());
     }
 }

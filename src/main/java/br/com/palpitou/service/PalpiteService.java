@@ -57,11 +57,11 @@ public class PalpiteService {
     public PalpiteResponse salvar(PalpiteRequest palpiteRequest) {
 
         Jogo jogo =
-                buscarJogo(palpiteRequest.getJogoId());
+                buscarJogo(palpiteRequest.jogoId());
 
 
         User user =
-                buscarUser(palpiteRequest.getUserId());
+                buscarUser(palpiteRequest.userId());
 
         validarPalpiteDuplicado
                 (palpiteRequest);
@@ -107,7 +107,7 @@ public class PalpiteService {
                 buscarPalpite(id);
 
         palpiteBd.alterarPontosObtidos
-                (put.getPontosObtidos());
+                (put.pontosObtidos());
 
         Palpite palpiteSalvo =
                 palpiteRepository.save(palpiteBd);
@@ -127,8 +127,8 @@ public class PalpiteService {
     private void validarPalpiteDuplicado(PalpiteRequest request) {
 
         if (palpiteRepository.existsByUserIdAndJogoId(
-                request.getUserId(),
-                request.getJogoId())
+                request.userId(),
+                request.jogoId())
         ) {
             throw new BusinessRuleException(
                     "O usuário já possui um " +
