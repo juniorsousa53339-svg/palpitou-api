@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -31,8 +34,12 @@ public class SecurityConfig {
                 )
                 // Define as regras de acesso às rotas
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login").permitAll() // Rota de login pública
-                        .anyRequest().authenticated()               // Demais rotas exigem token JWT
+                        // Endpoints públicos (PUBLIC)
+                        .requestMatchers(HttpMethod.POST, "/auth/login", "/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/campeonatos/**", "/boloes/**", "/times/**", "/dashboard/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        // Demais rotas exigem autenticação (AUTHENTICATED / ADMIN / USER)
+                        .anyRequest().authenticated()
                 )
                 // Adiciona o nosso filtro JWT antes do filtro padrão do Spring
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

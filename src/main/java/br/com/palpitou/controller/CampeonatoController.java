@@ -6,6 +6,7 @@ import br.com.palpitou.service.CampeonatoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class  CampeonatoController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CampeonatoResponse> salvar(
             @RequestBody @Valid CampeonatoRequest request) {
 
@@ -38,6 +40,7 @@ public class  CampeonatoController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CampeonatoResponse> atualizar(
             @PathVariable Long id,
             @RequestBody @Valid CampeonatoRequest request
@@ -49,6 +52,7 @@ public class  CampeonatoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
 
         campeonatoService.delete(id);

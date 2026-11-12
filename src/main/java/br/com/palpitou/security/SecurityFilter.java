@@ -43,7 +43,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             // 5. Buscar usuário e autenticar no Spring Security
             userRepository.findByEmail(email).ifPresent(user -> {
                 var auth = new UsernamePasswordAuthenticationToken(
-                        user, null, List.of(new SimpleGrantedAuthority(user.getRole().name()))
+                        user, null, List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
                 );
                 SecurityContextHolder.getContext().setAuthentication(auth);
             });
