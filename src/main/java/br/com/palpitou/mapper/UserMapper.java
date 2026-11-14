@@ -4,16 +4,21 @@ import br.com.palpitou.dto.putResponse.PutResponseUser;
 import br.com.palpitou.dto.request.UserRequest;
 import br.com.palpitou.dto.response.UserResponse;
 import br.com.palpitou.entity.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
 @Component
 public class UserMapper {
+
+    private final PasswordEncoder passwordEncoder;
 
     public User toEntity(UserRequest request) {
         User user = new User();
         user.setEmail(request.email());
         user.setNome(request.nome());
-        user.setSenha(request.senha());
+        user.setSenha(passwordEncoder.encode(request.senha()));
         user.setRole(request.role());
         return user;
     }
@@ -34,4 +39,8 @@ public class UserMapper {
             user.getSenha()
         );
     }
+
+
+//    passwordEncoder.
+//            encode(request.senha()));
 }
