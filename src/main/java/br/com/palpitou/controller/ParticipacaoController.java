@@ -8,6 +8,7 @@ import br.com.palpitou.service.ParticipacaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class ParticipacaoController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ParticipacaoResponse>> listarTodos(){
 
         var response =
@@ -38,6 +40,7 @@ public class ParticipacaoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id){
 
         participacaoService.delete(id);
@@ -52,6 +55,7 @@ public class ParticipacaoController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PutResponseParticipacao> atualizar(
             @PathVariable Long id,
             @RequestBody @Valid PutRequestParticipacao request

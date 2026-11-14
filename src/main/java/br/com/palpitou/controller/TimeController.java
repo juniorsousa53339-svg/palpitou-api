@@ -6,6 +6,7 @@ import br.com.palpitou.service.TimeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class TimeController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TimeResponse> save(
             @RequestBody @Valid TimeRequest request) {
 
@@ -35,6 +37,7 @@ public class TimeController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TimeResponse> atualizar(
             @PathVariable Long id,
             @RequestBody @Valid TimeRequest request
@@ -44,6 +47,7 @@ public class TimeController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletar(@PathVariable Long id){
         timeService.delete(id);
         return ResponseEntity.noContent().build();

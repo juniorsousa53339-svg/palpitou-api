@@ -9,6 +9,7 @@ import br.com.palpitou.service.PagamentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class PagamentoController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PagamentoResponse>> listarTodos(){
 
         var response = pagamentoService.listarTodos();
@@ -38,6 +40,7 @@ public class PagamentoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletar(@PathVariable Long id){
         pagamentoService.delete(id);
         return ResponseEntity.noContent().build();
@@ -50,6 +53,7 @@ public class PagamentoController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PutResponsePagamento> atualizar(
             @PathVariable Long id,
             @RequestBody @Valid PutRequestPagamento put

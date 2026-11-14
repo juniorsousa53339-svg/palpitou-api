@@ -25,22 +25,19 @@ public class UserMapper {
 
     public UserResponse toResponse(User user) {
         return new UserResponse(
-            user.getNome(),
-            user.getEmail(),
-            user.getSenha(),
-            user.getRole()
+                user.getNome(),
+                user.getEmail(),
+                passwordEncoder.encode(user.getSenha()),
+                user.getRole()
         );
     }
 
     public PutResponseUser toPut(User user) {
         return new PutResponseUser(
-            user.getNome(),
-            user.getEmail(),
-            user.getSenha()
+                user.getNome(),
+                user.getEmail(),
+                passwordEncoder.encode(user.getSenha())
         );
     }
 
-
-//    passwordEncoder.
-//            encode(request.senha()));
 }

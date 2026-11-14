@@ -3,6 +3,7 @@ package br.com.palpitou.security;
 import br.com.palpitou.entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -13,8 +14,8 @@ import java.util.Date;
 
 @Service
 public class TokenService {
-    // Chave secreta usada para assinar o token (em produção ficaria no application.properties)
-    private final String secret = "palpitou-api-chave-secreta-jwt-super-segura-123456";
+    @Value("${api.security.token.secret}")
+    private String secret;
 
     // Metodo auxiliar para converter nossa String secreta em um objeto SecretKey que a biblioteca JJWt entende
     private SecretKey getChave() {

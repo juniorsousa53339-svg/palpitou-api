@@ -8,6 +8,7 @@ import br.com.palpitou.service.JogoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class JogoController {
     private final JogoService jogoService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<JogoResponse> salvar(
             @RequestBody @Valid JogoRequest request) {
 
@@ -39,6 +41,7 @@ public class JogoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
 
         jogoService.delete(id);
@@ -53,6 +56,7 @@ public class JogoController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PutResponseJogo> atualizar(
             @PathVariable Long id,
             @RequestBody @Valid PutRequestJogo putRequest

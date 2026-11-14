@@ -8,6 +8,7 @@ import br.com.palpitou.service.BolaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class BolaoController {
     private final BolaoService bolaoService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BolaoResponse> salvar(
             @RequestBody @Valid BolaoRequest request){
 
@@ -39,6 +41,7 @@ public class BolaoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletar(@PathVariable Long id){
         bolaoService.delete(id);
         return ResponseEntity.noContent().build();
@@ -52,6 +55,7 @@ public class BolaoController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PutResponseBolao> atualizar(
             @PathVariable Long id,
             @RequestBody @Valid PutRequestBolao put

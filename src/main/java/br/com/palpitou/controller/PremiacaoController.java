@@ -6,6 +6,7 @@ import br.com.palpitou.service.PremiacaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class PremiacaoController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PremiacaoResponse> salvar(
             @RequestBody @Valid PremiacaoRequest request) {
 
@@ -47,6 +49,7 @@ public class PremiacaoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         premiacaoService.delete(id);
         return ResponseEntity.noContent().build();
