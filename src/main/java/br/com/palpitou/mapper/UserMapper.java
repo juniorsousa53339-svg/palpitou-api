@@ -27,7 +27,6 @@ public class UserMapper {
         return new UserResponse(
                 user.getNome(),
                 user.getEmail(),
-                passwordEncoder.encode(user.getSenha()),
                 user.getRole()
         );
     }
@@ -35,8 +34,7 @@ public class UserMapper {
     public PutResponseUser toPut(User user) {
         return new PutResponseUser(
                 user.getNome(),
-                user.getEmail(),
-                passwordEncoder.encode(user.getSenha())
+                user.getEmail()
         );
     }
 
