@@ -3,115 +3,108 @@
 ![Java](https://img.shields.io/badge/Java-17-007396?logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.0-6DB33F?logo=springboot&logoColor=white)
 ![Maven](https://img.shields.io/badge/Build-Maven-C71A36?logo=apachemaven&logoColor=white)
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+![Status](https://img.shields.io/badge/status-em%20desenvolvimento%20ativo-yellow)
 
-API REST em Java/Spring Boot para uma plataforma de **bolão de futebol**: campeonatos, jogos, bolões, participação mediante pagamento via PIX, palpites, pontuação, ranking, premiações e métricas do dashboard administrativo.
+API REST robusta desenvolvida em **Java 17** e **Spring Boot 4.1.0** para gerenciamento de plataformas de **bolões de futebol**, com foco inicial no Campeonato Brasileiro e no Campeonato Paulista. 
 
-O projeto modela o ciclo de um produto real, em que o usuário paga para entrar, o pagamento é validado, os palpites são feitos antes da partida e a pontuação é calculada a partir do resultado. Ele não é um CRUD isolado.
-
-> **Estágio atual:** back-end em desenvolvimento ativo. A API REST principal, os endpoints do Dashboard, as regras de negócio iniciais, a pontuação, o tratamento global de exceções e os testes unitários dos serviços estão implementados. Autenticação/autorização, PostgreSQL, Docker e front-end ainda **não** estão implementados (veja o [Roadmap](#roadmap)).
+O sistema modela o ciclo completo de um produto real: cadastro de campeonatos, times, partidas, criação de bolões, inscrições de participantes com comprovação de pagamento PIX, envio de palpites de placar, motor automatizado de pontuação e ranking, além de um dashboard administrativo consolidado.
 
 ---
 
 ## Índice
 
-- [Escopo do produto](#escopo-do-produto)
-- [Stack](#stack)
-- [Arquitetura](#arquitetura)
-- [Domínio](#domínio)
-- [Regras de negócio](#regras-de-negócio)
-- [Sistema de pontuação](#sistema-de-pontuação)
-- [Participações e pagamentos](#participações-e-pagamentos)
-- [Premiações](#premiações)
-- [Dashboard](#dashboard)
-- [Tratamento de exceções](#tratamento-de-exceções)
+- [Visão Geral e Objetivo](#visão-geral-e-objetivo)
+- [Problema que o Projeto Resolve](#problema-que-o-projeto-resolve)
+- [Principais Funcionalidades](#principais-funcionalidades)
+- [Stack Tecnológica](#stack-tecnológica)
+- [Arquitetura e Organização do Backend (DDD)](#arquitetura-e-organização-do-backend-ddd)
+- [Regras de Negócio e Estados](#regras-de-negócio-e-estados)
+- [Sistema de Pontuação e Ranking](#sistema-de-pontuação-e-ranking)
+- [Participações e Pagamentos (PIX)](#participações-e-pagamentos-pix)
+- [Dashboard Administrativo](#dashboard-administrativo)
+- [Tratamento de Exceções](#tratamento-de-exceções)
 - [Segurança](#segurança)
-- [Endpoints](#endpoints)
-- [Exemplos de requisição](#exemplos-de-requisição)
+- [Endpoints da API](#endpoints-da-api)
 - [Documentação da API (Swagger)](#documentação-da-api-swagger)
-- [Banco de dados](#banco-de-dados)
-- [Como executar](#como-executar)
-- [Testes](#testes)
-- [Estrutura do projeto](#estrutura-do-projeto)
-- [Decisões técnicas](#decisões-técnicas)
-- [Roadmap](#roadmap)
-- [Inteligência Artificial e Agentes](#inteligência-artificial-e-agentes)
+- [Banco de Dados](#banco-de-dados)
+- [Como Executar](#como-executar)
+- [Estratégia de Testes](#estratégia-de-testes)
+- [Integrações Externas (Planejamento API-Football)](#integrações-externas-planejamento-api-football)
+- [Metodologia de Desenvolvimento com Inteligência Artificial](#metodologia-de-desenvolvimento-com-inteligência-artificial)
+- [Funcionalidades Concluídas e Roadmap](#funcionalidades-concluídas-e-roadmap)
 - [Autor](#autor)
 
 ---
 
-## Escopo do produto
+## Visão Geral e Objetivo
 
-O Palpitou foi pensado para bolões de campeonatos como o **Campeonato Brasileiro** e o **Campeonato Paulista**. O modelo de campeonato é genérico (nome, temporada e status), então não há nenhum campeonato fixo no código.
-
-O fluxo de negócio coberto pela modelagem e pelos serviços é:
-
-1. um administrador cadastra campeonato, times, jogos e bolões;
-2. o usuário registra um pagamento (PIX) para um bolão;
-3. o pagamento é aprovado (status alterado via API);
-4. com o pagamento aprovado, a participação no bolão pode ser criada;
-5. o usuário registra palpites para os jogos antes do início da partida;
-6. com o resultado do jogo registrado, a pontuação é calculada por regras definidas no `PontuacaoService`.
+O **Palpitou** nasceu com o objetivo de estruturar um backend profissional, testável, seguro e preparado para integração com front-ends (Web/Mobile) e serviços externos de futebol. Diferente de um CRUD acadêmico isolado, o projeto simula um ambiente de produção onde cada transação financeira (PIX), validação temporal (prazo de palpites antes da partida) e cálculo pontual impactam diretamente o engajamento e a competitividade dos participantes.
 
 ---
 
-## Stack
+## Problema que o Projeto Resolve
 
-| Categoria | Tecnologia |
-| --- | --- |
-| Linguagem | Java 17 |
-| Framework | Spring Boot 4.1.0 |
-| API REST | Spring Web MVC |
-| Persistência | Spring Data JPA / Hibernate |
-| Validação | Jakarta Bean Validation |
-| Segurança | Spring Security (configuração inicial) |
-| Banco de dados | H2 (em memória, desenvolvimento) |
-| Documentação | Springdoc OpenAPI / Swagger UI |
-| Produtividade | Lombok |
-| Build | Maven (Maven Wrapper incluso) |
-| Versionamento | Git / GitHub |
+Tradicionalmente, bolões de futebol em grupos de amigos, empresas ou bolões amadores são geridos de forma manual e descentralizada em planilhas eletrônicas ou aplicativos de mensagens. Isso gera:
+- **Erros humanos** no cálculo de pontos e apuração de resultados.
+- **Falta de transparência** na comprovação de pagamentos e inscrições.
+- **Dificuldade de escala** para gerenciar múltiplos campeonatos, rodadas e bolões simultaneamente.
+- **Ausência de métricas consolidadas** (faturamento, engajamento e status de pagamentos).
+
+O **Palpitou API** resolve essas dores centralizando a governança do bolão, automatizando o motor de regras de pontuação, auditando pagamentos e fornecendo contratos REST claros e documentados.
 
 ---
 
-## Arquitetura
+## Principais Funcionalidades
 
-Arquitetura em camadas, com responsabilidades separadas:
+- **Gestão de Campeonatos e Partidas:** Cadastro flexível de competições (temporadas, status global) e jogos vinculados a times mandantes e visitantes.
+- **Criação de Bolões:** Configuração de bolões por campeonato, definindo valor de inscrição, período de vigência e premiações.
+- **Inscrição com Pagamento PIX:** Registro de pagamentos associados a comprovantes textuais e validação de aprovação prévia para efetivação da participação.
+- **Envio de Palpites:** Registro de previsões de placares (gols mandante e visitante) com validação de prazo (proibido palpitar após o início do jogo).
+- **Motor de Pontuação e Ranking:** Cálculo automatizado de pontos por partida (placar exato, vencedor, gols) e geração de ranking por rodada.
+- **Dashboard Administrativo:** Consultas agregadas no banco de dados para faturamento total, pagamentos pendentes, aprovados e recusados, e métricas por bolão.
 
+---
+
+## Stack Tecnológica
+
+| Categoria | Tecnologia | Versão / Detalhes |
+| --- | --- | --- |
+| Linguagem | Java | 17 (OpenJDK) |
+| Framework | Spring Boot | 4.1.0 |
+| API REST | Spring Web MVC | Padrão RESTful |
+| Persistência | Spring Data JPA / Hibernate | Mapeamento relacional ORM |
+| Validação | Jakarta Bean Validation | Anotações `@NotNull`, `@NotBlank`, `@Email` |
+| Segurança | Spring Security | Configuração inicial de segurança |
+| Banco de Dados | H2 Database | Em memória (desenvolvimento e testes) |
+| Documentação | Springdoc OpenAPI / Swagger UI | v2.8.9 (`/swagger-ui.html`) |
+| Produtividade | Lombok | Redução de boilerplate (`@Getter`, `@Setter`, etc.) |
+| Build / Dependências | Maven | Maven Wrapper inclusos (`mvnw` / `mvnw.cmd`) |
+| Versionamento | Git / GitHub | Controle de versão |
+
+---
+
+## Arquitetura e Organização do Backend (DDD)
+
+A aplicação adota uma arquitetura em camadas bem definida, promovendo a separação de responsabilidades inspirada em princípios de **Domain-Driven Design (DDD)** e arquitetura limpa:
+
+```text
 Controller → Service → Repository → Database  
-↑           ↑  
-DTO         Mapper / Entity  
+    ↑           ↑  
+   DTO         Mapper / Entity  
+```
 
+| Camada | Pacote | Responsabilidade |
+| --- | --- | --- |
+| **Controller** | `br.com.palpitou.controller` | Expõe os endpoints REST, recebe DTOs de entrada e devolve DTOs de resposta. Delega o processamento aos services. |
+| **Service** | `br.com.palpitou.service` | Concentra as regras de negócio, validações, motor de pontuação e agregações. |
+| **Repository** | `br.com.palpitou.repository` | Interfaces Spring Data JPA (`JpaRepository`), contendo consultas derivadas e JPQL customizadas. |
+| **DTO** | `br.com.palpitou.dto` | Contratos de entrada (`request`), saída (`response`), atualização (`putRequest`, `putResponse`) e relatórios (`Dashboard`). |
+| **Mapper** | `br.com.palpitou.mapper` | Classes `@Component` dedicadas à conversão manual entre entidades e DTOs, mantendo controllers e services limpos. |
+| **Entity** | `br.com.palpitou.entity` | Modelagem relacional do domínio com anotações JPA/Hibernate. |
+| **Exception** | `br.com.palpitou.exception` | Tratamento centralizado (`GlobalExceptionHandler`, `BusinessRuleException`, `ResourceNotFoundException`). |
+| **Security** | `br.com.palpitou.security` | Configuração de segurança com Spring Security (`SecurityConfig`). |
 
-| Camada | Responsabilidade |
-| --- | --- |
-| **Controller** | Expõe os endpoints REST, recebe DTOs de entrada e devolve DTOs de resposta. Delega o processamento aos services. |
-| **Service** | Concentra as regras de negócio (validações, cálculo de pontuação, agregações do dashboard). |
-| **Repository** | Acesso a dados com Spring Data JPA, incluindo consultas derivadas e consultas JPQL de agregação. |
-| **DTO** | Contrato de entrada e saída da API, separado das entidades. Organizado em `request`, `response`, `putRequest`, `putResponse` e `Dashboard`. |
-| **Mapper** | Conversão entre entidades e DTOs (classes `@Component` escritas manualmente). |
-| **Entity** | Mapeamento JPA/Hibernate do domínio. |
-| **Exception** | `ResourceNotFoundException`, `BusinessRuleException` e `GlobalExceptionHandler`. |
-| **Security** | `SecurityConfig` com a configuração inicial do Spring Security. |
-
----
-
-## Domínio
-
-Entidades: `User`, `Campeonato`, `Bolao`, `Jogo`, `Time`, `Participacao`, `Pagamento`, `Palpite` e `Premiacao`.
-
-| Entidade | Responsabilidade |
-| --- | --- |
-| `User` | Usuário da plataforma (nome, e-mail único, senha, `Role`: `ADMIN` ou `USER`). |
-| `Campeonato` | Competição (nome, temporada, status). |
-| `Bolao` | Bolão vinculado a um campeonato (nome, valor de inscrição, período e status). |
-| `Jogo` | Partida de um campeonato (data/hora, rodada, placar, status, mandante e visitante). |
-| `Time` | Time (nome, sigla, escudo). |
-| `Pagamento` | Pagamento PIX de um usuário para um bolão. |
-| `Participacao` | Participação de um usuário em um bolão, vinculada a um pagamento. |
-| `Palpite` | Previsão de placar de um usuário para um jogo, com pontos obtidos. |
-| `Premiacao` | Prêmio configurado para uma posição de um bolão. |
-
-Relacionamentos presentes no código:
+### Modelo de Domínio (ERD)
 
 ```mermaid
 erDiagram
@@ -131,148 +124,82 @@ erDiagram
 
 ---
 
-## Regras de negócio
+## Regras de Negócio e Estados
 
-Regras implementadas hoje nos services:
+As regras de negócio centrais são validadas na camada de serviço (`Service`), lançando `BusinessRuleException` capturada pelo `GlobalExceptionHandler` (retornando `409 Conflict`):
 
-| Contexto | Regra | Resposta em caso de violação |
+| Contexto | Regra de Negócio | HTTP Status em Violação |
 | --- | --- | --- |
-| Participação | Um usuário não pode participar duas vezes do mesmo bolão. | `409 Conflict` |
-| Participação | Somente pagamento com status `APROVADO` permite criar a participação. | `409 Conflict` |
-| Participação | Bolão cuja data de início já passou não aceita novas participações. | `409 Conflict` |
-| Palpite | Um usuário não pode ter mais de um palpite para o mesmo jogo. | `409 Conflict` |
-| Palpite | Não é possível palpitar após o início do jogo. | `409 Conflict` |
-| Bolão | Não é permitido cadastrar bolão com status `FINALIZADA`. | `409 Conflict` |
-| Jogo | Não é permitido cadastrar jogo em campeonato `FINALIZADA`. | `409 Conflict` |
-| Jogo | Mandante e visitante não podem ser o mesmo time. | `409 Conflict` |
-| Dashboard | O faturamento considera apenas pagamentos `APROVADO`. | n/a |
+| **Participação** | Um usuário não pode se inscrever duas vezes no mesmo bolão. | `409 Conflict` |
+| **Participação** | A criação de participação exige um pagamento com status `APROVADO`. | `409 Conflict` |
+| **Participação** | Bolões com data de início já expirada não aceitam novas inscrições. | `409 Conflict` |
+| **Palpite** | O usuário só pode registrar um palpite por jogo. | `409 Conflict` |
+| **Palpite** | Não é permitido enviar ou alterar palpites após o início da partida. | `409 Conflict` |
+| **Bolão / Jogo** | Proibido cadastrar bolões ou jogos vinculados a campeonatos finalizados (`FINALIZADA`). | `409 Conflict` |
+| **Partida** | O time mandante e o visitante não podem ser o mesmo. | `409 Conflict` |
 
-**Estados existentes**
+### Estados e Enums
 
-| Enum | Valores |
+- **`StatusPagamento`**: `PENDENTE`, `APROVADO`, `RECUSADO`
+- **`StatusParticipacao`**: `PENDENTE`, `APROVADA`, `REJEITADA`
+- **`StatusGlobal`** (Campeonato, Bolão, Jogo): `ABERTA`, `EM_ANDAMENTO`, `FINALIZADA`
+- **`Role`**: `ADMIN`, `USER`
+
+---
+
+## Sistema de Pontuação e Ranking
+
+O motor de pontuação implementado em `PontuacaoService` avalia o palpite do usuário comparando-o com o placar oficial da partida:
+
+| Situação do Palpite | Pontos |
 | --- | --- |
-| `StatusPagamento` | `PENDENTE`, `APROVADO`, `RECUSADO` |
-| `StatusParticipacao` | `PENDENTE`, `APROVADA`, `REJEITADA` |
-| `StatusGlobal` (campeonato, bolão e jogo) | `ABERTA`, `EM_ANDAMENTO`, `FINALIZADA` |
-| `Role` | `ADMIN`, `USER` |
+| **Placar exato** (gols mandante e visitante corretos) | **10** |
+| **Vencedor correto E gols do time vencedor corretos** | **7** |
+| **Vencedor correto** (mandante ou visitante) | **5** |
+| **Empate previsto corretamente** (placar diferente do exato) | **5** |
+| **Resultado incorreto** | **0** |
+
+O serviço também oferece métodos para filtragem de palpites por rodada, soma de pontos por participante e geração de ranking ordenado (`RankingResponse`).
 
 ---
 
-## Sistema de pontuação
+## Participações e Pagamentos (PIX)
 
-O cálculo está em `PontuacaoService`, comparando o placar do jogo com o palpite:
-
-| Situação | Pontos |
-| --- | --- |
-| Placar exato | 10 |
-| Vencedor correto **e** gols do vencedor corretos | 7 |
-| Vencedor correto | 5 |
-| Empate previsto corretamente (placar diferente do exato) | 5 |
-| Resultado incorreto | 0 |
-
-Exemplo com o resultado **Flamengo 2 x 1 Palmeiras**:
-
-| Palpite | Pontos | Motivo |
-| --- | --- | --- |
-| 2 x 1 | 10 | placar exato |
-| 2 x 0 | 7 | mandante venceu e os gols do mandante conferem |
-| 3 x 1 | 7 | mandante venceu e os gols do visitante conferem |
-| 3 x 0 | 5 | apenas o vencedor confere |
-| 1 x 1 | 0 | resultado incorreto |
-
-Observe que, no código atual, os 7 pontos exigem que os gols do **time vencedor** estejam corretos (o campo "gols do perdedor" não entra nessa regra).
-
-O `PontuacaoService` também oferece:
-
-- busca de palpites de uma rodada e de um usuário em uma rodada;
-- identificação dos participantes de uma rodada;
-- soma da pontuação por participante na rodada;
-- geração do ranking da rodada (`RankingResponse` com posição, nome e pontuação).
-
-> Esses métodos estão implementados na camada de serviço e cobertos por testes. **Ainda não há endpoint REST** que exponha o ranking.
+O fluxo financeiro e de adesão opera em etapas auditáveis:
+1. O usuário registra um pagamento informando valor, nome do pagador PIX e comprovante textual (`/pagamentos` — status inicial `PENDENTE`).
+2. O administrador aprova ou recusa o pagamento via `PUT /pagamentos/{id}`.
+3. Com o pagamento `APROVADO`, o usuário cria sua participação no bolão (`/participacoes`).
 
 ---
 
-## Participações e pagamentos
+## Dashboard Administrativo
 
-Fluxo conceitual:
-
-Usuário → registra pagamento (PENDENTE) → pagamento aprovado  
-        → cria participação (PENDENTE) → participação aprovada  
-        → participa do bolão  
-
-
-**Pagamento** (`/pagamentos`)
-- Campos: valor, nome do pagador PIX, comprovante, usuário e bolão, além do status.
-- Todo pagamento é criado com status `PENDENTE`.
-- A atualização (`PUT /pagamentos/{id}`) altera apenas o status.
-- O `comprovante` é um campo de texto. **Não existe upload nem armazenamento de arquivos.**
-
-**Participação** (`/participacoes`)
-- A criação exige usuário, bolão e um pagamento já com status `APROVADO`.
-- A participação é criada com status `PENDENTE` e a data de inscrição é preenchida automaticamente.
-- A atualização (`PUT /participacoes/{id}`) altera pontos e status (`PENDENTE`, `APROVADA`, `REJEITADA`).
-- Não há uma regra de aprovação automática: a mudança de status acontece pela atualização.
+O `DashboardService` executa consultas de agregação otimizadas diretamente no banco de dados (evitando carregar entidades em memória):
+- **Métricas Gerais (`GET /dashboard`):** Total de bolões, participantes com participações aprovadas, contagem de pagamentos por status (`PENDENTE`, `APROVADO`, `RECUSADO`) e faturamento total (soma dos pagamentos aprovados).
+- **Métricas por Bolão (`GET /dashboard/boloes`):** Visão detalhada por grupo de bolão.
 
 ---
 
-## Premiações
+## Tratamento de Exceções
 
-Cada premiação possui **posição**, **valor**, **descrição** e o **bolão** relacionado. A entidade também tem um campo opcional de usuário, retornado como `userId` na resposta.
+Centralizado no `GlobalExceptionHandler` (`@RestControllerAdvice`):
+- `ResourceNotFoundException` → `404 Not Found`
+- `BusinessRuleException` → `409 Conflict`
 
-Já é possível cadastrar, consultar, listar e excluir premiações. A **apuração automática** (definir o vencedor de cada posição a partir do ranking) e a distribuição de prêmios **ainda não estão implementadas**. Hoje o `userId` fica vazio, pois nenhum fluxo o preenche.
-
----
-
-## Dashboard
-
-O `DashboardService` calcula métricas agregadas da plataforma e dos bolões:
-
-| Métrica | Critério |
-| --- | --- |
-| Total de bolões | contagem de bolões |
-| Participantes aprovados | participações com status `APROVADA` |
-| Pagamentos pendentes | pagamentos `PENDENTE` |
-| Pagamentos aprovados | pagamentos `APROVADO` |
-| Pagamentos recusados | pagamentos `RECUSADO` |
-| Faturamento | soma dos valores de pagamentos `APROVADO` |
-
-As métricas vêm de **consultas de agregação no banco** (`COUNT` por status e `SELECT COALESCE(SUM(p.valor), 0)` em JPQL). Isso evita carregar todas as entidades em memória apenas para contar ou somar.
-
-O `DashboardController` expõe os endpoints do dashboard em `/dashboard` (métricas gerais) e `/dashboard/boloes` (métricas detalhadas por bolão).
-
----
-
-## Tratamento de exceções
-
-O `GlobalExceptionHandler` (`@RestControllerAdvice`) centraliza o mapeamento de exceções de domínio para respostas HTTP:
-
-| Exceção | HTTP |
-| --- | --- |
-| `ResourceNotFoundException` | `404 Not Found` |
-| `BusinessRuleException` | `409 Conflict` |
-
-O corpo da resposta é a mensagem de erro em texto. O benefício é manter os services focados na regra de negócio, com um único ponto de tradução para HTTP. Ainda **não há** tratamento dedicado para erros de validação.
+Mantém os services limpos e padroniza as respostas de erro da API.
 
 ---
 
 ## Segurança
 
-| Item | Situação |
-| --- | --- |
-| Configuração inicial do Spring Security (`SecurityConfig`) | Implementado |
-| Autenticação | Em desenvolvimento |
-| Autorização / controle de acesso por perfil | Em desenvolvimento |
-| JWT | Planejado |
-| Proteção definitiva dos endpoints | Em desenvolvimento |
-
-Atualmente o `SecurityConfig` desabilita CSRF e **libera todas as requisições** (`anyRequest().permitAll()`). Portanto **não há proteção de acesso** nos endpoints, e a senha do usuário ainda é armazenada como recebida na API. Não utilize a aplicação em ambiente público no estado atual.
+Atualmente, o projeto conta com a configuração estrutural do Spring Security (`SecurityConfig`) desativando CSRF. As rotas encontram-se abertas (`permitAll()`) para agilizar o desenvolvimento local e os testes via Swagger. 
+> **Nota de Segurança:** A autenticação JWT, a criptografia de senhas com `BCrypt` e o controle de acesso por perfis (`Role`) constam no roadmap de produção.
 
 ---
 
-## Endpoints
+## Endpoints da API
 
-| Recurso | Base | Operações |
+| Recurso | Base Path | Operações Disponíveis |
 | --- | --- | --- |
 | Campeonatos | `/campeonatos` | `GET`, `GET /{id}`, `POST`, `PUT /{id}`, `DELETE /{id}` |
 | Bolões | `/boloes` | `GET`, `GET /{id}`, `POST`, `PUT /{id}`, `DELETE /{id}` |
@@ -285,287 +212,125 @@ Atualmente o `SecurityConfig` desabilita CSRF e **libera todas as requisições*
 | Premiações | `/premiacao` | `GET`, `GET /{id}`, `POST`, `DELETE /{id}` |
 | Dashboard | `/dashboard` | `GET`, `GET /boloes` |
 
-Os identificadores são `Long`. Ainda **não existem** endpoints para o ranking.
-
----
-
-## Exemplos de requisição
-
-Os corpos abaixo seguem os DTOs reais do projeto. Datas usam o formato ISO-8601 (`LocalDateTime`).
-
-**Criar bolão** — `POST /boloes`
-
-```json
-{
-  "nome": "Bolão Brasileirão Rodada 10",
-  "valorInscricao": 30.00,
-  "dataInicio": "2026-10-10T16:00:00",
-  "dataFim": "2026-10-17T22:00:00",
-  "status": "ABERTA",
-  "campeonatoId": 1
-}
-```
-
-**Registrar pagamento** — `POST /pagamentos`
-
-```json
-{
-  "valor": 30.00,
-  "nomePagadorPix": "Maria Silva",
-  "comprovante": "comprovante-pix-123",
-  "userId": 1,
-  "bolaoId": 1
-}
-```
-
-Resposta (o pagamento nasce `PENDENTE`):
-
-```json
-{
-  "valor": 30.00,
-  "status": "PENDENTE",
-  "nomePagadorPix": "Maria Silva",
-  "comprovante": "comprovante-pix-123"
-}
-```
-
-**Aprovar pagamento** — `PUT /pagamentos/{id}`
-
-```json
-{ "status": "APROVADO" }
-```
-
-**Criar participação** (exige pagamento aprovado) — `POST /participacoes`
-
-```json
-{
-  "pontos": 0,
-  "userId": 1,
-  "bolaoId": 1,
-  "pagamentoId": 1
-}
-```
-
-**Registrar palpite** — `POST /palpites`
-
-```json
-{
-  "golsMandante": 2,
-  "golsVisitante": 1,
-  "jogoId": 1,
-  "userId": 1
-}
-```
-
-**Cadastrar premiação** — `POST /premiacao`
-
-```json
-{
-  "posicao": 1,
-  "valor": 500.00,
-  "descricao": "Prêmio do 1º colocado",
-  "bolaoId": 1
-}
-```
-
-**Consultar Dashboard** — `GET /dashboard` e `GET /dashboard/boloes`
-
-Não há exemplo de corpo pois são requisições `GET`.
-
 ---
 
 ## Documentação da API (Swagger)
 
-O projeto usa **Springdoc OpenAPI**. Com a aplicação em execução, a documentação interativa fica disponível nas URLs padrão do Springdoc (não há customização de caminho no `application.properties`):
-
-- Swagger UI: <http://localhost:8080/swagger-ui.html>
-- OpenAPI (JSON): <http://localhost:8080/v3/api-docs>
-
----
-
-## Banco de dados
-
-O projeto usa **H2 em memória** para desenvolvimento. **PostgreSQL ainda não está configurado**; ele está no [Roadmap](#roadmap).
-
-| Item | Valor |
-| --- | --- |
-| URL JDBC | `jdbc:h2:mem:palpitou` |
-| Usuário / senha | `sa` / (vazia) |
-| Console H2 | <http://localhost:8080/h2-console> |
-| DDL | `spring.jpa.hibernate.ddl-auto=update` |
-
-Os dados são perdidos ao reiniciar a aplicação.
+Com a aplicação rodando, acesse a documentação interativa OpenAPI/Swagger UI:
+- **Swagger UI:** <http://localhost:8080/swagger-ui.html>
+- **OpenAPI JSON:** <http://localhost:8080/v3/api-docs>
 
 ---
 
-## Como executar
+## Banco de Dados
 
-**Pré-requisitos**
+Utiliza **H2 Database** em memória (`jdbc:h2:mem:palpitou`).
+- **Console H2:** <http://localhost:8080/h2-console>
+- **Credenciais:** Usuário `sa` / senha vazia.
+- **DDL Strategy:** `spring.jpa.hibernate.ddl-auto=update`
 
+---
+
+## Como Executar
+
+### Pré-requisitos
 - Java 17 (JDK)
 - Git
 
-O Maven não precisa estar instalado, pois o projeto inclui o Maven Wrapper.
-
-**1. Clonar e entrar no diretório**
-
+### 1. Clonar o Repositório
 ```bash
 git clone https://github.com/juniorsousa53339-svg/palpitou-api.git
 cd palpitou-api
 ```
 
-**2. Executar os testes**
-
+### 2. Executar os Testes Unitários
 ```bash
-# Linux/macOS
+# Linux / macOS
 ./mvnw test
 
-# Windows
+# Windows (PowerShell / CMD)
 .\mvnw.cmd test
 ```
 
-**3. Executar a aplicação**
-
+### 3. Executar a Aplicação
 ```bash
-# Linux/macOS
+# Linux / macOS
 ./mvnw spring-boot:run
 
-# Windows
+# Windows (PowerShell / CMD)
 .\mvnw.cmd spring-boot:run
 ```
 
-**4. Acessar a documentação**
-
-Com a aplicação no ar, abra o Swagger UI em <http://localhost:8080/swagger-ui.html>.
-
----
-
-## Testes
-
-Há testes unitários nos serviços e componentes:
-
-| Classe | Serviço testado |
-| --- | --- |
-| `BolaoServiceTest` | `BolaoService` |
-| `DashboardServiceTest` | `DashboardService` |
-| `PagamentoServiceTest` | `PagamentoService` |
-| `PalpiteServiceTest` | `PalpiteService` |
-| `ParticipacaoServiceTest` | `ParticipacaoService` |
-| `PontuacaoServiceTest` | `PontuacaoService` (inclusive ranking da rodada) |
-
-Há também o `ApiApplicationTests` (carregamento do contexto). Os testes cobrem os fluxos principais dos serviços, e a cobertura continua sendo ampliada conforme novas funcionalidades são implementadas. Os cenários de violação de regra de negócio e os serviços restantes (Campeonato, Jogo, Time, User e Premiacao) ainda não têm testes dedicados.
-
-```bash
-# Linux/macOS
-./mvnw test
-
-# Windows
-.\mvnw.cmd test
-```
+### 4. Acessar a Documentação
+Abra <http://localhost:8080/swagger-ui.html> no navegador.
 
 ---
 
-## Estrutura do projeto
+## Estratégia de Testes
 
-src/  
-├── main/  
-│   ├── java/br/com/palpitou/  
-│   │   ├── controller/  
-│   │   ├── dto/  
-│   │   │   ├── Dashboard/  
-│   │   │   ├── putRequest/  
-│   │   │   ├── putResponse/  
-│   │   │   ├── request/  
-│   │   │   └── response/  
-│   │   ├── entity/  
-│   │   ├── enums/  
-│   │   ├── exception/  
-│   │   ├── mapper/  
-│   │   ├── repository/  
-│   │   ├── security/  
-│   │   ├── service/  
-│   │   └── ApiApplication.java  
-│   └── resources/  
-│       └── application.properties  
-└── test/  
-    └── java/br/com/palpitou/  
-        ├── service/  
-        └── ApiApplicationTests.java  
+O projeto possui suíte de testes unitários desenvolvida com **JUnit 5** e **Mockito**, cobrindo os principais serviços de domínio:
+- `BolaoServiceTest`
+- `DashboardServiceTest`
+- `PagamentoServiceTest`
+- `PalpiteServiceTest`
+- `ParticipacaoServiceTest`
+- `PontuacaoServiceTest` (incluindo simulação de pontuações exatas, parciais e ranking de rodada)
+- `ApiApplicationTests` (teste de carga de contexto Spring)
 
 ---
 
-## Decisões técnicas
+## Integrações Externas (Planejamento API-Football)
 
-- **Separação Controller / Service / Repository:** os controllers cuidam apenas do HTTP, enquanto as regras ficam nos services.
-- **DTOs de entrada e saída:** as entidades não são usadas como contrato da API, e as operações de atualização têm DTOs próprios (`PutRequest*` / `PutResponse*`), expondo só os campos atualizáveis.
-- **Mappers dedicados:** a conversão entidade ↔ DTO fica fora dos services e controllers.
-- **Enums para estados:** `StatusPagamento`, `StatusParticipacao`, `StatusGlobal` e `Role`, persistidos como `STRING`.
-- **Regras de negócio nos services:** validações como participação duplicada, pagamento aprovado e jogo já iniciado ficam concentradas na camada de serviço.
-- **Agregações no banco:** `COUNT` e `SUM` do dashboard são executados no banco, sem carregar entidades em memória.
-- **Tratamento global de exceções:** exceções de domínio mapeadas para HTTP em um único ponto.
-- **Testes unitários de serviços:** as regras de negócio são testadas isoladamente (incluindo `DashboardServiceTest`).
+O projeto possui especificação técnica documentada (`docs/API_INTEGRATION_REFERENCE.md`) para futura integração com a **API-Football (API-Sports)**. A arquitetura prevê um pacote isolado `integration` contendo:
+1. **`integration.client`**: Clientes HTTP utilizando o `RestClient` do Spring Boot com autenticação via cabeçalho (`x-apisports-key`).
+2. **`integration.dto`**: Records para desserialização dos JSONs externos.
+3. **`integration.service`**: Serviços de sincronização idempotente de campeonatos, times e partidas, disparando o recálculo automático de pontuações e rankings ao finalizar partidas (`FT`).
 
 ---
 
-## Roadmap
+## Metodologia de Desenvolvimento com Inteligência Artificial
 
-### Back-end
+Este projeto foi construído sob uma abordagem avançada de **Engenharia de Software Assistida por IA**, demonstrando maturidade na aplicação de ferramentas modernas sem abrir mão da autoria, rigor técnico e aprendizado contínuo do desenvolvedor.
 
-**Implementado**
+### 1. Spec-Driven Development (SDD) e Documentação Viva
+O desenvolvimento seguiu rigorosamente especificações técnicas prévias e documentação estruturada em `docs/` (`PROJECT_CONTEXT.md`, `ROADMAP.md`, `DECISIONS.md`, `API_INTEGRATION_REFERENCE.md`). Nenhum código foi escrito sem alinhamento prévio ao escopo e arquitetura definidos.
 
-- [x] Modelagem de domínio
-- [x] DTOs, mappers e repositories
-- [x] Services e controllers REST
-- [x] CRUDs principais
-- [x] Regras de negócio iniciais (participação, pagamento, palpite, bolão e jogo)
-- [x] Pontuação e ranking por rodada (camada de serviço)
-- [x] Tratamento global de exceções (404 e 409)
-- [x] Configuração inicial do Spring Security
-- [x] Documentação OpenAPI / Swagger
-- [x] Testes unitários dos principais serviços (`BolaoServiceTest`, `DashboardServiceTest`, `PagamentoServiceTest`, `PalpiteServiceTest`, `ParticipacaoServiceTest`, `PontuacaoServiceTest`)
-- [x] `DashboardService` e consultas de agregação
-- [x] Endpoints do Dashboard (`/dashboard` e `/dashboard/boloes`)
+### 2. Arquitetura Multiagente Especializada
+Utilização de agentes especializados configurados no ecossistema do **Claude Code** para suportar diferentes dimensões do ciclo de desenvolvimento:
+- **Java Mentor (`java-mentor`):** Orientação didática sobre conceitos arquiteturais, padrões Spring Boot e decisões de design incremental.
+- **Code Reviewer (`code-reviewer`):** Auditoria de código focada em segurança, corretude, integridade de dados JPA/transações e princípios SOLID.
+- **Test Engineer (`test-engineer`):** Concepção e validação de testes unitários com JUnit 5 e Mockito.
 
-**Em desenvolvimento**
+### 3. Engenharia de Contexto e Governança
+- **Contexto Modular (`CLAUDE.md` e regras em `.claude/rules/`):** Garantia de que todas as interações com IAs respeitassem estritamente os padrões de arquitetura em camadas, validação de entradas, tratamento global de exceções e proteção do repositório.
+- **Papel do Desenvolvedor:** O desenvolvedor humano permaneceu integralmente no comando — concebendo os requisitos, avaliando trade-offs arquiteturais, revisando as implementações propostas e conduzindo as decisões técnicas finais.
 
-- [ ] Endpoint de ranking
-- [ ] Autenticação e autorização (JWT, perfis de acesso)
-- [ ] Tratamento de erros de validação
+---
+
+## Funcionalidades Concluídas e Roadmap
+
+### ✅ Concluído
+- [x] Modelagem completa do domínio (9 entidades relacionais)
+- [x] DTOs segmentados (Request, Response, PutRequest, PutResponse, Dashboard)
+- [x] Mappers dedicados para conversão de entidades
+- [x] Repositórios Spring Data JPA com consultas customizadas
+- [x] Services com regras de negócio e validações defensivas
+- [x] Controllers REST para todos os recursos
+- [x] Motor de pontuação e ranking por rodada
+- [x] Dashboard analítico e faturamento via agregações SQL
+- [x] Tratamento global de exceções (`GlobalExceptionHandler`)
+- [x] Documentação OpenAPI / Swagger UI
+- [x] Testes unitários com JUnit 5 e Mockito
+
+### 🔄 Em Andamento / Próximos Passos
+- [ ] Endpoints REST dedicados para consulta de ranking
+- [ ] Autenticação e autorização robusta (Spring Security + JWT + BCrypt)
+- [ ] Tratamento dedicado para erros de validação (`MethodArgumentNotValidException`)
 - [ ] Apuração automática de premiações
-- [ ] Ampliação dos testes
-- [ ] Integração com API externa de futebol
-- [ ] PostgreSQL
-
-### Infraestrutura (futuro)
-
-- [ ] PostgreSQL
-- [ ] Docker
-- [ ] Configuração de ambientes
-- [ ] Deploy
-
-### Front-end (futuro)
-
-- [ ] Angular
-- [ ] Autenticação
-- [ ] Área do usuário
-- [ ] Área administrativa
-- [ ] Dashboard
-- [ ] Gerenciamento de bolões
-- [ ] Pagamentos
-- [ ] Palpites
-- [ ] Ranking
-- [ ] Premiações
-
----
-
-## Inteligência Artificial e Agentes
-
-Este projeto utiliza engenharia de IA avançada com o **Claude Code** (Anthropic SDK) e uma arquitetura multiagente configurada no workspace (`.claude/`), demonstrando competência em desenvolvimento assistido por IA, padronização de código, revisão rigorosa e aprendizado contínuo:
-
-- **Java Mentor (`.claude/agents/java-mentor.md`):** Especialista em Java e Spring Boot focado em orientar conceitos arquiteturais, decisões de design e implementação incremental com abordagem didática.
-- **Code Reviewer (`.claude/agents/code-reviewer.md`):** Agente responsável por auditorias de código focadas em segurança, corretude, integridade de dados (JPA/transações) e princípios SOLID.
-- **Test Engineer (`.claude/agents/test-engineer.md`):** Especialista em JUnit 5, Mockito e validação de cobertura de testes unitários e de integração.
-- **Regras e Contexto Personalizados (`.claude/rules/` e `CLAUDE.md`):** Diretrizes estruturadas para garantir segurança, validação de entradas, tratamento global de exceções e separação estrita de responsabilidades em camadas.
+- [ ] Persistência em banco relacional de produção (PostgreSQL)
+- [ ] Integração com API externa de futebol (API-Football)
+- [ ] Containerização com Docker e Docker Compose
+- [ ] Desenvolvimento de front-end (Angular)
 
 ---
 
